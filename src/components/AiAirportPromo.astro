@@ -1,0 +1,77 @@
+---
+import { ArrowRight, ExternalLink, Sparkles, TicketPercent } from '@lucide/astro';
+import type { BrandProfile } from '../data/brands';
+
+interface Props {
+  brand: BrandProfile;
+  appName: string;
+  variant?: 'inline' | 'sidebar';
+}
+
+const { brand, appName, variant = 'inline' } = Astro.props;
+---
+
+<aside
+  class:list={['ai-airport-promo', `is-${variant}`]}
+  style={`--promo-accent:${brand.accent}`}
+  aria-label={`${appName}页面推荐机场：${brand.name}`}
+>
+  <div class="promo-kicker"><Sparkles size={14} /> AI 使用搭档 · 推荐机场</div>
+  <div class="promo-main">
+    <img src={brand.logo} alt={`${brand.name}机场 Logo`} width="320" height="240" loading="lazy" decoding="async" />
+    <div class="promo-copy">
+      <span>{brand.recommendation}</span>
+      <h2>{brand.name}</h2>
+      <p>如需在多设备上使用 {appName} 等海外 AI 服务，可将 {brand.name} 作为线路候选。可用性会随节点和平台策略变化，建议先用短周期套餐测试。</p>
+      <div class="promo-facts">
+        <strong>{brand.price}</strong>
+        {brand.couponCode && <em><TicketPercent size={13} /> 优惠码 {brand.couponCode}</em>}
+      </div>
+    </div>
+  </div>
+  <div class="promo-actions">
+    {brand.referralUrl && brand.linkVerified && (
+      <a class="promo-primary" href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">一键访问机场 <ExternalLink size={14} /></a>
+    )}
+    <a class="promo-secondary" href={`/brands/${brand.slug}/`}>查看本站评测 <ArrowRight size={14} /></a>
+  </div>
+  <small>推广提示：机场入口可能包含邀请或合作链接，套餐与可用性以结算页为准。</small>
+</aside>
+
+<style>
+  .ai-airport-promo { min-width: 0; padding: 1rem; overflow: hidden; background: linear-gradient(145deg, color-mix(in srgb, var(--promo-accent) 7%, #fffaf4), #fff 64%); border: 1px solid color-mix(in srgb, var(--promo-accent) 22%, #e6ddd4); border-top: 3px solid var(--promo-accent); }
+  .promo-kicker { display: flex; align-items: center; gap: .35rem; color: var(--promo-accent); font-size: .66rem; font-weight: 800; letter-spacing: .06em; }
+  .promo-main { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: .85rem; align-items: center; margin-top: .8rem; }
+  .promo-main img { width: 74px; height: 74px; object-fit: contain; padding: .45rem; background: #fff; border: 1px solid #eee5dc; border-radius: 15px; }
+  .promo-copy > span { color: var(--promo-accent); font-size: .66rem; font-weight: 750; }
+  .promo-copy h2 { margin: .12rem 0 .3rem; padding: 0; border: 0; font-size: 1.05rem; }
+  .promo-copy p { margin: 0; color: #756b63; font-size: .72rem; line-height: 1.65; }
+  .promo-facts { display: flex; align-items: center; flex-wrap: wrap; gap: .4rem .75rem; margin-top: .55rem; }
+  .promo-facts strong { color: #3e3732; font-size: .76rem; }
+  .promo-facts em { display: inline-flex; align-items: center; gap: .25rem; color: #a85d3c; font-size: .68rem; font-style: normal; font-weight: 700; }
+  .promo-actions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: .85rem; }
+  .promo-actions a { display: inline-flex; align-items: center; justify-content: center; gap: .28rem; padding: .56rem .72rem; font-size: .7rem; font-weight: 800; }
+  .promo-primary { color: #fff; background: var(--promo-accent); }
+  .promo-secondary { color: #5a5049; background: #fff; border: 1px solid #e4d9cf; }
+  .ai-airport-promo > small { display: block; margin-top: .7rem; color: #a2978f; font-size: .58rem; line-height: 1.5; }
+
+  .is-inline { margin-top: 2.4rem; padding: 1.25rem; }
+  .is-inline .promo-main { grid-template-columns: 92px minmax(0, 1fr); }
+  .is-inline .promo-main img { width: 92px; height: 92px; }
+  .is-inline .promo-copy h2 { font-size: 1.2rem; }
+  .is-inline .promo-copy p { max-width: 42rem; font-size: .78rem; }
+  .is-inline .promo-actions { padding-left: 107px; margin-top: .2rem; }
+  .is-inline > small { padding-left: 107px; }
+
+  .is-sidebar { padding: .95rem; }
+  .is-sidebar .promo-main { display: block; }
+  .is-sidebar .promo-main img { width: 62px; height: 62px; margin-bottom: .65rem; }
+  .is-sidebar .promo-copy p { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 4; overflow: hidden; }
+  .is-sidebar .promo-actions { display: grid; grid-template-columns: 1fr; }
+
+  @media (max-width: 700px) {
+    .is-inline .promo-main { grid-template-columns: 68px minmax(0, 1fr); }
+    .is-inline .promo-main img { width: 68px; height: 68px; }
+    .is-inline .promo-actions, .is-inline > small { padding-left: 0; }
+  }
+</style>

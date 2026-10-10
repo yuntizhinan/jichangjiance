@@ -1,0 +1,281 @@
+---
+import { ArrowUpRight, CalendarDays, CircleAlert, CircleCheckBig, CopyCheck, ExternalLink, Gauge, Link2, WalletCards } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BrandCard from '../../components/BrandCard.astro';
+import { brands, getBrandIntentFaqs, getBrandIntentKeywords, type BrandProfile } from '../../data/brands';
+import { absoluteUrl, formatDate } from '../../lib/site';
+
+export function getStaticPaths() {
+  return brands.map((brand) => ({ params: { slug: brand.slug }, props: { brand } }));
+}
+
+const { brand } = Astro.props as { brand: BrandProfile };
+const publishedAt = new Date(`${brand.publishedAt}T08:00:00+08:00`);
+const updatedAt = new Date(`${brand.updatedAt}T08:00:00+08:00`);
+const related = brands.filter((item) => item.slug !== brand.slug && item.status === brand.status).slice(0, 3);
+const title = `${brand.name}怎么样？2026 ${brand.name}机场评测与官网入口`;
+const pageFaq = [...brand.faq, ...getBrandIntentFaqs(brand)];
+const pageKeywords = getBrandIntentKeywords(brand);
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Brand',
+    name: brand.name,
+    alternateName: brand.englishName,
+    logo: absoluteUrl(brand.logo),
+    url: absoluteUrl(`/brands/${brand.slug}/`),
+    description: brand.description
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: pageFaq.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title={title}
+  description={brand.description}
+  type="article"
+  publishedAt={publishedAt}
+  updatedAt={updatedAt}
+  keywords={pageKeywords}
+  image={brand.cover}
+  imageAlt={`${brand.name}机场 2026 独立评测封面`}
+  jsonLd={jsonLd}
+>
+  <div class="shell brand-detail" style={`--brand-accent:${brand.accent}`}>
+    <Breadcrumbs items={[{ label: '机场评测库', href: '/brands/' }, { label: `${brand.name}评测` }]} />
+
+    <header class="brand-article-hero">
+      <div class="brand-hero-copy">
+        <div class="brand-labels"><span>{brand.status}</span><span>{brand.recommendation}</span></div>
+        <h1>{brand.name}怎么样？<br />2026 {brand.name}机场评测</h1>
+        <p>{brand.description}</p>
+        <div class="article-date"><CalendarDays size={15} /> 更新于 {formatDate(updatedAt)} · 资料状态：{brand.status}</div>
+        <div class="hero-actions">
+          {brand.referralUrl && brand.linkVerified ? (
+          <a class="primary-cta" href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">访问机场入口 <ExternalLink size={16} /></a>
+          ) : (
+          <span class="disabled-cta">机场入口待核验</span>
+          )}
+          {brand.couponCode && (
+            <button class="coupon-cta" type="button" data-coupon-copy={brand.couponCode} aria-label={`复制${brand.name}优惠码 ${brand.couponCode}`}>
+              <CopyCheck size={16} /><span data-copy-label>优惠码 {brand.couponCode}</span>
+            </button>
+          )}
+        <a class="secondary-cta" href="/brands/">返回机场评测库</a>
+        </div>
+      </div>
+      <img class="brand-cover" src={brand.cover} alt={`${brand.name}机场评测：线路、价格、客户端与风险提示`} width="1200" height="630" fetchpriority="high" decoding="async" />
+    </header>
+
+      <div class="affiliate-disclosure"><Link2 size={17} /><p><strong>跳转说明：</strong>页面中的机场入口可能属于邀请或联盟链接。本站是独立评测与信息整理网站，可能获得佣金，但不会因此隐藏风险提示。请在付款前核对域名、套餐与退款说明。</p></div>
+
+    <section class="brand-summary-grid" aria-label={`${brand.name}快速信息`}>
+      <article><WalletCards size={20} /><span>参考价格</span><strong>{brand.price}</strong></article>
+      <article><Gauge size={20} /><span>线路定位</span><strong>{brand.recommendation}</strong></article>
+      <article><CircleCheckBig size={20} /><span>协议支持</span><strong>{brand.protocols.join(' / ')}</strong></article>
+    </section>
+
+    <section class="pricing-section" aria-labelledby="pricing-title">
+      <div class="pricing-heading">
+        <div>
+          <span>PRICE GUIDE</span>
+          <h2 id="pricing-title">{brand.name}套餐价格表</h2>
+          <p>本站于 2026 年 10 月 7 日根据可见公开资料整理，方便快速比较月费、流量和使用定位。</p>
+        </div>
+        {brand.referralUrl && brand.linkVerified && (
+          <a href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">查看实时套餐 <ExternalLink size={15} /></a>
+        )}
+      </div>
+      <div class="pricing-table-wrap">
+        <table>
+          <thead>
+            <tr><th scope="col">套餐名称</th><th scope="col">参考价格</th><th scope="col">流量</th><th scope="col">适合场景与说明</th><th scope="col">入口</th></tr>
+          </thead>
+          <tbody>
+            {brand.plans.map((plan) => (
+              <tr>
+                <th scope="row">{plan.name}</th>
+                <td><strong>{plan.price}</strong></td>
+                <td>{plan.traffic}</td>
+                <td>{plan.note}</td>
+                <td>{brand.referralUrl && brand.linkVerified ? <a href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener" aria-label={`查看${brand.name}${plan.name}实时价格`}>查看 <ArrowUpRight size={14} /></a> : <span>待核验</span>}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="pricing-note"><CircleAlert size={15} /> 套餐名称、活动价、流量倍率、设备数和在售状态可能随时调整；付款前请以机场结算页显示为准，首次使用优先选择月付或短周期方案。</p>
+    </section>
+
+    <div class="brand-content-layout">
+      <article class="brand-article prose">
+        <div class="verdict-box">
+          <span>一分钟结论</span>
+          <p>{brand.verdict}</p>
+        </div>
+
+        <h2>{brand.name}线路与协议概览</h2>
+        <p>{brand.lineArchitecture}</p>
+
+        <div class="pros-cons-grid">
+          <section>
+            <h2><CircleCheckBig size={20} /> 主要卖点</h2>
+            <ul>{brand.strengths.map((item) => <li>{item}</li>)}</ul>
+          </section>
+          <section class="considerations">
+            <h2><CircleAlert size={20} /> 购买前注意</h2>
+            <ul>{brand.considerations.map((item) => <li>{item}</li>)}</ul>
+          </section>
+        </div>
+
+        {brand.sections.map((section) => (
+          <section>
+            <h2>{section.title}</h2>
+            {section.paragraphs.map((paragraph) => <p>{paragraph}</p>)}
+          </section>
+        ))}
+
+        <h2>{brand.name}适合哪些人？</h2>
+        <ul>{brand.audience.map((item) => <li>{item}</li>)}</ul>
+
+        <h2>{brand.name}常见使用场景</h2>
+        <div class="scenario-tags">{brand.useCases.map((item) => <span>{item}</span>)}</div>
+
+        <section class="brand-faq">
+          <h2>{brand.name}常见问题</h2>
+          {pageFaq.map((item, index) => (
+            <details open={index === 0}>
+              <summary>{item.question}</summary>
+              <p>{item.answer}</p>
+            </details>
+          ))}
+        </section>
+
+        <div class="source-note">
+          <strong>资料说明</strong>
+          <p>{brand.sourceNote}</p>
+        {!brand.linkVerified && brand.candidateUrl && <p>候选链接已保存在数据层，但在完成机场服务商归属核验前不会作为正式入口展示。</p>}
+        </div>
+      </article>
+
+      <aside class="brand-sidebar">
+        <div class="sidebar-card">
+          <img src={brand.logo} alt={`${brand.name}机场 Logo`} width="320" height="240" loading="lazy" decoding="async" />
+          <h2>{brand.name}</h2>
+          <p>{brand.tagline}</p>
+              {brand.referralUrl && brand.linkVerified && <a href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">前往机场入口 <ArrowUpRight size={15} /></a>}
+        </div>
+        <div class="sidebar-card">
+          <h2>本文关键词</h2>
+          <div class="keyword-tags">{pageKeywords.slice(0, 12).map((keyword) => <span>{keyword}</span>)}</div>
+        </div>
+      </aside>
+    </div>
+
+    {related.length > 0 && (
+      <section class="related-brands">
+        <h2>相近使用场景的机场</h2>
+        <div class="related-grid">{related.map((item) => <BrandCard brand={item} compact />)}</div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .brand-detail { padding-top: 2rem; }
+  .brand-article-hero { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, .92fr); align-items: center; gap: 2.5rem; padding: 3rem 0 2rem; }
+  .brand-hero-copy { min-width: 0; }
+  .brand-labels { display: flex; flex-wrap: wrap; gap: .55rem; }
+  .brand-labels span { padding: .25rem .65rem; border-radius: var(--radius-full); border: 1px solid color-mix(in srgb, var(--brand-accent) 42%, transparent); color: var(--brand-accent); background: color-mix(in srgb, var(--brand-accent) 10%, transparent); font-size: .76rem; font-weight: 700; }
+  .brand-hero-copy h1 { font-size: clamp(2.35rem, 5vw, 4.25rem); line-height: 1.05; letter-spacing: -.045em; margin: 1rem 0 1.2rem; }
+  .brand-hero-copy > p { color: var(--text-secondary); font-size: 1.05rem; line-height: 1.75; }
+  .article-date { display: flex; align-items: center; gap: .4rem; color: var(--text-muted); font-size: .8rem; margin-top: 1rem; }
+  .brand-cover { width: 100%; height: auto; display: block; border-radius: var(--radius-lg); border: 1px solid var(--border-color); box-shadow: var(--shadow-lg); }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .75rem; width: 100%; min-width: 0; margin-top: 1.5rem; }
+  .hero-actions > * { max-width: 100%; }
+  .primary-cta, .secondary-cta, .disabled-cta, .coupon-cta { display: inline-flex; align-items: center; gap: .4rem; padding: .7rem 1rem; border-radius: var(--radius-full); font-size: .88rem; font-weight: 700; }
+  .primary-cta { background: var(--brand-accent); color: #06101b; }
+  .secondary-cta { background: var(--bg-surface); border: 1px solid var(--border-color); }
+  .disabled-cta { color: var(--text-muted); background: var(--bg-surface); border: 1px dashed var(--border-color-hover); }
+  .coupon-cta { border: 1px dashed color-mix(in srgb, var(--brand-accent) 60%, #8794a3); color: var(--brand-accent); background: color-mix(in srgb, var(--brand-accent) 8%, #fff); cursor: pointer; }
+  .coupon-cta:hover { background: color-mix(in srgb, var(--brand-accent) 14%, #fff); }
+  .affiliate-disclosure { display: flex; align-items: flex-start; gap: .65rem; padding: 1rem 1.15rem; background: rgba(56, 189, 248, .06); border: 1px solid rgba(56, 189, 248, .2); border-radius: var(--radius-md); color: var(--text-secondary); font-size: .83rem; line-height: 1.6; }
+  .affiliate-disclosure svg { color: var(--tone-aqua); flex: 0 0 auto; margin-top: .15rem; }
+  .brand-summary-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; margin: 1.5rem 0 3rem; }
+  .brand-summary-grid article { padding: 1.1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .brand-summary-grid svg { color: var(--brand-accent); margin-bottom: .65rem; }
+  .brand-summary-grid span, .brand-summary-grid strong { display: block; }
+  .brand-summary-grid span { color: var(--text-muted); font-size: .76rem; }
+  .brand-summary-grid strong { margin-top: .2rem; font-size: .92rem; }
+  .pricing-section { min-width: 0; margin: 0 0 3rem; padding: 1.35rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); box-shadow: var(--shadow-sm); }
+  .pricing-heading { display: flex; align-items: flex-end; justify-content: space-between; gap: 1.5rem; margin-bottom: 1rem; }
+  .pricing-heading span { color: var(--brand-accent); font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+  .pricing-heading h2 { margin: .25rem 0 .3rem; font-size: 1.45rem; }
+  .pricing-heading p { margin: 0; color: var(--text-muted); font-size: .82rem; line-height: 1.6; }
+  .pricing-heading > a { flex: 0 0 auto; display: inline-flex; align-items: center; gap: .35rem; padding: .62rem .85rem; border-radius: var(--radius-full); background: var(--brand-accent); color: #06101b; font-size: .8rem; font-weight: 800; }
+  .pricing-table-wrap { overflow-x: auto; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .pricing-table-wrap table { width: 100%; min-width: 760px; border-collapse: collapse; font-size: .86rem; }
+  .pricing-table-wrap th, .pricing-table-wrap td { padding: .85rem .9rem; text-align: left; vertical-align: middle; border-bottom: 1px solid var(--border-color); }
+  .pricing-table-wrap thead th { color: var(--text-primary); background: color-mix(in srgb, var(--brand-accent) 8%, var(--bg-elevated)); font-size: .78rem; white-space: nowrap; }
+  .pricing-table-wrap tbody tr:last-child > * { border-bottom: 0; }
+  .pricing-table-wrap tbody tr:nth-child(even) { background: color-mix(in srgb, var(--brand-accent) 2.5%, transparent); }
+  .pricing-table-wrap tbody th { color: var(--text-primary); font-weight: 750; white-space: nowrap; }
+  .pricing-table-wrap td { color: var(--text-secondary); line-height: 1.55; }
+  .pricing-table-wrap td > a { display: inline-flex; align-items: center; gap: .15rem; color: var(--brand-accent); font-weight: 750; white-space: nowrap; }
+  .pricing-note { display: flex; align-items: flex-start; gap: .45rem; margin: .85rem 0 0; color: var(--text-muted); font-size: .76rem; line-height: 1.55; }
+  .pricing-note svg { flex: 0 0 auto; margin-top: .12rem; color: var(--brand-accent); }
+  .brand-content-layout { display: grid; grid-template-columns: minmax(0, 1fr) 18rem; gap: 3rem; align-items: start; }
+  .verdict-box { padding: 1.4rem; background: color-mix(in srgb, var(--brand-accent) 8%, var(--bg-surface)); border: 1px solid color-mix(in srgb, var(--brand-accent) 28%, transparent); border-radius: var(--radius-md); }
+  .verdict-box span { color: var(--brand-accent); font-size: .76rem; font-weight: 800; letter-spacing: .08em; }
+  .verdict-box p { margin: .45rem 0 0; }
+  .pros-cons-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin: 2rem 0; }
+  .pros-cons-grid section { background: rgba(34, 197, 94, .05); border: 1px solid rgba(34, 197, 94, .18); border-radius: var(--radius-md); padding: 1.15rem; }
+  .pros-cons-grid .considerations { background: rgba(245, 158, 11, .05); border-color: rgba(245, 158, 11, .2); }
+  .pros-cons-grid h2 { display: flex; align-items: center; gap: .45rem; margin: 0 0 .8rem; padding: 0; border: 0; font-size: 1.05rem; }
+  .pros-cons-grid li { font-size: .88rem; }
+  .scenario-tags, .keyword-tags { display: flex; flex-wrap: wrap; gap: .5rem; }
+  .scenario-tags span, .keyword-tags span { padding: .3rem .65rem; border: 1px solid var(--border-color); border-radius: var(--radius-full); background: var(--bg-surface); color: var(--text-secondary); font-size: .76rem; }
+  .brand-faq details { margin-bottom: .75rem; padding: 1rem 1.1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .brand-faq summary { cursor: pointer; font-weight: 700; }
+  .brand-faq details p { margin: .75rem 0 0; }
+  .source-note { margin-top: 2.5rem; padding: 1.15rem; border-left: 3px solid var(--brand-accent); background: var(--bg-surface); }
+  .source-note p { font-size: .84rem; margin: .35rem 0 0; }
+  .brand-sidebar { position: sticky; top: 5.5rem; display: grid; gap: 1rem; }
+  .sidebar-card { padding: 1.1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .sidebar-card img { width: 100%; height: 9rem; object-fit: contain; background: #fff; border-radius: var(--radius-sm); padding: .65rem; }
+  .sidebar-card h2 { font-size: 1rem; margin: .9rem 0 .35rem; }
+  .sidebar-card p { color: var(--text-muted); font-size: .82rem; line-height: 1.55; }
+  .sidebar-card a { display: inline-flex; align-items: center; gap: .35rem; color: var(--brand-accent); font-size: .84rem; font-weight: 700; margin-top: .8rem; }
+  .related-brands { margin-top: 4rem; padding-top: 2.5rem; border-top: 1px solid var(--border-color); }
+  .related-brands > h2 { font-size: 1.55rem; margin-bottom: 1.25rem; }
+  .related-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  @media (max-width: 960px) { .brand-article-hero { grid-template-columns: minmax(0, 1fr); } .brand-content-layout { grid-template-columns: minmax(0, 1fr); } .brand-sidebar { position: static; grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .brand-summary-grid, .pros-cons-grid, .related-grid, .brand-sidebar { grid-template-columns: 1fr; } .pricing-section { padding: 1rem; } .pricing-heading { align-items: flex-start; flex-direction: column; } .hero-actions { display: grid; grid-template-columns: max-content max-content; gap: .6rem; } .hero-actions .secondary-cta { grid-column: 1 / -1; justify-self: start; } .primary-cta, .secondary-cta, .disabled-cta, .coupon-cta { padding-inline: .85rem; font-size: .82rem; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-coupon-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const code = button.dataset.couponCopy;
+      const label = button.querySelector<HTMLElement>('[data-copy-label]');
+      if (!code || !label) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        label.textContent = `已复制 ${code}`;
+        window.setTimeout(() => { label.textContent = `优惠码 ${code}`; }, 1800);
+      } catch {
+        label.textContent = `请复制 ${code}`;
+      }
+    });
+  });
+</script>

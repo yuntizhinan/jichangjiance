@@ -1,0 +1,601 @@
+export interface BrandFaq {
+  question: string;
+  answer: string;
+}
+
+export interface BrandSection {
+  title: string;
+  paragraphs: string[];
+}
+
+export interface BrandPlan {
+  name: string;
+  price: string;
+  traffic: string;
+  note: string;
+}
+
+export interface BrandProfile {
+  slug: string;
+  name: string;
+  englishName: string;
+  logo: string;
+  cover: string;
+  accent: string;
+  recommendation: string;
+  status: '重点关注' | '场景推荐' | '性价比观察' | '资料待核验';
+  tagline: string;
+  description: string;
+  verdict: string;
+  lineArchitecture: string;
+  protocols: string[];
+  price: string;
+  plans: BrandPlan[];
+  audience: string[];
+  useCases: string[];
+  strengths: string[];
+  considerations: string[];
+  keywords: string[];
+  referralUrl?: string;
+  couponCode?: string;
+  candidateUrl?: string;
+  linkVerified: boolean;
+  sourceNote: string;
+  publishedAt: string;
+  updatedAt: string;
+  featured: boolean;
+  sections: BrandSection[];
+  faq: BrandFaq[];
+}
+
+const commonSource = '基于用户提供的机场资料、服务商公开页面与机场监测编辑整理；套餐、节点和入口可能变化，以服务商结算页与公告为准。';
+
+export const brands: BrandProfile[] = [
+  {
+    slug: 'jilianyun',
+    name: '极连云',
+    englishName: 'Jilian Cloud',
+    logo: '/images/brands/logos/jilianyun-logo.webp',
+    cover: '/images/brands/covers/jilianyun-cover-warm.webp',
+    accent: '#21c7ff',
+    recommendation: '全平台易用型',
+    status: '重点关注',
+    tagline: '定制客户端与 AI、影音场景兼顾',
+    description: '极连云怎么样？本文从 IEPL 线路、全平台客户端、ChatGPT/Claude 与流媒体场景、价格和购买风险等方面整理 2026 年极连云机场评测。',
+    verdict: '更适合希望减少配置步骤，同时兼顾 AI 工具、流媒体和多设备使用的新手与办公用户。',
+    lineArchitecture: '服务商资料标注 IEPL 专线与多地区入口，具体节点等级和倍率应在购买页逐项确认。',
+    protocols: ['Shadowsocks', 'Trojan', 'Hysteria2'],
+    price: '¥15.50/月起；年付 ¥96 起',
+    plans: [
+      { name: '轻量体验（年付）', price: '¥96/年', traffic: '60GB/月', note: '适合轻度使用，年付折合约 ¥8/月' },
+      { name: '基础套餐', price: '¥15.50/月', traffic: '100GB/月', note: '服务商页面标注 IPLC 专线与原生 IP' },
+      { name: '进阶套餐', price: '¥30.50/月', traffic: '200GB/月', note: '面向 AI 工具与日常影音使用' },
+      { name: '旗舰套餐', price: '¥65.50/月', traffic: '500GB/月', note: '适合较高流量与低延迟需求' },
+      { name: '尊享套餐', price: '¥120.50/月', traffic: '1000GB/月', note: '高流量旗舰档，购买前核对带宽规则' },
+      { name: '不限时套餐', price: '¥399', traffic: '600GB 总量', note: '一次性流量包，不按月重置' }
+    ],
+    audience: ['首次使用机场的新手', 'AI 工具高频用户', '商务与远程办公用户', '多设备家庭'],
+    useCases: ['ChatGPT / Claude', 'Netflix / Disney+', '跨平台客户端', '日常办公与视频'],
+    strengths: ['提供 Windows、macOS、iOS、Android 使用入口', '配置门槛相对低，适合一键客户端偏好者', '资料定位覆盖 AI 与流媒体场景', '月付起步价格处于主流区间'],
+    considerations: ['专线、原生 IP 和流媒体可用性会随节点变化', '公开资料提示部分地区可能存在可用性限制', '购买前应确认退款、设备数和高倍率节点规则', '建议先月付验证晚高峰与常用设备'],
+    keywords: ['极连云怎么样', '极连云机场评测', '极连云官网入口', '2026机场推荐', 'IEPL专线机场', 'ChatGPT机场推荐', 'Netflix 4K机场', '全平台机场客户端'],
+    referralUrl: 'https://19629.jlyvipaff.com/#/?code=zMHMPYDj',
+    couponCode: 'JLY888',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '极连云的核心定位是什么？',
+        paragraphs: [
+          '从独立评测角度看，极连云并非以最低价格作为主要卖点，其公开资料更强调“少配置、跨平台、常见场景覆盖”。对于不想研究订阅转换、内核选择和复杂规则的新手，定制客户端与清晰的设备入口会比协议数量更有实际价值。',
+          '如果你同时需要 ChatGPT、Netflix 和多平台客户端，极连云可以作为综合型选项一起比较；建议先从月付开始，按自己的设备和常用时段确认体验。'
+        ]
+      },
+      {
+        title: '线路、协议与晚高峰应该怎么看？',
+        paragraphs: [
+          '服务商资料标注 IEPL 专线，并支持 Shadowsocks、Trojan 与 Hysteria2。对普通用户而言，协议名称不应成为唯一判断标准，更重要的是所在运营商入口、晚高峰丢包、节点倍率和故障切换速度。',
+          '首次使用时建议记录工作日与周末晚间的实际体验，并分别测试 AI 对话、网页加载和视频拖动。单次测速很高，并不能代替连续几天的稳定性观察。'
+        ]
+      },
+      {
+        title: '谁更适合选择极连云？',
+        paragraphs: [
+          '如果你的主要设备横跨 Windows、macOS、iPhone 和 Android，并且希望快速完成配置，极连云的产品方向较匹配。AI 工具、远程协作和影音属于其资料中重点强调的场景。',
+          '如果你只需要极低频备用，或者更重视按量不限时套餐，则应同时比较可信云、光年梯等低门槛方案，不必只看综合型套餐。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '极连云适合完全不懂配置的新手吗？', answer: '从服务商公开资料看，其重点之一是提供多平台定制客户端，适合希望减少手动配置的用户。购买前仍应确认自己的系统版本和客户端支持范围。' },
+      { question: '极连云能稳定使用 ChatGPT 和 Claude 吗？', answer: '服务商公开资料将 AI 工具列为主要场景，但可用性与具体出口 IP、地区和平台风控有关。建议先用月付套餐测试常用账号和时段。' },
+      { question: '极连云应该月付还是年付？', answer: '首次使用更适合从月付开始，连续观察晚高峰、设备兼容与售后响应后，再决定是否延长周期。' }
+    ]
+  },
+  {
+    slug: 'sujie',
+    name: '速界',
+    englishName: 'Sujie Cloud',
+    logo: '/images/brands/logos/sujie-logo.webp',
+    cover: '/images/brands/covers/sujie-cover-warm.webp',
+    accent: '#2c7df7',
+    recommendation: '大流量性价比型',
+    status: '重点关注',
+    tagline: 'BGP 中转与多设备大流量使用',
+    description: '速界机场怎么样？本文整理速界 BGP 中转、Shadowsocks/VLESS、晚高峰表现、大流量套餐、多设备连接与 2026 年高性价比机场选购建议。',
+    verdict: '更适合视频使用量较大、设备较多，并希望在价格与线路质量之间取得平衡的用户。',
+    lineArchitecture: 'BGP 多入口中转与内网转发，重点观察本地运营商入口和高峰期拥堵。',
+    protocols: ['Shadowsocks', 'VLESS-REALITY'],
+    price: '¥25/月起；年付 ¥90 起',
+    plans: [
+      { name: '年付体验包', price: '¥90/年', traffic: '50GB/月', note: '折合约 ¥7.5/月，适合轻量体验' },
+      { name: '极速版', price: '¥25/月', traffic: '120GB/月', note: '适合日常浏览、AI 与中等流量影音' },
+      { name: '超速版', price: '¥50/月', traffic: '250GB/月', note: '适合多设备与较高流量使用' }
+    ],
+    audience: ['视频重度用户', '留学生', '多设备家庭', '需要大流量的用户'],
+    useCases: ['流媒体观看', '多设备并发', '大流量下载', '日常学习与办公'],
+    strengths: ['套餐价格与流量配置偏性价比路线', 'BGP 多入口有利于兼容不同本地运营商', '支持常用协议与多设备场景', '适合作为大流量主力或第二线路'],
+    considerations: ['公网或中转入口仍可能受高峰拥堵影响', '不同套餐的倍率与设备数需要单独核对', '若与其他机场服务做双备份，应确认上游线路是否真正独立', '流媒体地区库会随出口 IP 调整'],
+    keywords: ['速界怎么样', '速界机场评测', '速界官网入口', '便宜机场推荐', '高性价比机场', '大流量机场', 'BGP中转机场', 'Netflix机场推荐'],
+    referralUrl: 'https://justland.szjtfp.xyz/#/?code=yyTdTqTA',
+    couponCode: 'sujie888',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '速界为什么更偏向性价比与大流量？',
+        paragraphs: [
+          '速界的核心吸引力来自价格、流量与中转线路之间的平衡。对每天观看视频、同步文件或多设备并发的用户来说，套餐额度、倍率和晚高峰实际吞吐往往比“节点数量”更重要。',
+          '选择时可以先把套餐价格除以折算后的真实流量，得到每 GB 成本，再结合常用地区节点的倍率比较。这样比直接看“500GB”“1000GB”等标称数字更有参考价值。'
+        ]
+      },
+      {
+        title: 'BGP 中转适合哪些网络环境？',
+        paragraphs: [
+          'BGP 多入口的价值在于让电信、联通、移动等不同本地网络更容易找到相对合适的入口，但实际体验仍取决于所在城市、运营商和上游容量。',
+          '建议分别使用家庭宽带与手机热点测试。如果两个网络表现差异明显，应优先选择与你主要网络更匹配的入口，而不是频繁切换协议。'
+        ]
+      },
+      {
+        title: '速界适合当唯一主力吗？',
+        paragraphs: [
+          '对于视频、大流量和常规办公，速界可以作为主力候选。若你的工作对连续在线要求很高，仍建议准备一个上游不同的备用服务，以免单一入口维护影响全部设备。',
+          '首次购买建议月付，重点测试晚间 20:00–23:00、流媒体拖动、订阅更新和客服响应，再考虑更长周期。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '速界适合看 Netflix 和 Disney+ 吗？', answer: '服务商公开资料将主流流媒体列为使用场景，但不同节点的地区库和 IP 状态会变化，建议先确认目标地区并进行短周期测试。' },
+      { question: '速界的大流量套餐一定更便宜吗？', answer: '需要把节点倍率计算进去。标称流量除以常用节点倍率，才是更接近实际可用的额度。' },
+      { question: '速界和边缘节点可以作为彼此备用吗？', answer: '可以作为候选组合，但购买前应确认两者当前上游线路、入口和运维是否独立，否则同时故障的风险可能高于预期。' }
+    ]
+  },
+  {
+    slug: 'edgenova',
+    name: '边缘节点',
+    englishName: 'EdgeNova',
+    logo: '/images/brands/logos/edgenova-logo.webp',
+    cover: '/images/brands/covers/edgenova-cover-warm.webp',
+    accent: '#7c4dff',
+    recommendation: '弱网低延迟型',
+    status: '场景推荐',
+    tagline: 'Hysteria2 与边缘节点优化',
+    description: '边缘节点 EdgeNova 怎么样？本文从 Hysteria2/VLESS、弱网优化、低延迟节点、游戏与跨境工作场景、价格和备用线路策略进行 2026 年评测。',
+    verdict: '更适合经常使用移动网络、弱网环境，或对交互延迟和跨地区节点有明确需求的用户。',
+    lineArchitecture: '服务商资料强调全球边缘节点与弱网优化，公开资料显示包含多地区节点与不同倍率。',
+    protocols: ['Hysteria2', 'VLESS'],
+    price: '¥25/月起；年付 ¥108 起',
+    plans: [
+      { name: '限时年付', price: '¥108/年', traffic: '45GB/月', note: '折合约 ¥9/月，适合轻量使用' },
+      { name: '极界·标准套餐', price: '¥25/月', traffic: '120GB/月', note: '支持多周期订阅，适合日常使用' },
+      { name: '极界·进阶套餐', price: '¥50/月', traffic: '250GB/月', note: '适合较高流量与大文件传输' }
+    ],
+    audience: ['移动网络用户', '游戏玩家', '跨境电商从业者', '科研与远程协作用户'],
+    useCases: ['弱网连接', '低延迟交互', '外服游戏', 'AI 与跨境工作'],
+    strengths: ['Hysteria2 更适合高丢包或移动网络环境', '多地区节点便于按业务区域选择', '月付起步门槛处于常见区间', '游戏、AI 和跨境业务场景覆盖明确'],
+    considerations: ['UDP 协议体验受本地网络策略影响较大', '部分特殊地区或节点可能采用更高流量倍率', '低延迟需要结合实际地理位置测试', '不要只依据客户端延迟数字判断游戏体验'],
+    keywords: ['边缘节点怎么样', 'EdgeNova机场评测', '边缘节点官网入口', 'Hysteria2机场', '低延迟节点', '游戏专线机场', '弱网机场推荐', '跨境电商机场'],
+    referralUrl: 'https://zoio.edgenovaaff.cc/#/?code=Y65i2kCU',
+    couponCode: 'xk808',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '边缘节点的差异化卖点是什么？',
+        paragraphs: [
+          '边缘节点更强调“弱网下保持可用”和“交互延迟”，而不是单纯追求测速峰值。Hysteria2 基于 QUIC/UDP，在部分高丢包网络中可能比传统 TCP 连接更流畅，但并不意味着所有网络都一定更快。',
+          '如果你主要使用手机热点、宿舍网络或跨地区移动办公，这类协议与边缘入口更值得测试；如果本地网络对 UDP 不友好，则需要保留 VLESS 或其他兼容入口。'
+        ]
+      },
+      {
+        title: '游戏与 AI 场景应该测试什么？',
+        paragraphs: [
+          '游戏场景应关注抖动、丢包和连续稳定性，而不是只看平均延迟。建议测试实际游戏服务器，连续观察至少 20 分钟。',
+          'AI 工具则更看重出口 IP 的可用性、会话稳定和上传响应。能打开网页不等于长期不会触发验证，因此应使用自己的常用账号与工作流测试。'
+        ]
+      },
+      {
+        title: '购买边缘节点前的检查清单',
+        paragraphs: [
+          '确认套餐中常用地区的节点倍率、设备数、订阅格式以及客户端是否支持 Hysteria2。iOS 用户尤其需要确认现有客户端版本是否兼容。',
+          '如果计划把它作为备用线路，还要确认主力服务与边缘节点是否共享相同入口或运维体系，避免所谓双备份实际只有一个故障域。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '边缘节点一定比普通机场延迟低吗？', answer: '不一定。延迟由地理距离、本地运营商、入口路由和目标服务器共同决定，边缘节点的优势需要在你的网络上实际验证。' },
+      { question: 'Hysteria2 在公司或校园网能用吗？', answer: '取决于网络是否允许稳定的 UDP/QUIC 流量。如果 UDP 受限，应切换到服务商提供的 VLESS 等兼容节点。' },
+      { question: '边缘节点适合下载大文件吗？', answer: '可以作为候选，但要先核对套餐额度与节点倍率。弱网吞吐表现好并不等于单位流量成本最低。' }
+    ]
+  },
+  {
+    slug: 'guangnianti',
+    name: '光年梯',
+    englishName: 'Lightyear Ladder',
+    logo: '/images/brands/logos/guangnianti-logo.webp',
+    cover: '/images/brands/covers/guangnianti-cover-warm.webp',
+    accent: '#f46fc7',
+    recommendation: '新手低门槛型',
+    status: '性价比观察',
+    tagline: '低价月付与定制客户端',
+    description: '光年梯机场怎么样？本文整理光年梯月付价格、定制客户端、线路结构、流媒体体验、适合人群与购买前注意事项。',
+    verdict: '适合预算较低、希望先用小额月付体验定制客户端的新手，但对客户端自由度有要求的用户应先确认限制。',
+    lineArchitecture: '公开资料显示其使用专线中转与定制客户端模式，具体入口与协议由客户端管理。',
+    protocols: ['定制客户端托管', '具体协议以客户端为准'],
+    price: '¥18/月起；年付 ¥90 起',
+    plans: [
+      { name: '入门版（年付）', price: '¥90/年', traffic: '50GB/月', note: '折合约 ¥7.5/月，适合极轻量使用' },
+      { name: '入门版', price: '¥18/月', traffic: '110GB/月', note: '轻度入门档，购买前确认客户端支持' },
+      { name: '晋级版', price: '¥34/月', traffic: '220GB/月', note: '适合多设备日常使用' },
+      { name: '专业版', price: '¥68/月', traffic: '450GB/月', note: '适合较高流量主力使用' },
+      { name: '至尊版', price: '¥130/月', traffic: '900GB/月', note: '面向重度流量用户' },
+      { name: '独享私人专线', price: '¥680/月', traffic: '500GB/月', note: '独立带宽与独立公网 IP 以结算页说明为准' }
+    ],
+    audience: ['预算有限的新手', '学生用户', '希望一键连接的用户', '轻量日常使用者'],
+    useCases: ['网页与社交', '基础流媒体', '入门体验', '多平台一键连接'],
+    strengths: ['月付门槛较低', '定制客户端减少订阅导入步骤', '覆盖常见桌面与移动平台', '适合先建立基础使用习惯'],
+    considerations: ['公开资料显示可能必须使用服务商定制客户端', '自定义规则、第三方客户端和订阅迁移自由度可能较低', '低价套餐应关注流量、设备数和限速', '建议确认客户端更新与隐私说明'],
+    keywords: ['光年梯怎么样', '光年梯机场评测', '光年梯官网入口', '便宜机场推荐', '月付机场', '新手机场推荐', 'Windows加速器', '安卓客户端'],
+    referralUrl: 'https://19629.gntaff.com/#/?code=AixFrykO',
+    couponCode: 'GNT80',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '光年梯适合怎样的新手？',
+        paragraphs: [
+          '光年梯的主要吸引力是较低月付门槛和定制客户端。对于第一次接触订阅、规则模式和节点选择的用户，一键登录与连接可以减少初期学习成本。',
+          '但定制客户端也意味着生态更封闭。准备长期使用第三方客户端、软路由或复杂分流的用户，应先确认是否能获得标准订阅格式。'
+        ]
+      },
+      {
+        title: '低价套餐应该如何比较？',
+        paragraphs: [
+          '低价不等于真实成本低。需要同时查看月流量、节点倍率、设备限制、限速和续费价格。若常用节点为高倍率，标称流量需要折算后再比较。',
+          '对轻度用户而言，稳定的小流量月付可能比大流量年付更合适；对视频用户而言，则应重点测试晚高峰吞吐。'
+        ]
+      },
+      {
+        title: '购买前最重要的三项确认',
+        paragraphs: [
+          '第一，确认自己的系统版本能否安装服务商定制客户端；第二，确认是否支持常用目标地区和流媒体；第三，确认标准订阅、退款和设备更换规则。',
+          '如果只是入门体验，月付即可。连续使用一段时间后，再判断是否需要迁移到自由度更高的 Clash、Sing-box 或 Shadowrocket 生态。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '光年梯可以导入 Clash Verge Rev 吗？', answer: '公开资料显示其更偏向定制客户端，标准订阅支持情况应以当前购买页和客服说明为准。' },
+      { question: '光年梯适合学生用户吗？', answer: '低月付门槛适合预算有限的轻量用户，但应结合每月流量、设备数和晚高峰表现判断。' },
+      { question: '定制客户端安全吗？', answer: '应从官方入口下载，并检查更新来源、权限、数字签名和隐私说明。不要从不明网盘或第三方群文件安装。' }
+    ]
+  },
+  {
+    slug: 'kuaili',
+    name: '快狸',
+    englishName: 'Kuali Cloud',
+    logo: '/images/brands/logos/kuaili-logo.webp',
+    cover: '/images/brands/covers/kuaili-cover-warm.webp',
+    accent: '#53b7ff',
+    recommendation: '跨境协作型',
+    status: '场景推荐',
+    tagline: '多地区节点与外贸办公场景',
+    description: '快狸 Kuali Cloud 怎么样？本文从专线中转、多地区节点、跨境电商与外贸办公、流媒体支持、价格和购买注意事项进行评测。',
+    verdict: '更适合需要多地区业务节点、Google Workspace、WhatsApp、Shopify 等跨境协作场景的用户。',
+    lineArchitecture: '服务商资料标注 IPLC/专线中转，公开资料显示覆盖多地区并提供 Shadowsocks 节点。',
+    protocols: ['Shadowsocks', 'Trojan（以当前套餐为准）'],
+    price: '¥15/月起；年付 ¥120 起',
+    plans: [
+      { name: '森狸年付小套餐', price: '¥120/年', traffic: '30GB/月', note: '折合约 ¥10/月，适合基础备用' },
+      { name: '月狸月付小套餐', price: '¥15/月', traffic: '50GB/月', note: '轻量月付档，流量按月重置' },
+      { name: '小狸基础版', price: '¥22/月', traffic: '100GB/月', note: '适合日常办公与中轻度使用' }
+    ],
+    audience: ['跨境电商卖家', '外贸团队', 'SaaS 远程办公人员', '多地区业务用户'],
+    useCases: ['Google Workspace', 'WhatsApp', 'Shopify', '多地区流媒体'],
+    strengths: ['节点地区覆盖较丰富', '跨境办公与电商场景定位明确', '月付起步价格适中', '公开资料显示包含部分冷门地区节点'],
+    considerations: ['SLA、住宅 IP 与原生 IP 需要具体套餐证据支持', '电商账号风控不只由网络 IP 决定', '高倍率冷门节点会改变真实流量成本', '重要业务不应只依赖一个服务商'],
+    keywords: ['快狸怎么样', '快狸机场评测', 'Kuali Cloud官网入口', '跨境电商机场', '外贸专线机场', 'IPLC专线机场', 'WhatsApp网络', 'Google Workspace机场'],
+    referralUrl: 'https://196295.kuailiaff.com/#/?code=tmUe2z1n',
+    couponCode: 'kl888',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '快狸为什么适合跨境协作场景？',
+        paragraphs: [
+          '跨境电商和外贸团队通常不只需要“能连接”，还需要目标地区、会话稳定、上传速度和多设备协作。快狸的资料重点覆盖多地区节点与办公应用，因此更适合作为业务型候选。',
+          '选择具体节点时，应让出口地区与业务市场保持一致，并避免频繁跨国家切换。账号风控还与设备指纹、登录行为和平台规则有关，网络节点只是其中一个因素。'
+        ]
+      },
+      {
+        title: '专线、原生 IP 与 SLA 应如何核验？',
+        paragraphs: [
+          '“专线”“原生 IP”“99.9% SLA”等描述需要结合套餐页、节点标签和服务协议确认。普通共享节点和专属商务线路的保障范围可能完全不同。',
+          '如果网络用于团队生产，应询问故障响应、入口冗余、设备限制和退款政策，并为关键业务准备独立备用线路。'
+        ]
+      },
+      {
+        title: '快狸的真实成本怎么计算？',
+        paragraphs: [
+          '先确定团队每月总流量，再按常用节点倍率折算。冷门地区或特殊 IP 节点如果采用高倍率，应单独计算，而不是用套餐平均流量估算。',
+          '对于多人团队，还要确认同时在线设备数、共享账号规则和是否允许路由器接入，避免购买后才发现连接限制。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '快狸适合跨境电商团队吗？', answer: '从其公开产品方向与节点覆盖看，较符合跨境协作需求，但团队使用前应确认设备数、共享规则、目标地区出口和故障保障。' },
+      { question: '使用快狸能避免电商账号风控吗？', answer: '不能保证。网络 IP 只是风控因素之一，设备、登录地点、操作行为和平台政策同样重要。' },
+      { question: '快狸的冷门地区节点值得买吗？', answer: '如果业务确实面向对应地区，这类节点有价值；购买前应检查倍率、延迟、可用性和是否为真实目标地区出口。' }
+    ]
+  },
+  {
+    slug: 'shunyun',
+    name: '瞬云',
+    englishName: 'Shunyun Cloud',
+    logo: '/images/brands/logos/shunyun-logo.webp',
+    cover: '/images/brands/covers/shunyun-cover-warm.webp',
+    accent: '#ffb9d6',
+    recommendation: '影音体验型',
+    status: '场景推荐',
+    tagline: '视频场景与节点冗余定位',
+    description: '瞬云机场怎么样？本文整理瞬云专网冗余、Hysteria2、晚高峰影音体验、TikTok/Netflix 场景、价格与短周期测试建议。',
+    verdict: '更适合把 YouTube、Netflix、TikTok 等视频体验放在首位，并愿意先测试晚高峰的用户。',
+    lineArchitecture: '服务商资料标注高速内网专线与专网冗余，公开可核验资料有限，建议将核心指标视为待复测。',
+    protocols: ['Shadowsocks', 'Hysteria2'],
+    price: '¥20/月起；年付 ¥99 起',
+    plans: [
+      { name: '限时年付小包', price: '¥99/年', traffic: '59GB/月', note: '折合约 ¥8.25/月，限时套餐可能下架' },
+      { name: '行者', price: '¥20/月', traffic: '150GB/月', note: '适合日常中度使用' },
+      { name: '纵横', price: '¥36/月', traffic: '300GB/月', note: '适合影音与多设备使用' },
+      { name: '凌霄', price: '¥68/月', traffic: '600GB/月', note: '适合大流量与重度办公下载' }
+    ],
+    audience: ['影音爱好者', '视频创作者', 'TikTok 使用者', '需要备用节点的用户'],
+    useCases: ['YouTube 高画质', 'Netflix', 'TikTok', '视频上传与直播'],
+    strengths: ['公开资料更强调视频与高吞吐场景', '资料中强调节点监测与冗余切换', 'Hysteria2 可作为弱网备选协议', '适合建立独立影音节点组'],
+    considerations: ['8K、无缓冲等体验高度依赖本地网络和片源', '公开资料有限，线路与价格需要购买页复核', 'TikTok 原生 IP 需按具体节点确认', '直播用户应重点测试上传而不是只测下载'],
+    keywords: ['瞬云怎么样', '瞬云机场评测', '瞬云官网入口', 'Netflix机场', 'TikTok加速器', 'YouTube 4K机场', 'Hysteria2机场', '晚高峰稳定机场'],
+    referralUrl: 'https://ccc.jichang.best/#/register?code=ClNa0zPm',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '瞬云的影音定位应如何理解？',
+        paragraphs: [
+          '瞬云的资料重点是高画质视频、TikTok 与节点冗余。对影音用户而言，真正需要测试的是晚高峰持续码率、视频拖动恢复速度、地区库和出口 IP，而不是某一次测速峰值。',
+          '8K 视频需要很高且持续的带宽，但多数用户的实际需求集中在 1080p、4K 与直播上传。购买前应按自己的片源和设备验证。'
+        ]
+      },
+      {
+        title: 'TikTok 和直播场景关注哪些指标？',
+        paragraphs: [
+          'TikTok 运营通常需要地区一致性、稳定出口和良好上传质量。所谓原生 IP 应按节点逐项确认，并避免在同一账号上频繁切换地区。',
+          '直播用户应进行 20–30 分钟连续上传测试，观察抖动和断流，而不是只看下载测速。'
+        ]
+      },
+      {
+        title: '资料较少时怎样降低购买风险？',
+        paragraphs: [
+          '优先选择月付，保存套餐说明和订单信息，并确认官方群、公告和工单是否正常更新。先完成自己的场景测试，再判断是否把瞬云作为长期主力。',
+          '如果视频是刚需，应同时准备一个不同上游的备用服务，避免单一线路维护影响全部播放与上传任务。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '瞬云真的能稳定播放 8K 视频吗？', answer: '是否流畅取决于本地宽带、晚高峰容量、节点和片源。服务商宣传只能作为线索，建议使用自己的设备和常用时段测试。' },
+      { question: '瞬云适合 TikTok 直播吗？', answer: '可作为候选，但应重点检查目标地区出口、上传稳定性、连续直播表现和账号地区一致性。' },
+      { question: '瞬云公开资料不多，能买吗？', answer: '可以先用短周期小套餐观察，但不建议仅依据宣传直接购买长期套餐。' }
+    ]
+  },
+  {
+    slug: 'yuntu',
+    name: '云图',
+    englishName: 'Yuntu Airport',
+    logo: '/images/brands/logos/yuntu-logo.png',
+    cover: '/images/brands/covers/yuntu-cover-warm.webp',
+    accent: '#2b9bd8',
+    recommendation: '科研检索型',
+    status: '场景推荐',
+    tagline: '多路优化与知识工作场景',
+    description: '云图机场怎么样？本文从 BGP 多路优化、科研检索、Google Scholar、知识工作、流媒体、价格和隐私注意事项整理云图机场评测。',
+    verdict: '更适合科研检索、海外资料访问与日常知识工作，并希望在价格和多路入口之间平衡的用户。',
+    lineArchitecture: '服务商资料标注 BGP 多路优化中转，具体运营商入口、节点倍率和冗余情况需要复核。',
+    protocols: ['Shadowsocks', 'Trojan'],
+    price: '¥20/月起；另有不限时流量包',
+    plans: [
+      { name: '岚图', price: '¥20/月', traffic: '150GB/月', note: '5 台设备，常规倍率以套餐页为准' },
+      { name: '梦图', price: '¥49/月', traffic: '300GB/月', note: '5 台设备，适合中等流量使用' },
+      { name: '星图', price: '¥99/月', traffic: '600GB/月', note: '5 台设备，适合高流量使用' },
+      { name: '50G 不限时流量', price: '¥78/次', traffic: '50GB 总量', note: '一次性流量包，不按月重置' },
+      { name: '100G 不限时流量', price: '¥119/次', traffic: '100GB 总量', note: '一次性流量包，不按月重置' }
+    ],
+    audience: ['研究生与高校用户', '知识工作者', '海外资料检索用户', '日常办公用户'],
+    useCases: ['Google Scholar', 'GitHub', '学术数据库', '流媒体与日常浏览'],
+    strengths: ['科研和知识工作定位清晰', 'BGP 多路入口有利于不同运营商适配', '价格处于常见月付区间', '适合作为学习与资料检索主力候选'],
+    considerations: ['“隐私安全度高”需要隐私政策与日志说明支撑', '学术资源是否可用还取决于机构账号与数据库授权', '不同地区节点质量可能存在差异', '建议测试大文件下载和 Git 操作稳定性'],
+    keywords: ['云图机场怎么样', '云图机场评测', '云图机场官网入口', '科研机场推荐', 'Google Scholar加速', 'Github加速', 'BGP中转机场', '学生机场推荐'],
+    referralUrl: 'https://vip.ytjcok.org/#/register?code=nDsDjrfI',
+    couponCode: 'yt88',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '云图为什么适合科研和知识工作？',
+        paragraphs: [
+          '科研场景通常需要稳定访问搜索、代码托管、论文页面和远程协作，而不是极端峰值带宽。从公开资料与线路说明看，云图的多路中转更贴近这种持续、分散的日常使用。',
+          '对于 GitHub、Google Scholar 和海外文档，DNS、连接稳定和小文件请求延迟往往比单线程测速更重要。'
+        ]
+      },
+      {
+        title: '学术用户应该怎样测试？',
+        paragraphs: [
+          '建议测试常用数据库登录、PDF 下载、Git clone/pull、视频会议和云盘同步。若需要学校机构授权，还应确认访问方式是否符合机构政策。',
+          '不同节点可按“检索”“下载”“会议”建立分组，避免一个节点承担所有任务。'
+        ]
+      },
+      {
+        title: '隐私与日志信息如何判断？',
+        paragraphs: [
+          '服务商宣传中的“隐私安全”需要结合隐私政策、日志保留说明、客服沟通和客户端权限判断。不要把代理连接等同于完全匿名。',
+          '重要账号应使用独立强密码和双因素验证，不在未知页面输入学校、邮箱或支付账户凭据。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '云图适合访问 Google Scholar 吗？', answer: '其定位与节点结构适合科研检索候选，但具体可用性仍需用自己的网络、账号和常用数据库测试。' },
+      { question: '云图能替代学校 VPN 吗？', answer: '不能直接替代。学校 VPN 通常用于访问机构授权资源，普通代理服务不一定具备相同权限。' },
+      { question: '云图的隐私表现如何判断？', answer: '应查看隐私政策、日志说明、客户端来源和权限；仅凭宣传语无法确认实际日志策略。' }
+    ]
+  },
+  {
+    slug: 'kexinyun',
+    name: '可信云',
+    englishName: 'Kexin Cloud',
+    logo: '/images/brands/logos/kexinyun-logo.webp',
+    cover: '/images/brands/covers/kexinyun-cover-warm.webp',
+    accent: '#2475b8',
+    recommendation: '低门槛试用型',
+    status: '性价比观察',
+    tagline: '小额试用与短周期备用方案',
+    description: '可信云机场怎么样？本文整理可信云试用套餐、IEPL 线路、月付流量、节点地区、短周期测试与备用机场使用建议。',
+    verdict: '更适合希望以较低成本试用、轻量使用或配置备用线路的用户。',
+    lineArchitecture: '公开资料标注 IEPL/专线入口，节点地区和线路数量相对精简。',
+    protocols: ['Shadowsocks（公开资料）'],
+    price: '¥15/月起；年付 ¥96 起',
+    plans: [
+      { name: '年费小礼包', price: '¥96/年', traffic: '60GB/月', note: '折合约 ¥8/月，适合轻量使用' },
+      { name: '月付小包', price: '¥15/月', traffic: '60GB/月', note: '适合短期试用与备用线路' },
+      { name: '基础版 Basic', price: '¥25/月', traffic: '150GB/月', note: '适合日常使用，周期优惠以结算页为准' }
+    ],
+    audience: ['轻度用户', '备用线路用户', '预算敏感用户', '希望先试用的新手'],
+    useCases: ['轻量浏览', '备用防失联', '低成本试用', '常用地区节点'],
+    strengths: ['试用门槛较低', '月付价格易于控制风险', '常用地区节点覆盖基础需求', '适合验证本地网络与客户端兼容性'],
+    considerations: ['服务商与当前域名运营时间相对较短', '套餐流量偏精简，不适合重度视频', '公开节点地区数量有限', '专线与解锁能力需要逐节点验证'],
+    keywords: ['可信云怎么样', '可信云机场评测', '可信云官网入口', '便宜机场推荐', '机场试用', '月付机场', '备用机场', 'IEPL机场'],
+    referralUrl: 'https://asfasf.kexintztz2.sbs/#/?code=BStg7pM7',
+    couponCode: 'kxy80',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-06',
+    updatedAt: '2026-10-07',
+    featured: true,
+    sections: [
+      {
+        title: '可信云的主要价值是什么？',
+        paragraphs: [
+          '可信云更适合作为低成本试用与备用候选。小额试用能帮助用户确认客户端、订阅格式和本地网络是否兼容，再决定是否购买月付套餐。',
+          '这类精简套餐不适合只看“节点越多越好”，而应确认自己常用的香港、日本、新加坡或美国等地区是否可用。'
+        ]
+      },
+      {
+        title: '轻量用户如何选择套餐？',
+        paragraphs: [
+          '如果主要是查资料、收消息和偶尔使用 AI 工具，小流量月付可能足够。若经常观看视频或同步文件，则需要先估算月流量，避免频繁加购。',
+          '试用期间应同时测试订阅更新、系统代理、TUN、常用网站和晚高峰，不要只测试首页能否打开。'
+        ]
+      },
+      {
+        title: '为什么更适合按月观察？',
+        paragraphs: [
+          '公开资料显示服务商与当前域名运营时间较短，因此短周期比长期预付更容易控制风险。观察重点包括公告更新、节点维护、工单响应和入口稳定。',
+          '作为备用线路时，最好与主力服务使用不同的上游和入口，才能真正起到容灾作用。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '可信云的试用套餐适合测速吗？', answer: '适合检查连接、延迟、常用节点和客户端兼容，但流量较少，不适合长时间高清视频压力测试。' },
+      { question: '可信云适合做备用机场吗？', answer: '低门槛与月付模式适合作为备用候选，但应确认其上游与主力服务不同。' },
+      { question: '可信云值得年付吗？', answer: '对运营时间较短或仍在观察的服务，更稳妥的是先月付并持续观察公告与维护表现。' }
+    ]
+  }
+];
+
+export const featuredBrands = brands.filter((brand) => brand.featured);
+
+/**
+ * 机场评测页的高意向搜索词。它们对应用户进入购买前最后一轮核验时
+ * 最常见的搜索表达，但页面回答仍以可核验资料为准，不生成虚构优惠。
+ */
+export function getBrandIntentKeywords(brand: BrandProfile) {
+  return Array.from(new Set([
+    ...brand.keywords,
+    `${brand.name}多少钱`,
+    `${brand.name}价格`,
+    `${brand.name}月付套餐`,
+    `${brand.name}优惠码`,
+    `${brand.name}晚高峰`,
+    `${brand.name}Clash订阅`,
+    `${brand.name}Shadowrocket`,
+    `${brand.name}ChatGPT`
+  ]));
+}
+
+/**
+ * 所有机场评测共享的购买前问题，专门承接价格、优惠、晚高峰和客户端
+ * 兼容等长尾搜索。回答不承诺无法持续验证的折扣或性能。
+ */
+export function getBrandIntentFaqs(brand: BrandProfile): BrandFaq[] {
+  return [
+    {
+      question: `${brand.name}多少钱一个月？`,
+      answer: `本站当前记录的参考价格为“${brand.price}”。套餐、流量、倍率和活动会调整，进入结算页后应再次核对折后月费、流量重置周期、设备数和续费价格。`
+    },
+    {
+      question: `${brand.name}有没有可用优惠码？`,
+      answer: brand.couponCode
+        ? `本站当前记录的 ${brand.name} 优惠码为“${brand.couponCode}”。使用时请保持大小写一致，并在付款前确认代码是否生效、适用套餐、优惠内容和最终结算金额。`
+        : '本站目前没有记录到已核验的独立优惠码。机场入口可能自动绑定邀请优惠，也可能没有正在进行的活动；付款前请以结算页显示的最终金额为准。'
+    },
+    {
+      question: `${brand.name}晚高峰稳定吗？`,
+      answer: '晚高峰体验与本地运营商、入口负载、节点线路和所在地区有关，不能用一次测速作长期保证。建议先月付，并在工作日与周末 20:00—23:00 连续测试延迟、丢包、视频拖动和常用应用。'
+    },
+    {
+      question: `${brand.name}支持 Clash、Shadowrocket 或 Sing-box 吗？`,
+      answer: `服务商资料涉及的协议包括 ${brand.protocols.join('、')}。协议支持不等于所有客户端都能直接导入，购买前应确认后台是否提供 Clash、Shadowrocket、Sing-box 或通用订阅格式，以及当前系统版本是否兼容。`
+    }
+  ];
+}
+
+export function getBrand(slug: string) {
+  return brands.find((brand) => brand.slug === slug);
+}

@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">机场跑路风险排查</title><desc id="desc">官网、订阅、节点、公告与客服组成的机场异常证据清单</desc>
+  <rect width="1280" height="720" rx="44" fill="#f7f2f5"/><circle cx="1100" cy="610" r="260" fill="#e1eee8"/>
+  <text x="88" y="118" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#8b637f">RISK CHECK 2026</text><text x="88" y="205" font-family="Arial, sans-serif" font-size="62" font-weight="800" fill="#342f33">机场跑路前兆怎么查</text><text x="88" y="258" font-family="Arial, sans-serif" font-size="28" fill="#756b73">官网 · 订阅 · 节点 · 公告 · 客服</text>
+  <g transform="translate(88 334)" font-family="Arial, sans-serif"><rect width="1096" height="250" rx="30" fill="#fff" stroke="#ddd0d9"/>
+  <g fill="#4a4147" font-size="22" font-weight="700"><text x="88" y="72">官网入口</text><text x="292" y="72">订阅更新</text><text x="496" y="72">节点状态</text><text x="700" y="72">维护公告</text><text x="904" y="72">客服响应</text></g>
+  <g fill="none" stroke="#8d6b83" stroke-width="8"><circle cx="124" cy="132" r="34"/><circle cx="328" cy="132" r="34"/><circle cx="532" cy="132" r="34"/><circle cx="736" cy="132" r="34"/><circle cx="940" cy="132" r="34"/></g><path d="M158 132h136M362 132h136M566 132h136M770 132h136" stroke="#d5c6d0" stroke-width="6" stroke-dasharray="12 12"/><text x="54" y="210" font-size="22" fill="#796c75">一个信号不能直接下结论，多项异常同时出现再提升风险等级</text></g>
+  <text x="88" y="656" font-family="Arial, sans-serif" font-size="22" fill="#756b73">jichangjiance.com · 先保存证据，再停止续费和长付</text>
+</svg>

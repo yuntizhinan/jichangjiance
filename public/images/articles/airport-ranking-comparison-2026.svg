@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">2026 机场推荐横向对比</title><desc id="desc">暖色仪表盘展示价格、线路、设备与场景四项机场对比指标</desc>
+  <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff8ef"/><stop offset="1" stop-color="#e8f3ef"/></linearGradient></defs>
+  <rect width="1280" height="720" rx="44" fill="url(#bg)"/><circle cx="1070" cy="130" r="170" fill="#d9ebe4" opacity=".7"/><circle cx="160" cy="650" r="210" fill="#f0d4c1" opacity=".6"/>
+  <text x="92" y="118" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#bf6844">2026 AIRPORT GUIDE</text>
+  <text x="92" y="205" font-family="Arial, sans-serif" font-size="64" font-weight="800" fill="#382f2a">机场推荐横向对比</text>
+  <text x="92" y="258" font-family="Arial, sans-serif" font-size="28" fill="#75665d">价格 · 线路 · 流量 · 使用场景</text>
+  <g transform="translate(92 338)" font-family="Arial, sans-serif"><rect width="1096" height="250" rx="28" fill="#fffdf9" stroke="#dccdc0"/>
+    <g transform="translate(44 42)"><rect width="222" height="166" rx="20" fill="#f8e9df"/><text x="26" y="45" font-size="20" fill="#8e776a">预算</text><text x="26" y="102" font-size="42" font-weight="700" fill="#c26d48">月付 / 年付</text><text x="26" y="138" font-size="18" fill="#8e776a">先小额验证</text></g>
+    <g transform="translate(300 42)"><rect width="222" height="166" rx="20" fill="#e9f3ef"/><text x="26" y="45" font-size="20" fill="#657b71">线路</text><text x="26" y="102" font-size="42" font-weight="700" fill="#27826c">IEPL / BGP</text><text x="26" y="138" font-size="18" fill="#657b71">观察晚高峰</text></g>
+    <g transform="translate(556 42)"><rect width="222" height="166" rx="20" fill="#f4ecf7"/><text x="26" y="45" font-size="20" fill="#7d6f86">设备</text><text x="26" y="102" font-size="42" font-weight="700" fill="#8465a1">全平台</text><text x="26" y="138" font-size="18" fill="#7d6f86">客户端兼容</text></g>
+    <g transform="translate(812 42)"><rect width="222" height="166" rx="20" fill="#eaf2f8"/><text x="26" y="45" font-size="20" fill="#65798a">场景</text><text x="26" y="102" font-size="42" font-weight="700" fill="#3b789e">AI / 影音</text><text x="26" y="138" font-size="18" fill="#65798a">按需求选择</text></g>
+  </g><text x="92" y="654" font-family="Arial, sans-serif" font-size="22" fill="#75665d">jichangjiance.com · 独立评测与信息整理</text>
+</svg>

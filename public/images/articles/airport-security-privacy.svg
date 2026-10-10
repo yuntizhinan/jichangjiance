@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">隐私安全</title>
+  <desc id="desc">安全与隐私：HTTPS · DNS · 账号防护</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#dff8f5"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#087f8c"/><stop offset="1" stop-color="#38b2ac"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#087f8c" flood-opacity=".13"/></filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#087f8c" opacity=".08"/></pattern>
+  </defs>
+  <rect width="1280" height="720" rx="34" fill="url(#bg)"/>
+  <rect width="1280" height="720" rx="34" fill="url(#dots)"/>
+  <circle cx="1170" cy="42" r="230" fill="#38b2ac" opacity=".11"/>
+  <circle cx="90" cy="690" r="190" fill="#087f8c" opacity=".06"/>
+  <g font-family="Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif">
+    <rect x="86" y="118" width="176" height="42" rx="21" fill="#087f8c" opacity=".11"/>
+    <text x="174" y="146" text-anchor="middle" fill="#087f8c" font-size="20" font-weight="700" letter-spacing="2">安全与隐私</text>
+    <text x="86" y="264" fill="#172a38" font-size="62" font-weight="800" letter-spacing="1">隐私安全</text>
+    <text x="88" y="324" fill="#5c6d78" font-size="27" font-weight="500">HTTPS · DNS · 账号防护</text>
+    <rect x="88" y="389" width="112" height="8" rx="4" fill="url(#accent)"/>
+    <text x="88" y="497" fill="#087f8c" font-size="22" font-weight="700">JICHANGJIANCE.COM</text>
+    <text x="88" y="532" fill="#71828c" font-size="18">机场监测 · 专业指南与工具分享</text>
+  </g>
+  <g filter="url(#shadow)"><rect x="760" y="142" width="382" height="438" rx="38" fill="#ffffff" opacity=".94"/><rect x="794" y="178" width="314" height="20" rx="10" fill="#dce9ef"/><path d="M951 246l104 39v78c0 80-43 126-104 157-61-31-104-77-104-157v-78z" fill="#38b2ac" opacity=".18" stroke="#087f8c" stroke-width="8"/><rect x="910" y="348" width="82" height="70" rx="16" fill="#087f8c"/><path d="M930 348v-22c0-33 52-33 52 0v22" fill="none" stroke="#087f8c" stroke-width="13"/><circle cx="951" cy="383" r="7" fill="#fff"/><path d="M818 226 L884 226" fill="none" stroke="#38b2ac" stroke-width="10" stroke-linecap="round"/><path d="M1018 226 L1084 226" fill="none" stroke="#38b2ac" stroke-width="10" stroke-linecap="round"/></g>
+  <rect x="1.5" y="1.5" width="1277" height="717" rx="32" fill="none" stroke="#087f8c" stroke-opacity=".11" stroke-width="3"/>
+</svg>

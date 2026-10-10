@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">流媒体机场节点测试</title><desc id="desc">电视屏幕与播放进度条表示 Netflix YouTube 4K 流媒体测试</desc>
+  <rect width="1280" height="720" rx="44" fill="#eef6f5"/><circle cx="1090" cy="96" r="190" fill="#f0d6c5" opacity=".62"/>
+  <text x="88" y="118" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#267e79">STREAMING GUIDE 2026</text><text x="88" y="205" font-family="Arial, sans-serif" font-size="62" font-weight="800" fill="#302f30">流媒体机场怎么选</text><text x="88" y="258" font-family="Arial, sans-serif" font-size="28" fill="#687675">Netflix · YouTube 4K · Disney+</text>
+  <g transform="translate(88 328)" font-family="Arial, sans-serif"><rect width="740" height="270" rx="30" fill="#fff" stroke="#cadeda"/><rect x="34" y="34" width="672" height="154" rx="18" fill="#1e3f46"/><circle cx="370" cy="111" r="48" fill="#fff" opacity=".9"/><path d="m354 81 50 30-50 30z" fill="#c26948"/><rect x="54" y="217" width="632" height="12" rx="6" fill="#dbe8e5"/><rect x="54" y="217" width="402" height="12" rx="6" fill="#2a8a80"/>
+  <rect x="774" width="322" height="270" rx="30" fill="#fff" stroke="#cadeda"/><text x="810" y="62" font-size="21" fill="#71807e">测试四件事</text><text x="810" y="112" font-size="26" font-weight="700" fill="#31423f">内容库</text><text x="810" y="154" font-size="26" font-weight="700" fill="#31423f">首开与拖动</text><text x="810" y="196" font-size="26" font-weight="700" fill="#31423f">持续码率</text><text x="810" y="238" font-size="26" font-weight="700" fill="#31423f">晚高峰</text></g>
+  <text x="88" y="656" font-family="Arial, sans-serif" font-size="22" fill="#687675">jichangjiance.com · 直接测试目标地区内容库</text>
+</svg>

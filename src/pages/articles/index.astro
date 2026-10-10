@@ -1,0 +1,116 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import Sidebar from '../../components/Sidebar.astro';
+import { getCollection } from 'astro:content';
+import { categories } from '../../lib/site';
+import { Search } from '@lucide/astro';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = articles.sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime());
+---
+
+<BaseLayout
+  title="文章库"
+  description="浏览机场指南的所有文章与知识库。涵盖新手入门、机场线路评测、Clash/Sing-box 客户端教程与网络传输基础。"
+>
+  <div class="shell page-container">
+    <Breadcrumbs items={[{ label: '文章库' }]} />
+
+    <div class="page-hero">
+      <h1>文章知识库</h1>
+      <p>面向中文用户的机场代理、节点分流与客户端工具实战指南全集。</p>
+    </div>
+
+    {/* Filter Navigation */}
+    <div class="filter-bar">
+      <div class="category-tabs">
+        <a href="/articles/" class="tab-item is-active">全部文章 ({sortedArticles.length})</a>
+        {categories.map((cat) => {
+          const count = articles.filter((a) => a.data.category === cat.name).length;
+          return <a href={`/categories/${cat.slug}/`} class="tab-item">{cat.name} ({count})</a>;
+        })}
+      </div>
+      <a href="/search/" class="search-shortcut"><Search size={16} /> 搜索文章...</a>
+    </div>
+
+  </div>
+
+  <div class="blog-main shell archive-main">
+    <main>
+      <div class="articles-grid">
+        {sortedArticles.map((article) => <ArticleCard article={article} />)}
+      </div>
+    </main>
+    <Sidebar />
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    padding-top: 2rem;
+  }
+
+  .archive-main { padding-top: 0; }
+
+  .filter-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 2rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1rem;
+  }
+
+  .category-tabs {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .tab-item {
+    font-size: 0.875rem;
+    font-weight: 500;
+    padding: 0.4rem 0.9rem;
+    border-radius: var(--radius-full);
+    color: var(--text-secondary);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+  }
+
+  .tab-item:hover {
+    color: var(--text-primary);
+    border-color: var(--border-color-hover);
+  }
+
+  .tab-item.is-active {
+    background: var(--tone-lime-bg);
+    color: var(--tone-lime);
+    border-color: var(--tone-lime-border);
+    font-weight: 600;
+  }
+
+  .search-shortcut {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    padding: 0.4rem 0.85rem;
+    border-radius: var(--radius-md);
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    transition: all var(--transition-fast);
+  }
+
+  .search-shortcut:hover {
+    color: var(--text-primary);
+    border-color: var(--border-color-hover);
+  }
+
+</style>

@@ -1,0 +1,191 @@
+---
+import { ArrowRight, CalendarDays, CircleCheck, ExternalLink, Globe, Layers, Lightbulb, ShieldAlert, Sparkles, WalletCards } from '@lucide/astro';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../../components/Breadcrumbs.astro';
+import AiAirportPromo from '../../../components/AiAirportPromo.astro';
+import { absoluteUrl } from '../../../lib/site';
+import { aiAppProfiles, type AiAppProfile } from '../../../data/aiAppProfiles';
+import { featuredBrands } from '../../../data/brands';
+
+export function getStaticPaths() {
+  return aiAppProfiles.map((app) => ({ params: { slug: app.slug }, props: { app } }));
+}
+
+const { app } = Astro.props as { app: AiAppProfile };
+const appIndex = Math.max(0, aiAppProfiles.findIndex((item) => item.slug === app.slug));
+const promotedBrand = featuredBrands[appIndex % featuredBrands.length];
+const related = aiAppProfiles.filter((item) => item.slug !== app.slug && item.category === app.category).slice(0, 3);
+const fallbackRelated = related.length > 0 ? related : aiAppProfiles.filter((item) => item.slug !== app.slug).slice(0, 3);
+const pagePath = `/ai-news/apps/${app.slug}/`;
+const pageTitle = `${app.name}是什么？功能、适用场景与使用指南`;
+const faq = [
+  { question: `${app.name}适合什么人使用？`, answer: `${app.name}更适合${app.bestFor}。是否适合长期使用，还要结合数据类型、团队流程、预算和人工复核要求判断。` },
+  { question: `使用${app.name}前最需要注意什么？`, answer: app.caution },
+  { question: `${app.name}可以直接替代人工吗？`, answer: `不建议把${app.name}直接视为人工替代。更稳妥的方式是让它处理可定义、可检查的环节，再由人负责目标、事实、风险和最终交付。` }
+];
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'SoftwareApplication', name: app.name, applicationCategory: app.category,
+    description: app.description, image: absoluteUrl(app.logo), url: absoluteUrl(pagePath), operatingSystem: app.access,
+    offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD', description: app.pricing }
+  },
+  { '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: faq.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } })) }
+];
+---
+
+<BaseLayout title={pageTitle} description={`${app.name}中文介绍：了解核心功能、适用人群、使用场景、开始步骤、局限与官网入口。${app.description}`} keywords={[app.name, `${app.name}是什么`, `${app.name}怎么用`, `${app.name}官网`, `${app.name}使用教程`, ...app.tags]} image={app.logo} imageAlt={`${app.name} Logo`} jsonLd={jsonLd}>
+  <div class="shell app-detail" style={`--app-accent:${app.accent}`}>
+    <Breadcrumbs items={[{ label: 'AI资讯分享', href: '/ai-news/' }, { label: 'AI应用库', href: '/ai-news/apps/' }, { label: app.name }]} />
+
+    <header class="detail-hero">
+      <div class="hero-logo"><img src={app.logo} alt={`${app.name} Logo`} width="128" height="128" fetchpriority="high" decoding="async" /></div>
+      <div class="hero-copy">
+        <span class="category">{app.category}</span>
+        <h1>{app.name}</h1>
+        <p>{app.description}</p>
+        <div class="hero-tags">{app.tags.map((tag) => <span>{tag}</span>)}</div>
+        <div class="hero-actions">
+          <a class="primary" href={app.website} target="_blank" rel="nofollow noopener">访问官网 <ExternalLink size={16} /></a>
+          <a class="secondary" href="/ai-news/apps/">返回应用库</a>
+        </div>
+      </div>
+      <aside><Sparkles size={25} /><strong>编辑结论</strong><p>{app.editorTip}</p></aside>
+    </header>
+
+    <section class="quick-facts" aria-label={`${app.name}快速信息`}>
+      <article><WalletCards size={20} /><span>费用方式</span><strong>{app.pricing}</strong></article>
+      <article><Globe size={20} /><span>使用入口</span><strong>{app.access}</strong></article>
+      <article><Layers size={20} /><span>更适合</span><strong>{app.bestFor}</strong></article>
+      <article><CalendarDays size={20} /><span>页面更新</span><strong>2026年10月6日</strong></article>
+    </section>
+
+    <main class="detail-layout">
+      <article class="detail-content prose">
+        <section>
+          <span class="eyebrow">OVERVIEW</span>
+          <h2>{app.name}是什么？</h2>
+          <p>{app.overview}</p>
+        </section>
+
+        <section>
+          <span class="eyebrow">CORE FEATURES</span>
+          <h2>{app.name}的核心功能</h2>
+          <div class="feature-grid">{app.keyFeatures.map((item, index) => <article><span>0{index + 1}</span><p>{item}</p></article>)}</div>
+        </section>
+
+        <section>
+          <span class="eyebrow">USE CASES</span>
+          <h2>适合用在哪些场景？</h2>
+          <ul class="check-list">{app.scenarios.map((item) => <li><CircleCheck size={17} />{item}</li>)}</ul>
+        </section>
+
+        <section>
+          <span class="eyebrow">GET STARTED</span>
+          <h2>{app.name}使用步骤</h2>
+          <ol class="steps">{app.steps.map((item, index) => <li><span>{index + 1}</span><p>{item}</p></li>)}</ol>
+        </section>
+
+        <section class="limits">
+          <span class="eyebrow">LIMITS & SAFETY</span>
+          <h2>使用限制与风险提示</h2>
+          <div class="warning"><ShieldAlert size={22} /><p><strong>最需要注意：</strong>{app.caution}</p></div>
+          <ul>{app.limitations.map((item) => <li>{item}</li>)}</ul>
+        </section>
+
+        <section class="faq">
+          <span class="eyebrow">FAQ</span>
+          <h2>{app.name}常见问题</h2>
+          {faq.map((item, index) => <details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+        </section>
+
+        <AiAirportPromo brand={promotedBrand} appName={app.name} variant="inline" />
+      </article>
+
+      <aside class="detail-sidebar">
+        <div class="sidebar-card">
+          <img src={app.logo} alt={`${app.name}应用图标`} width="128" height="128" loading="lazy" decoding="async" />
+          <h2>{app.name}</h2>
+          <p>{app.description}</p>
+          <a href={app.website} target="_blank" rel="nofollow noopener">打开官方网站 <ExternalLink size={15} /></a>
+        </div>
+        <div class="sidebar-card tip-card"><Lightbulb size={20} /><h2>编辑建议</h2><p>{app.editorTip}</p></div>
+        <AiAirportPromo brand={promotedBrand} appName={app.name} variant="sidebar" />
+      </aside>
+    </main>
+
+    <section class="related-apps">
+      <span class="eyebrow">RELATED APPS</span>
+      <h2>同类工具继续比较</h2>
+      <div>{fallbackRelated.map((item) => <a href={`/ai-news/apps/${item.slug}/`} style={`--related-accent:${item.accent}`}><img src={item.logo} alt={`${item.name} Logo`} width="128" height="128" loading="lazy" decoding="async" /><span><strong>{item.name}</strong><small>{item.bestFor}</small></span><ArrowRight size={17} /></a>)}</div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .app-detail { padding-top: 1.5rem; padding-bottom: 3rem; }
+  .detail-hero { display: grid; grid-template-columns: 150px minmax(0, 1fr) 280px; gap: 1.5rem; align-items: center; margin-top: 1rem; padding: 2rem; background: linear-gradient(135deg, color-mix(in srgb, var(--app-accent) 12%, #f8fafc), #fff 58%); border: 1px solid color-mix(in srgb, var(--app-accent) 25%, #e2e8f0); }
+  .hero-logo { display: grid; width: 138px; height: 138px; place-items: center; background: #fff; border: 1px solid #e7ebef; border-radius: 28px; box-shadow: 0 16px 38px rgba(30, 45, 60, .1); }
+  .hero-logo img { width: 82px; height: 82px; object-fit: contain; }
+  .category, .eyebrow { color: var(--app-accent); font-size: .68rem; font-weight: 800; letter-spacing: .1em; }
+  .hero-copy h1 { margin-top: .25rem; font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1; }
+  .hero-copy > p { max-width: 42rem; margin-top: .75rem; color: var(--text-secondary); font-size: .9rem; line-height: 1.75; }
+  .hero-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .8rem; }
+  .hero-tags span { padding: .2rem .55rem; color: #53606c; background: #fff; border: 1px solid #e3e7ea; border-radius: 999px; font-size: .64rem; }
+  .hero-actions { display: flex; flex-wrap: wrap; gap: .55rem; margin-top: 1rem; }
+  .hero-actions a { display: inline-flex; align-items: center; gap: .35rem; padding: .65rem .9rem; font-size: .75rem; font-weight: 750; }
+  .hero-actions .primary { color: #fff; background: var(--app-accent); }
+  .hero-actions .secondary { color: #4d5965; background: #fff; border: 1px solid #dde3e8; }
+  .detail-hero > aside { align-self: stretch; padding: 1.1rem; color: #e7f4f7; background: #193b49; border-left: 3px solid var(--app-accent); }
+  .detail-hero > aside svg { color: #7bd4e8; }
+  .detail-hero > aside strong { display: block; margin-top: .55rem; color: #fff; font-size: .82rem; }
+  .detail-hero > aside p { margin-top: .35rem; color: #b9cbd2; font-size: .7rem; line-height: 1.7; }
+  .quick-facts { display: grid; grid-template-columns: repeat(4, 1fr); gap: .75rem; margin: 1rem 0 2rem; }
+  .quick-facts article { padding: 1rem; background: #fff; border: 1px solid #e3e7eb; }
+  .quick-facts svg { color: var(--app-accent); }
+  .quick-facts span, .quick-facts strong { display: block; }
+  .quick-facts span { margin-top: .45rem; color: var(--text-muted); font-size: .62rem; }
+  .quick-facts strong { margin-top: .15rem; font-size: .72rem; line-height: 1.45; }
+  .detail-layout { display: grid; grid-template-columns: minmax(0, 1fr) 260px; gap: 2rem; align-items: start; }
+  .detail-content { min-width: 0; padding: 1.5rem; background: #fff; border: 1px solid #e3e7eb; }
+  .detail-content section + section { margin-top: 2.4rem; }
+  .detail-content h2 { margin: .35rem 0 .9rem; padding: 0; border: 0; font-size: 1.35rem; }
+  .detail-content p { color: var(--text-secondary); font-size: .82rem; line-height: 1.85; }
+  .feature-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .65rem; }
+  .feature-grid article { padding: .9rem; background: #f7f9fa; border-top: 2px solid var(--app-accent); }
+  .feature-grid span { color: var(--app-accent); font-size: .62rem; font-weight: 800; }
+  .feature-grid p { margin: .45rem 0 0; font-size: .72rem; line-height: 1.65; }
+  .check-list { display: grid; grid-template-columns: 1fr 1fr; gap: .55rem; padding: 0; list-style: none; }
+  .check-list li { display: flex; gap: .45rem; align-items: flex-start; padding: .75rem; color: #52606d; background: #f8fafb; border: 1px solid #edf0f2; font-size: .75rem; }
+  .check-list svg { flex: 0 0 auto; color: var(--app-accent); margin-top: .1rem; }
+  .steps { padding: 0; counter-reset: step; list-style: none; }
+  .steps li { display: grid; grid-template-columns: 34px 1fr; gap: .7rem; align-items: start; padding: .7rem 0; border-bottom: 1px solid #edf0f2; }
+  .steps li > span { display: grid; width: 30px; height: 30px; place-items: center; color: #fff; background: var(--app-accent); border-radius: 50%; font-size: .68rem; font-weight: 800; }
+  .steps p { margin: .2rem 0 0; font-size: .76rem; }
+  .warning { display: flex; gap: .65rem; padding: .9rem; background: #fff7ed; border: 1px solid #fed7aa; }
+  .warning svg { flex: 0 0 auto; color: #ea580c; }
+  .warning p { margin: 0; color: #7c4a1d; font-size: .75rem; }
+  .limits ul { margin-top: .8rem; }
+  .limits li { color: var(--text-secondary); font-size: .78rem; }
+  .faq details { margin-top: .55rem; padding: .85rem .95rem; background: #f8fafb; border: 1px solid #e8ecef; }
+  .faq summary { cursor: pointer; font-size: .78rem; font-weight: 750; }
+  .faq details p { margin: .6rem 0 0; font-size: .74rem; }
+  .detail-sidebar { position: sticky; top: 5.5rem; display: grid; gap: .8rem; }
+  .sidebar-card { padding: 1rem; background: #fff; border: 1px solid #e3e7eb; }
+  .sidebar-card > img { width: 58px; height: 58px; object-fit: contain; padding: .4rem; background: #f7f9fa; border-radius: 14px; }
+  .sidebar-card h2 { margin-top: .65rem; font-size: .92rem; }
+  .sidebar-card p { margin-top: .35rem; color: var(--text-muted); font-size: .7rem; line-height: 1.65; }
+  .sidebar-card a { display: inline-flex; align-items: center; gap: .3rem; margin-top: .8rem; color: var(--app-accent); font-size: .72rem; font-weight: 750; }
+  .tip-card { border-top: 3px solid var(--app-accent); }
+  .tip-card > svg { color: var(--app-accent); }
+  .related-apps { margin-top: 2.5rem; }
+  .related-apps > h2 { margin: .35rem 0 .9rem; font-size: 1.35rem; }
+  .related-apps > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: .75rem; }
+  .related-apps a { display: grid; grid-template-columns: 46px 1fr auto; gap: .65rem; align-items: center; padding: .85rem; background: #fff; border: 1px solid #e3e7eb; border-top: 2px solid var(--related-accent); }
+  .related-apps img { width: 40px; height: 40px; object-fit: contain; }
+  .related-apps strong, .related-apps small { display: block; }
+  .related-apps strong { font-size: .82rem; }
+  .related-apps small { margin-top: .18rem; color: var(--text-muted); font-size: .62rem; line-height: 1.45; }
+  .related-apps svg { color: #a0aab3; }
+  @media (max-width: 980px) { .detail-hero { grid-template-columns: 120px 1fr; }.detail-hero > aside { grid-column: 1 / -1; }.hero-logo { width: 110px; height: 110px; }.hero-logo img { width: 68px; height: 68px; }.quick-facts { grid-template-columns: 1fr 1fr; }.detail-layout { grid-template-columns: 1fr; }.detail-sidebar { position: static; grid-template-columns: 1fr 1fr; } }
+  @media (max-width: 700px) { .detail-hero { grid-template-columns: 1fr; padding: 1.2rem; }.hero-logo { width: 88px; height: 88px; border-radius: 22px; }.hero-logo img { width: 54px; height: 54px; }.quick-facts, .feature-grid, .check-list, .related-apps > div, .detail-sidebar { grid-template-columns: 1fr; }.detail-content { padding: 1rem; }.hero-copy h1 { font-size: 2.25rem; } }
+</style>

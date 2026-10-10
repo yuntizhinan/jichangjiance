@@ -1,0 +1,30 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRight, BookOpen, Layers } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { absoluteUrl } from '../../lib/site';
+import { aiColumns } from '../../data/aiContent';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft && data.category === 'AI资讯')).sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime());
+const jsonLd = { '@context': 'https://schema.org', '@type': 'CollectionPage', name: 'AI专题专栏', description: '围绕AI Agent、人才、内容生产、风控治理、资讯核验与应用选型构建长期专题。', url: absoluteUrl('/ai-news/columns/'), dateModified: '2026-10-06', mainEntity: { '@type': 'ItemList', itemListElement: aiColumns.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.title, url: absoluteUrl(item.href) })) } };
+---
+
+<BaseLayout title="AI专题专栏：Agent、人才、内容生产与风险治理" description="AI专题专栏覆盖Agent工作流、AI人才能力、内容生产工具链、大模型风控、资讯核验和应用选型，提供可长期复用的方法与实践指南。" keywords={['AI专题专栏', 'AI Agent工作流', 'AI人才趋势', '大模型内容风控', 'AI内容生产', 'AI应用选型']} jsonLd={jsonLd}>
+  <div class="shell columns-page">
+    <Breadcrumbs items={[{ label: 'AI资讯分享', href: '/ai-news/' }, { label: 'AI专题专栏' }]} />
+    <header class="columns-hero"><div><span><Layers size={15} /> AI COLUMNS</span><h1>把热点沉淀为长期可用的方法</h1><p>专题不按产品发布时间堆叠，而是围绕任务、组织、风险和评测建立持续更新的知识结构。</p></div><BookOpen size={46} /></header>
+    <section class="columns-grid">
+      {aiColumns.map((column, index) => <a href={column.href}><span>{String(index + 1).padStart(2, '0')}</span><h2>{column.title}</h2><p>{column.description}</p><div>{column.tags.map((tag) => <small>{tag}</small>)}</div><strong>进入专题 <ArrowRight size={14} /></strong></a>)}
+    </section>
+    <section class="articles"><div class="section-heading"><span>ALL ANALYSIS</span><h2>专题文章</h2><p>每篇文章提供明确的问题定义、方法步骤、表格或检查清单。</p></div><div>{articles.map((article) => <ArticleCard article={article} />)}</div></section>
+  </div>
+</BaseLayout>
+
+<style>
+  .columns-page { padding-top: 1.5rem; padding-bottom: 2rem; }.columns-hero { display: flex; align-items: end; justify-content: space-between; gap: 1rem; padding: 1.8rem; color: #fff; background: linear-gradient(135deg, #3a275f, #7759b8); }.columns-hero span { display: inline-flex; align-items: center; gap: .35rem; color: #dccfff; font-size: .68rem; font-weight: 800; letter-spacing: .1em; }.columns-hero h1 { margin-top: .55rem; font-size: clamp(1.75rem, 4vw, 2.6rem); }.columns-hero p { margin-top: .45rem; color: rgba(255,255,255,.75); font-size: .8rem; }.columns-hero > svg { flex: 0 0 auto; color: #d4c5ff; }
+  .columns-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .8rem; margin-top: 1rem; }.columns-grid a { min-width: 0; padding: 1rem; background: #fff; border: 1px solid #e5e8ec; border-top: 3px solid #7759b8; transition: .2s ease; }.columns-grid a:hover { transform: translateY(-2px); }.columns-grid a > span { color: #c6bae1; font-size: 1.2rem; font-weight: 800; }.columns-grid h2 { margin-top: .25rem; font-size: 1rem; }.columns-grid p { min-height: 3.2rem; margin-top: .3rem; color: var(--text-secondary); font-size: .72rem; line-height: 1.6; }.columns-grid div { display: flex; gap: .3rem; flex-wrap: wrap; margin-top: .55rem; }.columns-grid small { padding: .12rem .35rem; color: #7759b8; background: #f2effa; font-size: .6rem; }.columns-grid strong { display: inline-flex; align-items: center; gap: .25rem; margin-top: .65rem; color: #7759b8; font-size: .68rem; }
+  .articles { margin-top: 2.5rem; }.section-heading > span { color: #7759b8; font-size: .66rem; font-weight: 800; letter-spacing: .12em; }.section-heading h2 { margin-top: .2rem; font-size: 1.35rem; }.section-heading p { margin-top: .25rem; color: var(--text-secondary); font-size: .76rem; }.articles > div:last-child { display: grid; gap: 1rem; margin-top: 1rem; }
+  @media (max-width: 900px) { .columns-grid { grid-template-columns: repeat(2, 1fr); } } @media (max-width: 620px) { .columns-grid { grid-template-columns: 1fr; }.columns-grid p { min-height: 0; }.columns-hero > svg { display: none; } }
+</style>

@@ -1,0 +1,132 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+import { categories } from '../../lib/site';
+import { ArrowRight, BookOpen } from '@lucide/astro';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+
+const categoryData = categories.map((cat) => {
+  const categoryArticles = articles
+    .filter((a) => a.data.category === cat.name)
+    .sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime());
+  return {
+    ...cat,
+    articles: categoryArticles,
+    count: categoryArticles.length
+  };
+});
+---
+
+<BaseLayout
+  title="主题分类导航"
+  description="按主题分类探索机场代理指南：入门基础、机场选购评测、客户端工具使用以及网络传输原理。"
+>
+  <div class="shell page-container">
+    <Breadcrumbs items={[{ label: '主题导航' }]} />
+
+    <div class="page-hero">
+      <h1>主题导航</h1>
+      <p>模块化建立知识体系。从基础概念到高端专线传输，找到你最关心的主题。</p>
+    </div>
+
+    <div class="categories-overview-list">
+      {categoryData.map((cat) => (
+        <section class="cat-overview-block">
+          <div class="cat-header">
+            <div>
+              <span class="cat-tag"><BookOpen size={14} /> CATEGORY</span>
+              <h2>{cat.name}</h2>
+              <p>{cat.description}</p>
+            </div>
+            <a href={`/categories/${cat.slug}/`} class="btn-cat-more">
+              查看本类全部 {cat.count} 篇文章 <ArrowRight size={16} />
+            </a>
+          </div>
+
+          <div class="articles-grid">
+            {cat.articles.slice(0, 3).map((article) => (
+              <ArticleCard article={article} />
+            ))}
+          </div>
+        </section>
+      ))}
+    </div>
+  </div>
+</BaseLayout>
+
+<style>
+  .page-container {
+    padding-top: 2rem;
+  }
+
+  .categories-overview-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+    margin-top: 2rem;
+  }
+
+  .cat-overview-block {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
+  }
+
+  .cat-header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 1.25rem;
+  }
+
+  .cat-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--tone-lime);
+    letter-spacing: 0.08em;
+    margin-bottom: 0.25rem;
+  }
+
+  .cat-header h2 {
+    font-size: 1.75rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    margin-bottom: 0.5rem;
+  }
+
+  .cat-header p {
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    max-width: 36rem;
+  }
+
+  .btn-cat-more {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: var(--radius-full);
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-size: 0.875rem;
+    font-weight: 600;
+    transition: all var(--transition-fast);
+  }
+
+  .btn-cat-more:hover {
+    border-color: var(--tone-lime-border);
+    color: var(--tone-lime);
+  }
+</style>

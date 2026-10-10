@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">便宜机场与月付套餐</title><desc id="desc">用月历、流量和硬币图形表示月付年付及按量套餐成本</desc>
+  <rect width="1280" height="720" rx="44" fill="#fbf5ea"/><path d="M0 520C250 420 420 680 700 520s390-150 580-50v250H0z" fill="#e3eee6"/>
+  <text x="88" y="118" font-family="Arial, sans-serif" font-size="26" font-weight="700" fill="#3d856d">BUDGET GUIDE 2026</text><text x="88" y="205" font-family="Arial, sans-serif" font-size="62" font-weight="800" fill="#352f2b">便宜机场怎么选</text><text x="88" y="258" font-family="Arial, sans-serif" font-size="28" fill="#75685e">月付 · 年付小包 · 按量流量</text>
+  <g transform="translate(88 336)" font-family="Arial, sans-serif"><rect width="348" height="230" rx="28" fill="#fff" stroke="#ded0c0"/><rect x="32" y="34" width="86" height="86" rx="20" fill="#f3d9c6"/><text x="53" y="93" font-size="42" font-weight="700" fill="#be6744">月</text><text x="32" y="162" font-size="26" font-weight="700" fill="#3c342f">月付先试用</text><text x="32" y="198" font-size="19" fill="#7a6d63">降低第一次选择成本</text>
+  <rect x="374" width="348" height="230" rx="28" fill="#fff" stroke="#ded0c0"/><circle cx="454" cy="77" r="44" fill="#dcebe4"/><text x="430" y="91" font-size="36" font-weight="700" fill="#347d66">¥</text><text x="406" y="162" font-size="26" font-weight="700" fill="#3c342f">计算折后月费</text><text x="406" y="198" font-size="19" fill="#7a6d63">别只看最低至</text>
+  <rect x="748" width="348" height="230" rx="28" fill="#fff" stroke="#ded0c0"/><path d="M790 106h182M790 76h248M790 136h140" stroke="#8569a0" stroke-width="18" stroke-linecap="round"/><text x="780" y="162" font-size="26" font-weight="700" fill="#3c342f">流量除以倍率</text><text x="780" y="198" font-size="19" fill="#7a6d63">比较真实每 GB 成本</text></g>
+  <text x="88" y="650" font-family="Arial, sans-serif" font-size="22" fill="#75685e">jichangjiance.com · 先短周期验证，再决定长付</text>
+</svg>

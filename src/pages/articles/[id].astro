@@ -1,0 +1,243 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import ArticleCard from '../../components/ArticleCard.astro';
+import { getCollection, render } from 'astro:content';
+import { categoryByName, formatDate } from '../../lib/site';
+import { Clock3, Calendar, User, Tag, CircleQuestionMark } from '@lucide/astro';
+
+export async function getStaticPaths() {
+  const articles = await getCollection('articles', ({ data }) => !data.draft);
+  return articles.map((article) => ({
+    params: { id: article.id },
+    props: { article }
+  }));
+}
+
+const { article } = Astro.props;
+const { data } = article;
+const category = categoryByName[data.category];
+
+const { Content, headings } = await render(article);
+
+// Related articles
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const relatedArticles = allArticles
+  .filter((a) => a.id !== article.id && a.data.category === data.category)
+  .slice(0, 2);
+
+const badgeClass = `badge badge-${data.coverTone}`;
+const articleJsonLd = data.faq.length > 0 ? {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: data.faq.map((item: { question: string; answer: string }) => ({
+    '@type': 'Question',
+    name: item.question,
+    acceptedAnswer: { '@type': 'Answer', text: item.answer }
+  }))
+} : undefined;
+---
+
+<BaseLayout
+  title={data.title}
+  description={data.description}
+  type="article"
+  publishedAt={data.publishedAt}
+  updatedAt={data.updatedAt}
+  keywords={data.keywords}
+  image={data.image}
+  imageAlt={data.imageAlt ?? data.title}
+  jsonLd={articleJsonLd}
+>
+  <div class="shell article-page-container">
+    <Breadcrumbs
+      items={[
+        { label: '文章库', href: '/articles/' },
+        ...(category ? [{ label: category.name, href: `/categories/${category.slug}/` }] : []),
+        { label: data.title }
+      ]}
+    />
+
+    <div class="article-detail-layout">
+      {/* Main Content Area */}
+      <article class="article-main">
+        <header class="article-header">
+          <div class="article-header-meta">
+            <span class={badgeClass}>{data.category}</span>
+            <span><Calendar size={14} /> 更新于 {formatDate(data.updatedAt)}</span>
+            <span><Clock3 size={14} /> 预计阅读 {data.readingTime}</span>
+            <span><User size={14} /> {data.author}</span>
+          </div>
+
+          <h1 class="article-title">{data.title}</h1>
+          <p class="article-lead">{data.description}</p>
+        </header>
+
+        {data.image && (
+          <figure class="article-cover">
+            <img
+              src={data.image}
+              alt={data.imageAlt ?? data.title}
+              width="1280"
+              height="720"
+              loading="eager"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </figure>
+        )}
+
+        {/* Markdown Rendered Content */}
+        <div class="prose">
+          <Content />
+        </div>
+
+        {/* Article FAQ Section if present */}
+        {data.faq && data.faq.length > 0 && (
+          <section class="faq-section">
+            <h2><CircleQuestionMark size={22} /> 常见问题解答 (FAQ)</h2>
+            <div class="faq-list">
+              {data.faq.map((item: { question: string; answer: string }) => (
+                <div class="faq-item">
+                  <div class="faq-question">Q: {item.question}</div>
+                  <div class="faq-answer">{item.answer}</div>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Article Footer Tags */}
+        <footer class="article-footer-tags">
+          <div class="tags-label"><Tag size={16} /> 本文标签：</div>
+          <div class="tags-wrapper">
+            {data.tags.map((tag: string) => (
+              <a href={`/search/?q=${encodeURIComponent(tag)}`} class="tag-pill">#{tag}</a>
+            ))}
+          </div>
+        </footer>
+      </article>
+
+      {/* Sidebar Area */}
+      <aside class="sidebar">
+        {/* Table of Contents */}
+        {headings && headings.length > 0 && (
+          <div class="sidebar-box">
+            <h4>目录导航</h4>
+            <ul class="toc-list">
+              {headings.map((h: { depth: number; slug: string; text: string }) => (
+                <li style={`margin-left: ${(h.depth - 2) * 0.75}rem`}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Category Information */}
+        {category && (
+          <div class="sidebar-box">
+            <h4>所属专栏</h4>
+            <div class="column-info">
+              <strong>{category.name}</strong>
+              <p>{category.description}</p>
+              <a href={`/categories/${category.slug}/`} class="sidebar-link">查看此主题全部文章 →</a>
+            </div>
+          </div>
+        )}
+      </aside>
+    </div>
+
+    {/* Related Articles Section */}
+    {relatedArticles.length > 0 && (
+      <section class="related-section">
+        <h3>相关推荐</h3>
+        <div class="articles-grid">
+          {relatedArticles.map((relArticle) => (
+            <ArticleCard article={relArticle} />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+</BaseLayout>
+
+<style>
+  .article-page-container {
+    padding-top: 2rem;
+  }
+
+  .article-header-meta span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    color: var(--text-muted);
+  }
+
+  .article-cover {
+    margin: 0 0 2rem;
+    overflow: hidden;
+    background: #f2e9df;
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    box-shadow: 0 12px 32px rgba(91, 66, 47, 0.09);
+  }
+
+  .article-cover img {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .article-footer-tags {
+    margin-top: 3.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+  }
+
+  .tags-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+  }
+
+  .column-info strong {
+    display: block;
+    color: var(--text-primary);
+    margin-bottom: 0.4rem;
+  }
+
+  .column-info p {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem;
+  }
+
+  .sidebar-link {
+    font-size: 0.85rem;
+    color: var(--tone-lime);
+    font-weight: 600;
+  }
+
+  .related-section {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border-color);
+  }
+
+  .related-section h3 {
+    font-size: 1.5rem;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+  }
+</style>

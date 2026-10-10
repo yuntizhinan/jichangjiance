@@ -1,0 +1,35 @@
+---
+import TopicLanding from '../components/TopicLanding.astro';
+import BrandCard from '../components/BrandCard.astro';
+import { brands } from '../data/brands';
+---
+<TopicLanding
+  eyebrow="AIRPORT DIRECTORY"
+  title="机场导航：按需求查找机场代理服务"
+  description="通过预算、线路、流量、设备、目标地区和使用场景组织机场导航入口，并连接评测、优惠与风险信息。"
+  keywords={['机场导航', '机场代理', '机场推荐', '机场vpn', '最佳梯子推荐']}
+  intro="导航页采用多入口结构：新手可以按预算和设备开始，进阶用户可以按线路、节点地区、协议与高峰期需求筛选，再进入对应评测。"
+  points={[
+    { title: '按预算', description: '从轻量低价、主流月付到高稳定线路，比较实际可用流量与限制。' },
+    { title: '按线路', description: '区分公网直连、优化中转与专线类产品，理解成本和体验差异。' },
+    { title: '按场景', description: '覆盖日常浏览、流媒体、AI 服务、远程协作、游戏与多设备家庭。' },
+    { title: '按风险', description: '结合运营时间、公告、售后、域名变化和异常记录查看服务状态。' }
+  ]}
+  categoryNames={['机场评测', '入门指南', '网络知识']}
+  featuredTitle="按机场进入详细评测"
+  links={[
+    { label: '2026 机场推荐', href: '/airport-recommendations/' },
+    { label: '机场排行榜与对比', href: '/airport-comparison/' },
+    { label: '机场优惠码', href: '/deals/' },
+    { label: '跑路预警', href: '/alerts/' },
+    { label: '新手指南', href: '/categories/beginner/' }
+  ]}
+  faqs={[
+    { question: '机场导航和机场推荐有什么区别？', answer: '导航页帮助你按条件缩小范围；推荐页则进一步解释选择依据、适用人群和比较结论。' },
+    { question: '第一次使用应该从哪个入口开始？', answer: '建议先阅读新手指南，确认设备和客户端，再从月付、适中流量和清晰售后信息的选项开始比较。' }
+  ]}
+>
+  <Fragment slot="featured">
+    {brands.map((brand) => <BrandCard brand={brand} />)}
+  </Fragment>
+</TopicLanding>

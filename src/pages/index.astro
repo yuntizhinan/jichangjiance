@@ -1,0 +1,99 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import BrandCard from '../components/BrandCard.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { getCollection } from 'astro:content';
+import { site } from '../lib/site';
+import { featuredBrands } from '../data/brands';
+import { Radio, ArrowRight } from '@lucide/astro';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const sortedArticles = articles.sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime());
+---
+
+<BaseLayout title="2026机场推荐排行榜与独立评测：价格、专线、优惠码" description={site.description} keywords={site.keywords}>
+  <section class="blog-cover" id="home">
+    <div class="cover-overlay"></div>
+    <div class="shell cover-content">
+      <span class="cover-kicker"><Radio size={15} /> {site.name} · 持续更新的中文评测博客</span>
+          <h1>2026 机场推荐排行榜与独立评测</h1>
+          <p>从极连云、速界、边缘节点等机场评测，到价格对比、晚高峰、专线选购、优惠码、客户端配置与跑路预警。</p>
+      <div class="cover-links">
+        <a href="/airport-recommendations/">2026 机场推荐</a>
+        <a href="/airport-comparison/">机场排行榜</a>
+            <a href="/brands/">机场评测库</a>
+        <a href="/airport-directory/">机场导航</a>
+        <a href="/categories/beginner/">新手入门</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-airport-strip shell" aria-label="八家机场快速入口">
+    <div class="home-airport-strip-copy"><span>本期机场推荐</span><strong>先看八家机场，再按场景挑选</strong></div>
+    <div class="home-airport-pills">
+      {featuredBrands.map((brand) => <a href={`/brands/${brand.slug}/`}><span>{brand.name}</span><small>{brand.recommendation}</small></a>)}
+    </div>
+    <a class="home-airport-more" href="/airport-recommendations/">查看推荐理由 <ArrowRight size={15} /></a>
+  </section>
+
+  <div class="blog-main shell">
+    <section class="blog-stream" aria-labelledby="latest-title">
+      <div class="stream-heading">
+          <div><span>REVIEW LIBRARY</span><h2>2026 精选机场评测</h2></div>
+          <a href="/brands/">全部机场评测 <ArrowRight size={15} /></a>
+      </div>
+      <div class="home-brand-grid">
+        {featuredBrands.map((brand) => <BrandCard brand={brand} />)}
+      </div>
+      <div class="stream-heading">
+        <div><span>NEW POSTS</span><h2 id="latest-title">最新文章</h2></div>
+        <a href="/articles/">文章归档 <ArrowRight size={15} /></a>
+      </div>
+      <div class="post-list">
+        {sortedArticles.map((article) => <ArticleCard article={article} />)}
+      </div>
+    </section>
+    <Sidebar />
+  </div>
+</BaseLayout>
+
+<style>
+  .blog-cover {
+    position: relative;
+    min-height: 340px;
+    display: flex;
+    align-items: center;
+    color: #fff;
+    background:
+      linear-gradient(90deg, rgba(58, 39, 29, .78) 0%, rgba(84, 54, 36, .55) 48%, rgba(86, 59, 42, .2) 100%),
+      url('/images/site-bg/warm/home-airport-warm.webp') center 52% / cover no-repeat;
+  }
+  .cover-overlay { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(255, 224, 190, .04), rgba(49, 30, 20, .2)); }
+  .cover-content { position: relative; z-index: 1; padding-top: 4.5rem; }
+  .cover-kicker { display: inline-flex; align-items: center; gap: .45rem; font-size: .85rem; letter-spacing: .06em; opacity: .88; }
+  .cover-content h1 { margin: .5rem 0 .55rem; font-size: clamp(2.5rem, 6vw, 4.2rem); line-height: 1; letter-spacing: -.04em; text-shadow: 0 3px 20px rgba(48,30,19,.3); }
+  .cover-content p { max-width: 42rem; font-size: 1.08rem; opacity: .92; }
+  .cover-links { display: flex; gap: .65rem; flex-wrap: wrap; margin-top: 1.35rem; }
+  .cover-links a { padding: .43rem .8rem; border: 1px solid rgba(255,247,238,.52); border-radius: 999px; background: rgba(255,247,238,.14); font-size: .82rem; backdrop-filter: blur(7px); }
+  .cover-links a:hover { color: #5b3827; background: #fff5e9; border-color: #fff5e9; }
+  .home-brand-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-bottom: 28px; }
+  .home-airport-strip { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 1rem; margin-top: -1.15rem; position: relative; z-index: 2; padding: .85rem 1rem; background: rgba(255, 250, 244, .97); border: 1px solid #ead9c7; border-radius: 14px; box-shadow: 0 10px 26px rgba(89, 59, 39, .1); }
+  .home-airport-strip-copy { display: grid; gap: .18rem; white-space: nowrap; }
+  .home-airport-strip-copy span { color: #bd7049; font-size: .67rem; font-weight: 800; letter-spacing: .1em; }
+  .home-airport-strip-copy strong { color: #50392b; font-size: .84rem; }
+  .home-airport-pills { display: flex; gap: .45rem; min-width: 0; overflow-x: auto; scrollbar-width: thin; }
+  .home-airport-pills a { display: grid; flex: 0 0 auto; gap: .12rem; min-width: 6.5rem; padding: .42rem .6rem; color: #5b4030; background: #fff; border: 1px solid #eadfd4; border-radius: 9px; }
+  .home-airport-pills a:hover { border-color: #c98057; background: #fff8ef; }
+  .home-airport-pills span { font-size: .78rem; font-weight: 750; }
+  .home-airport-pills small { overflow: hidden; color: #9a7d6b; font-size: .64rem; text-overflow: ellipsis; white-space: nowrap; }
+  .home-airport-more { display: inline-flex; align-items: center; gap: .25rem; white-space: nowrap; color: #a85f3c; font-size: .78rem; font-weight: 750; }
+  @media (max-width: 900px) { .home-airport-strip { grid-template-columns: 1fr auto; } .home-airport-pills { grid-column: 1 / -1; grid-row: 2; } }
+  @media (max-width: 560px) { .home-airport-strip { margin-top: -.75rem; } .home-airport-more { font-size: .7rem; } }
+  @media (max-width: 720px) {
+    .blog-cover { min-height: 285px; }
+    .cover-content { padding-top: 4rem; }
+    .cover-content p { font-size: .95rem; }
+    .home-brand-grid { grid-template-columns: 1fr; }
+  }
+</style>

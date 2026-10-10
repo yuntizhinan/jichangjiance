@@ -1,0 +1,21 @@
+---
+import { absoluteUrl } from '../lib/site';
+interface Props { items: { label: string; href?: string }[] }
+const { items } = Astro.props;
+const allItems = [{ label: '首页', href: '/' }, ...items];
+const breadcrumbSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: allItems.map((item, index) => ({
+    '@type': 'ListItem',
+    position: index + 1,
+    name: item.label,
+    item: item.href ? absoluteUrl(item.href) : absoluteUrl(Astro.url.pathname)
+  }))
+};
+---
+<nav class="breadcrumbs" aria-label="面包屑导航">
+  <a href="/">首页</a>
+  {items.map((item) => <><span aria-hidden="true">/</span>{item.href ? <a href={item.href}>{item.label}</a> : <span aria-current="page">{item.label}</span>}</>)}
+</nav>
+<script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />

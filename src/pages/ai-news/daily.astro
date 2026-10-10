@@ -1,0 +1,101 @@
+---
+import { CalendarDays, Funnel, Newspaper, Search } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { absoluteUrl } from '../../lib/site';
+import { aiDailyItems } from '../../data/aiContent';
+
+const categories = [...new Set(aiDailyItems.map((item) => item.category))];
+const jsonLd = {
+  '@context': 'https://schema.org', '@type': 'CollectionPage', name: '每日AI资讯与行业观察',
+  description: '按日期整理AI模型、Agent、行业政策、人才组织和开发者工具变化，并提供影响判断与行动建议。',
+  url: absoluteUrl('/ai-news/daily/'), dateModified: '2026-10-06',
+  mainEntity: { '@type': 'ItemList', itemListElement: aiDailyItems.map((item, index) => ({ '@type': 'ListItem', position: index + 1, name: item.title, description: item.summary })) }
+};
+---
+
+<BaseLayout title="每日AI资讯：模型、Agent、行业与人才动态" description="更新每日AI资讯与行业观察，覆盖模型产品、AI Agent、开发者工具、政策治理和人才组织变化，并提供影响分析和行动建议。" keywords={['每日AI资讯', 'AI日报', '人工智能新闻', 'AI Agent新闻', 'AI行业动态', 'AI模型资讯']} jsonLd={jsonLd}>
+  <div class="shell daily-page">
+    <Breadcrumbs items={[{ label: 'AI资讯分享', href: '/ai-news/' }, { label: '每日AI资讯' }]} />
+    <header class="daily-hero"><div><span><Newspaper size={15} /> DAILY AI BRIEF</span><h1>每日AI资讯与行业观察</h1><p>每条信息都补充影响范围和下一步动作，避免只有标题和产品宣传。</p></div><aside><CalendarDays size={24} /><strong>更新至 2026年10月6日</strong><p>快速变化的信息会在后续页面中修订。</p></aside></header>
+
+    <section class="filter-bar" aria-label="AI资讯筛选">
+      <label><span class="sr-only">搜索资讯</span><Search size={17} /><input id="news-search" type="search" placeholder="搜索标题、摘要或建议" /></label>
+      <label><Funnel size={16} /><span class="sr-only">按分类筛选</span><select id="news-category"><option value="all">全部分类</option>{categories.map((category) => <option value={category}>{category}</option>)}</select></label>
+      <button id="news-reset" type="button">重置</button>
+    </section>
+    <p class="result-count">当前显示 <strong id="news-count">{aiDailyItems.length}</strong> 条资讯观察</p>
+
+    <section class="news-timeline" id="news-list">
+      {aiDailyItems.map((item) => (
+        <article data-news-item data-category={item.category} data-search={`${item.title} ${item.summary} ${item.impact} ${item.action}`.toLowerCase()}>
+          <div class="news-date"><time datetime={item.date}>{item.date}</time><span>{item.category}</span></div>
+          <div class="news-body"><h2>{item.title}</h2><p>{item.summary}</p><div class="impact"><strong>可能影响</strong><span>{item.impact}</span></div><div class="action"><strong>建议动作</strong><span>{item.action}</span></div></div>
+        </article>
+      ))}
+    </section>
+    <div class="empty" id="news-empty" hidden>没有找到匹配内容，可缩短关键词或选择全部分类。</div>
+
+    <section class="method"><h2>本站如何整理每日AI资讯</h2><div><article><span>01</span><h3>先区分发布与演示</h3><p>产品宣布、限量测试和稳定可用不是同一件事。</p></article><article><span>02</span><h3>再判断影响对象</h3><p>开发者、普通用户、企业管理者受到的影响不同。</p></article><article><span>03</span><h3>最后给出行动</h3><p>优先提出可验证的小实验，而不是追逐每个新名词。</p></article></div></section>
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#news-search');
+  const select = document.querySelector<HTMLSelectElement>('#news-category');
+  const reset = document.querySelector<HTMLButtonElement>('#news-reset');
+  const items = [...document.querySelectorAll<HTMLElement>('[data-news-item]')];
+  const count = document.querySelector<HTMLElement>('#news-count');
+  const empty = document.querySelector<HTMLElement>('#news-empty');
+  const filter = () => {
+    const query = (input?.value ?? '').trim().toLocaleLowerCase('zh-CN');
+    const category = select?.value ?? 'all';
+    let visible = 0;
+    items.forEach((item) => { const show = (!query || (item.dataset.search ?? '').includes(query)) && (category === 'all' || item.dataset.category === category); item.hidden = !show; if (show) visible += 1; });
+    if (count) count.textContent = String(visible); if (empty) empty.hidden = visible !== 0;
+  };
+  input?.addEventListener('input', filter); select?.addEventListener('change', filter); reset?.addEventListener('click', () => { if (input) input.value = ''; if (select) select.value = 'all'; filter(); });
+</script>
+
+<style>
+  .daily-page { padding-top: 1.5rem; padding-bottom: 2rem; }
+  .daily-hero { display: grid; grid-template-columns: 1fr 310px; gap: 1rem; padding: 1.7rem; color: #fffaf5; background: linear-gradient(135deg, #58433b 0%, #7d5a54 52%, #a96c54 100%); border: 1px solid rgba(184, 107, 71, .2); border-radius: var(--radius-md); box-shadow: 0 18px 40px rgba(91, 66, 47, .12); }
+  .daily-hero span { display: inline-flex; align-items: center; gap: .35rem; color: #f2cdb5; font-size: .68rem; font-weight: 800; letter-spacing: .1em; }
+  .daily-hero h1 { margin-top: .55rem; font-size: clamp(1.7rem, 4vw, 2.5rem); }
+  .daily-hero > div > p { margin-top: .5rem; color: rgba(255, 248, 241, .8); font-size: .82rem; }
+  .daily-hero aside { padding: 1rem; background: rgba(255, 247, 239, .08); border: 1px solid rgba(255, 239, 224, .22); border-radius: var(--radius-sm); }
+  .daily-hero aside strong { display: block; margin-top: .55rem; font-size: .83rem; }
+  .daily-hero aside p { margin-top: .25rem; color: rgba(255, 248, 241, .72); font-size: .68rem; }
+  .filter-bar { display: grid; grid-template-columns: 1fr 230px auto; gap: .6rem; margin-top: 1rem; padding: .8rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+  .filter-bar label { position: relative; display: flex; align-items: center; }
+  .filter-bar svg { position: absolute; left: .7rem; color: var(--text-muted); }
+  .filter-bar input, .filter-bar select { width: 100%; height: 40px; padding: 0 .7rem 0 2rem; color: var(--text-primary); background: var(--bg-surface-hover); border: 1px solid var(--border-color); }
+  .filter-bar input:focus, .filter-bar select:focus { border-color: var(--tone-lime); outline: none; }
+  .filter-bar button { padding: 0 .8rem; color: #fff; background: var(--tone-lime); border: 0; cursor: pointer; }
+  .filter-bar button:hover { background: #9f593b; }
+  .result-count { margin: .7rem 0; color: var(--text-muted); font-size: .7rem; }
+  .result-count strong { color: var(--tone-lime); }
+  .news-timeline { display: grid; gap: .8rem; }
+  .news-timeline article { display: grid; grid-template-columns: 130px 1fr; background: var(--bg-surface); border: 1px solid var(--border-color); border-left: 4px solid var(--tone-violet); border-radius: var(--radius-sm); overflow: hidden; }
+  .news-timeline article[hidden], .empty[hidden] { display: none; }
+  .news-date { padding: 1rem; background: var(--tone-violet-bg); }
+  .news-date time, .news-date span { display: block; }
+  .news-date time { color: var(--tone-violet); font-size: .75rem; font-weight: 800; }
+  .news-date span { margin-top: .35rem; color: var(--text-muted); font-size: .66rem; }
+  .news-body { padding: 1rem 1.1rem; }
+  .news-body h2 { font-size: 1rem; }
+  .news-body > p { margin-top: .35rem; color: var(--text-secondary); font-size: .76rem; line-height: 1.65; }
+  .impact, .action { display: grid; grid-template-columns: 70px 1fr; gap: .5rem; margin-top: .6rem; padding-top: .55rem; border-top: 1px dashed var(--border-color); font-size: .69rem; line-height: 1.55; }
+  .impact strong { color: var(--tone-violet); }
+  .action strong { color: var(--tone-aqua); }
+  .impact span, .action span { color: var(--text-secondary); }
+  .empty { padding: 1.5rem; color: var(--text-muted); background: var(--bg-surface); border: 1px dashed var(--border-color-hover); text-align: center; }
+  .method { margin-top: 2rem; }
+  .method h2 { font-size: 1.2rem; }
+  .method > div { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin-top: .8rem; }
+  .method article { padding: 1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+  .method article > span { color: var(--tone-lime); font-weight: 800; }
+  .method h3 { margin-top: .4rem; font-size: .82rem; }
+  .method p { margin-top: .25rem; color: var(--text-secondary); font-size: .7rem; }
+  @media (max-width: 700px) { .daily-hero { grid-template-columns: 1fr; }.filter-bar { grid-template-columns: 1fr; }.filter-bar button { height: 40px; }.news-timeline article { grid-template-columns: 1fr; }.news-date { display: flex; align-items: center; justify-content: space-between; }.news-date span { margin-top: 0; }.method > div { grid-template-columns: 1fr; } }
+</style>

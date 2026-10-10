@@ -1,0 +1,214 @@
+---
+import { ArrowUpRight, CalendarClock, CircleAlert, CopyCheck, ReceiptText, Tags } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { brands } from '../data/brands';
+import { absoluteUrl } from '../lib/site';
+
+const verifiedBrands = brands.filter((brand) => brand.referralUrl && brand.linkVerified);
+const couponCount = verifiedBrands.filter((brand) => brand.couponCode).length;
+const dealFaqs = [
+  {
+    question: '2026 年机场优惠码应该去哪里找？',
+    answer: '优先查看机场服务商结算页、公告和更新时间明确的优惠汇总页。搜索结果里的旧文章可能仍展示已经过期的代码，使用前应核对适用套餐、新老用户条件、有效期和最终结算金额。'
+  },
+  {
+    question: '为什么本站没有给每个机场都填写优惠码？',
+    answer: '因为无法确认来源、适用条件或有效期的代码会误导购买。没有核验到独立代码时，本站只整理机场入口和参考价格，并提醒在结算页查看自动优惠或当前活动。'
+  },
+  {
+    question: '机场优惠码显示成功，为什么价格没有变化？',
+    answer: '可能是套餐不适用、仅限新用户、未达到最低金额、活动与其他折扣互斥，或优惠只增加流量而不降低价格。应查看订单明细，不要只看“使用成功”提示。'
+  },
+  {
+    question: '机场年付七折和月付原价哪个更划算？',
+    answer: '年付七折的账面月费通常更低，但还要考虑服务连续性、套餐是否匹配、退款规则和一年内需求变化。新机场或首次使用更适合先月付，稳定使用一段时间后再评估长期优惠。'
+  },
+  {
+    question: '怎样计算机场折后月费和真实流量成本？',
+    answer: '折后月费用实付金额除以使用月数；有效流量用套餐流量除以常用节点倍率；真实单位成本再用折后月费除以有效流量。还要把设备数、限速、续费价格和未用完流量计入比较。'
+  }
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '2026 机场优惠码与折扣活动汇总',
+    description: '整理机场优惠码、折扣入口、参考月费、活动条件与折后成本核验方法。',
+    url: absoluteUrl('/deals/'),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: verifiedBrands.map((brand, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${brand.name}优惠入口与价格核验`,
+        url: absoluteUrl(`/brands/${brand.slug}/`)
+      }))
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: dealFaqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title="2026机场优惠码与折扣汇总：折后月费和活动入口"
+  description="更新2026机场优惠码、折扣活动与机场入口，汇总极连云、速界、边缘节点、光年梯等参考价格，并说明有效期、适用套餐和折后成本核验方法。"
+  keywords={['机场优惠码', '2026机场优惠码', '机场折扣码', '机场促销活动', '机场折后月费', '机场年付优惠', '机场优惠入口', '便宜机场推荐']}
+  jsonLd={jsonLd}
+>
+  <div class="shell deals-page">
+    <Breadcrumbs items={[{ label: '机场优惠码' }]} />
+
+    <header class="deals-hero">
+      <div>
+        <span>COUPONS & DEALS · UPDATED 2026-10-06</span>
+        <h1>2026 机场优惠码<br />与折扣活动汇总</h1>
+      <p>当前收录 {couponCount} 个已核验机场优惠码，并集中核对机场入口、参考价格、优惠条件和折后成本。</p>
+      </div>
+      <aside>
+        <CalendarClock size={26} />
+        <strong>优惠信息具有时效性</strong>
+        <p>付款前以结算页显示的金额、流量、周期和续费规则为准。</p>
+      </aside>
+    </header>
+
+    <section class="deal-methods" aria-label="优惠核验方法">
+      <article><CopyCheck size={21} /><h2>代码可复制不等于有效</h2><p>仍需核对活动日期、适用套餐和新老用户条件。</p></article>
+      <article><ReceiptText size={21} /><h2>以订单明细为准</h2><p>确认优惠降低的是金额、增加的是流量，还是只改变周期。</p></article>
+      <article><Tags size={21} /><h2>比较折后月费</h2><p>把不同周期统一折算成月费，再加入倍率与设备限制。</p></article>
+      <article><CircleAlert size={21} /><h2>避免为折扣忽略风险</h2><p>异常长期低价不应替代对线路、售后和运营状态的判断。</p></article>
+    </section>
+
+    <section class="deal-list-section">
+      <div class="section-heading">
+        <span>VERIFIED ENTRANCES</span>
+        <h2>机场优惠入口与参考月费</h2>
+        <p>优惠码来自用户确认的机场资料；使用时请保持大小写一致，并以服务商结算页是否生效、适用套餐和最终金额为准。</p>
+      </div>
+      <div class="deal-list">
+        {verifiedBrands.map((brand) => (
+          <article style={`--deal-accent:${brand.accent}`}>
+              <img src={brand.logo} alt={`${brand.name}机场 Logo`} width="120" height="90" loading="lazy" decoding="async" />
+            <div class="deal-main">
+              <div class="deal-title"><h3>{brand.name}</h3><span>{brand.recommendation}</span></div>
+              <p>{brand.tagline}</p>
+              <div class="deal-meta">
+                <span>参考价格：<strong>{brand.price}</strong></span>
+                <span>优惠码：<strong>{brand.couponCode ?? '暂无已核验代码'}</strong></span>
+              </div>
+            </div>
+            <div class="deal-actions">
+              {brand.couponCode ? (
+                <button class="coupon-copy" type="button" data-coupon-copy={brand.couponCode} aria-label={`复制${brand.name}优惠码 ${brand.couponCode}`}>
+                  <CopyCheck size={15} /><span data-copy-label>复制 {brand.couponCode}</span>
+                </button>
+              ) : (
+                <span class="no-coupon">暂无已核验代码</span>
+              )}
+              <a class="deal-review" href={`/brands/${brand.slug}/`}>先看完整评测</a>
+                <a class="deal-entry" href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">前往机场入口 <ArrowUpRight size={15} /></a>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <aside class="deal-disclosure">
+      <strong>联盟链接与优惠说明</strong>
+      <p>部分机场入口包含邀请码或联盟参数，本站作为独立评测与信息整理网站，可能获得佣金或积分。入口参数有时会自动绑定活动，但是否优惠、优惠多少以及适用哪些套餐，必须以结算页为准。本站不会把未经核验的通用代码批量关联到机场服务商。</p>
+    </aside>
+
+    <section class="cost-guide">
+      <div class="section-heading"><span>REAL COST</span><h2>机场优惠后的真实成本怎么算？</h2></div>
+      <div class="cost-grid">
+        <article><span>01</span><h3>计算折后月费</h3><p>年付 120 元并不等于“只花 10 元”。先确认实际服务周期，再用实付金额除以月数。</p></article>
+        <article><span>02</span><h3>折算倍率流量</h3><p>500GB 套餐若常用节点为 2 倍率，有效使用量应按约 250GB 比较。</p></article>
+        <article><span>03</span><h3>检查续费与限制</h3><p>首购折扣、续费原价、限新用户、设备数、限速和未用流量清零都会改变真实价值。</p></article>
+      </div>
+      <a class="comparison-link" href="/airport-comparison/">进入 2026 机场排行榜与横向对比 <ArrowUpRight size={16} /></a>
+    </section>
+
+    <section class="deal-faq">
+      <div class="section-heading"><span>FAQ</span><h2>机场优惠码常见问题</h2></div>
+      {dealFaqs.map((item, index) => <details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .deals-page { padding-top: 2rem; }
+  .deals-hero { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, .6fr); align-items: end; gap: 2rem; padding: 3.4rem 0 2.6rem; }
+  .deals-hero > div > span, .section-heading > span { color: var(--tone-lime); font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+  .deals-hero h1 { margin: .8rem 0 1rem; font-size: clamp(2.55rem, 6vw, 4.7rem); line-height: 1.04; letter-spacing: -.05em; }
+  .deals-hero > div > p { max-width: 52rem; color: var(--text-secondary); font-size: 1.02rem; line-height: 1.8; }
+  .deals-hero aside { padding: 1.25rem; color: #fff5ec; background: linear-gradient(145deg, #6d493d, #a7654c); border: 1px solid rgba(255, 239, 224, .24); border-radius: var(--radius-lg); box-shadow: 0 16px 35px rgba(91, 66, 47, .12); }
+  .deals-hero aside svg { color: #f2c18f; }
+  .deals-hero aside strong { display: block; margin: .7rem 0 .3rem; color: #fff; }
+  .deals-hero aside p { font-size: .8rem; line-height: 1.6; }
+  .deal-methods { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 4rem; }
+  .deal-methods article { padding: 1.1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+  .deal-methods svg { color: var(--tone-lime); }
+  .deal-methods h2 { margin: .65rem 0 .25rem; font-size: .94rem; }
+  .deal-methods p { color: var(--text-muted); font-size: .78rem; line-height: 1.55; }
+  .deal-list-section, .cost-guide, .deal-faq { margin-bottom: 4rem; }
+  .section-heading { max-width: 50rem; margin-bottom: 1.25rem; }
+  .section-heading h2 { margin: .35rem 0 .45rem; font-size: clamp(1.65rem, 3vw, 2.2rem); }
+  .section-heading p { color: var(--text-secondary); font-size: .88rem; }
+  .deal-list { display: grid; gap: .75rem; }
+  .deal-list > article { display: grid; grid-template-columns: 100px minmax(0, 1fr) auto; align-items: center; gap: 1.2rem; padding: 1rem 1.15rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-left: 3px solid var(--tone-lime); border-radius: var(--radius-sm); }
+  .deal-list img { width: 100px; height: 76px; object-fit: contain; padding: .35rem; background: #fffaf4; border-radius: 6px; }
+  .deal-title { display: flex; align-items: baseline; flex-wrap: wrap; gap: .6rem; }
+  .deal-title h3 { font-size: 1.15rem; }
+  .deal-title span { color: var(--tone-aqua); font-size: .72rem; font-weight: 700; }
+  .deal-main > p { margin: .2rem 0 .55rem; color: var(--text-secondary); font-size: .82rem; }
+  .deal-meta { display: flex; flex-wrap: wrap; gap: .5rem 1.25rem; color: var(--text-muted); font-size: .74rem; }
+  .deal-meta strong { color: var(--text-primary); }
+  .deal-actions { display: flex; flex-direction: column; align-items: stretch; gap: .45rem; min-width: 145px; }
+  .deal-actions a, .deal-actions button, .no-coupon { display: inline-flex; align-items: center; justify-content: center; gap: .25rem; padding: .5rem .7rem; font-size: .76rem; font-weight: 700; }
+  .coupon-copy { color: var(--tone-lime); background: var(--tone-lime-bg); border: 1px dashed var(--tone-lime-border); cursor: pointer; }
+  .coupon-copy:hover { background: color-mix(in srgb, var(--tone-lime) 16%, var(--bg-surface)); }
+  .no-coupon { color: var(--text-muted); background: var(--bg-surface-hover); border: 1px dashed var(--border-color-hover); }
+  .deal-review { color: var(--text-secondary); background: var(--bg-surface); border: 1px solid var(--border-color); }
+  .deal-entry { color: #fff; background: var(--tone-lime); }
+  .deal-entry:hover { background: #9f593b; }
+  .deal-disclosure { margin: -2rem 0 4rem; padding: 1.1rem 1.25rem; background: var(--tone-aqua-bg); border: 1px solid var(--tone-aqua-border); border-radius: var(--radius-sm); }
+  .deal-disclosure strong { color: var(--tone-aqua); }
+  .deal-disclosure p { margin-top: .35rem; color: var(--text-secondary); font-size: .82rem; line-height: 1.7; }
+  .cost-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+  .cost-grid article { padding: 1.3rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+  .cost-grid article > span { color: var(--tone-lime); font-size: .72rem; font-weight: 800; }
+  .cost-grid h3 { margin: .5rem 0 .35rem; font-size: 1rem; }
+  .cost-grid p { color: var(--text-secondary); font-size: .82rem; line-height: 1.65; }
+  .comparison-link { display: inline-flex; align-items: center; gap: .35rem; margin-top: 1rem; color: var(--tone-lime); font-size: .86rem; font-weight: 700; }
+  .deal-faq details { margin-bottom: .7rem; padding: 1rem 1.1rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-sm); }
+  .deal-faq summary { cursor: pointer; font-weight: 700; }
+  .deal-faq p { margin-top: .7rem; color: var(--text-secondary); font-size: .86rem; line-height: 1.7; }
+  @media (max-width: 900px) { .deals-hero { grid-template-columns: 1fr; align-items: start; } .deal-methods, .cost-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 680px) { .deal-methods, .cost-grid { grid-template-columns: 1fr; } .deal-list > article { grid-template-columns: 72px minmax(0, 1fr); } .deal-list img { width: 72px; height: 62px; } .deal-actions { grid-column: 1 / -1; flex-flow: row wrap; min-width: 0; } .deal-actions a, .deal-actions button, .no-coupon { flex: 1 1 30%; } }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('[data-coupon-copy]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const code = button.dataset.couponCopy;
+      const label = button.querySelector<HTMLElement>('[data-copy-label]');
+      if (!code || !label) return;
+      try {
+        await navigator.clipboard.writeText(code);
+        label.textContent = `已复制 ${code}`;
+        window.setTimeout(() => { label.textContent = `复制 ${code}`; }, 1800);
+      } catch {
+        label.textContent = `请复制 ${code}`;
+      }
+    });
+  });
+</script>

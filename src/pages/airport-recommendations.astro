@@ -1,0 +1,66 @@
+---
+import TopicLanding from '../components/TopicLanding.astro';
+import BrandCard from '../components/BrandCard.astro';
+import { featuredBrands } from '../data/brands';
+---
+<TopicLanding
+  eyebrow="AIRPORT RECOMMENDATIONS"
+  title="2026 机场推荐：稳定机场、便宜月付与专线选择指南"
+  description="从机场排行榜、线路类型、晚高峰稳定性、折后月费、流量倍率、设备支持和售后透明度出发，整理2026机场推荐、便宜机场与专线机场选择方法。"
+  keywords={['2026机场推荐', '机场推荐排行榜', '稳定机场推荐', '便宜机场推荐', '月付机场', 'IEPL专线机场', '机场对比', 'ChatGPT机场推荐']}
+  intro="如果你正在找机场，不必先研究一堆线路术语：先从下面的八家机场里按使用场景筛选，再打开对应评测查看价格、套餐、客户端、优惠码和购买前注意事项。页面中的“访问机场入口”会直达对应服务商页面，建议第一次先选月付测试。"
+  points={[
+    { title: '先看稳定性', description: '关注晚高峰可用性、丢包、故障恢复与长期维护，而不是只看单次峰值。' },
+    { title: '再看折后成本', description: '统一比较月付价格、优惠后月费、可用流量、设备限制、倍率节点与续费规则。' },
+    { title: '匹配使用场景', description: '轻量浏览、流媒体、远程办公、AI 工具和多设备家庭的需求不同。' },
+    { title: '保留风险视角', description: '结合运营时间、公告透明度、域名与支付变化判断服务连续性。' }
+  ]}
+  categoryNames={['机场评测', '入门指南']}
+  featuredTitle="2026 综合推荐机场"
+  heroImage="/images/site-bg/warm/home-airport-warm.webp"
+  heroPosition="center 48%"
+  links={[
+    { label: '机场排行榜与对比', href: '/airport-comparison/' },
+    { label: '机场导航', href: '/airport-directory/' },
+    { label: '优惠码', href: '/deals/' },
+    { label: '跑路预警', href: '/alerts/' },
+  ]}
+  faqs={[
+    { question: '怎样判断一个机场是否稳定？', answer: '建议同时观察不同时段的延迟、丢包、节点可用率、故障恢复速度和公告响应。单次测速适合做参考，但不能替代持续观察。' },
+    { question: '价格越高就一定越好吗？', answer: '不一定。高价格可能来自专线、节点覆盖或服务成本，也可能与实际体验不匹配。应按自己的流量、设备数量和目标地区比较。' },
+    { question: '新手第一次购买适合长期套餐吗？', answer: '更稳妥的做法是先通过月付或较短周期确认客户端兼容性、线路体验和售后响应，再决定是否延长周期。' },
+    { question: '2026 机场排行榜里的第一名值得直接买吗？', answer: '不建议只按名次购买。地区、运营商、设备和使用场景会改变结果，应先看对比口径和更新时间，再用月付在自己的网络中验证。' },
+    { question: '机场优惠后的价格应该怎样比较？', answer: '把实付金额换算成折后月费，并把常用节点倍率、设备数、流量重置和续费价格一起计算，避免只看折扣百分比。' }
+  ]}
+>
+  <section slot="before-featured" class="recommend-quick-nav" aria-label="八家机场快速选择">
+    <div class="quick-nav-heading">
+      <div><span>QUICK CHOICE</span><h2>先选适合你的机场</h2></div>
+      <p>点击名称可直接跳到对应评测卡片；想立即查看套餐，可进入评测后点击机场入口。</p>
+    </div>
+    <div class="quick-nav-pills">
+      {featuredBrands.map((brand, index) => (
+        <a href={`#airport-${brand.slug}`}><strong>{index + 1}</strong>{brand.name}<small>{brand.recommendation}</small></a>
+      ))}
+    </div>
+  </section>
+  <Fragment slot="featured">
+    {featuredBrands.map((brand) => <div id={`airport-${brand.slug}`} class="airport-card-anchor"><BrandCard brand={brand} /></div>)}
+  </Fragment>
+</TopicLanding>
+
+<style>
+  .recommend-quick-nav { max-width: 1180px; margin: 0 auto 1.25rem; padding: 1.1rem 1.25rem; background: #fff9f1; border: 1px solid #ecdcc9; border-radius: 16px; box-shadow: 0 8px 24px rgba(96, 65, 39, .06); }
+  .quick-nav-heading { display: flex; align-items: end; justify-content: space-between; gap: 1rem; margin-bottom: .85rem; }
+  .quick-nav-heading span { color: #bd7049; font-size: .68rem; font-weight: 800; letter-spacing: .12em; }
+  .quick-nav-heading h2 { margin: .2rem 0 0; color: #513829; font-size: 1.18rem; }
+  .quick-nav-heading p { max-width: 31rem; margin: 0; color: #766457; font-size: .78rem; line-height: 1.6; }
+  .quick-nav-pills { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .55rem; }
+  .quick-nav-pills a { display: flex; align-items: center; gap: .45rem; min-width: 0; padding: .62rem .7rem; color: #4e392d; background: #fff; border: 1px solid #eadfd4; border-radius: 10px; font-size: .83rem; font-weight: 750; transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease; }
+  .quick-nav-pills a:hover { transform: translateY(-2px); border-color: #ce8b61; box-shadow: 0 7px 16px rgba(170, 103, 67, .12); }
+  .quick-nav-pills strong { display: inline-grid; place-items: center; width: 1.35rem; height: 1.35rem; flex: 0 0 auto; color: #fff; background: #c77a53; border-radius: 50%; font-size: .68rem; }
+  .quick-nav-pills small { margin-left: auto; overflow: hidden; color: #9b8272; font-size: .68rem; font-weight: 550; text-overflow: ellipsis; white-space: nowrap; }
+  .airport-card-anchor { scroll-margin-top: 88px; }
+  @media (max-width: 760px) { .quick-nav-heading { display: block; } .quick-nav-heading p { margin-top: .45rem; } .quick-nav-pills { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 430px) { .quick-nav-pills { grid-template-columns: 1fr; } }
+</style>

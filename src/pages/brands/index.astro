@@ -1,0 +1,76 @@
+---
+import { BookOpenCheck, CircleDollarSign, RefreshCw, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import BrandCard from '../../components/BrandCard.astro';
+import { brands } from '../../data/brands';
+import { absoluteUrl } from '../../lib/site';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+    name: '2026 机场评测库与服务商资料',
+    description: '集中整理不同机场服务商的线路、协议、价格、适用人群、风险提示和独立评测。',
+  url: absoluteUrl('/brands/'),
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: brands.map((brand, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `${brand.name}机场评测`,
+      url: absoluteUrl(`/brands/${brand.slug}/`)
+    }))
+  }
+};
+---
+
+<BaseLayout
+  title="2026 机场评测库与服务商资料"
+  description="收录极连云、速界、边缘节点、光年梯、快狸、瞬云、云图与可信云，按线路、价格、协议、客户端、使用场景和风险提示整理独立评测。"
+  keywords={['机场评测库', '机场评测', '机场推荐2026', '机场排行榜', '高性价比机场', '机场官网入口']}
+  jsonLd={jsonLd}
+>
+  <div class="shell brands-page">
+    <Breadcrumbs items={[{ label: '机场评测库' }]} />
+    <header class="brands-hero">
+      <span class="section-tag">BRAND LIBRARY · UPDATED 2026-10-06</span>
+        <h1>2026 机场评测库与独立评测</h1>
+        <p>将机场服务商的宣传信息拆成可比较的线路、价格、协议、客户端、适用人群和风险提示。当前收录 {brands.length} 家机场，每家均有独立评测页面与专属配图。</p>
+    </header>
+
+    <section class="method-grid" aria-label="机场评测资料整理方法">
+      <article><BookOpenCheck size={21} /><h2>资料分层</h2><p>区分服务商资料、公开信息、编辑分析和仍待核验的结论。</p></article>
+      <article><CircleDollarSign size={21} /><h2>成本折算</h2><p>同时考虑月付价格、流量倍率、设备数和常用节点。</p></article>
+      <article><RefreshCw size={21} /><h2>持续更新</h2><p>线路、域名、价格或运营状态变化时更新页面日期。</p></article>
+      <article><ShieldCheck size={21} /><h2>风险提示</h2><p>保留短周期测试、入口核验、售后和备用线路建议。</p></article>
+    </section>
+
+    <div class="brand-library-grid">
+      {brands.map((brand) => <BrandCard brand={brand} />)}
+    </div>
+
+    <aside class="affiliate-note">
+      <strong>联盟链接说明</strong>
+      <p>部分机场评测页包含邀请或联盟跳转链接。本站是独立评测与信息整理网站，可能获得佣金或积分；商业关系不改变页面中的资料状态、适用人群和风险提示。套餐与入口请以机场服务商当前页面为准。</p>
+    </aside>
+  </div>
+</BaseLayout>
+
+<style>
+  .brands-page { padding-top: 2rem; }
+  .brands-hero { max-width: 58rem; padding: 3.5rem 0 2.6rem; }
+  .brands-hero h1 { font-size: clamp(2.4rem, 6vw, 4.5rem); line-height: 1.05; letter-spacing: -.045em; margin: .75rem 0 1.25rem; }
+  .brands-hero p { color: var(--text-secondary); font-size: 1.08rem; line-height: 1.75; }
+  .section-tag { color: var(--tone-lime); font-size: .74rem; font-weight: 800; letter-spacing: .1em; }
+  .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 2.5rem; }
+  .method-grid article { padding: 1.15rem; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .method-grid svg { color: var(--tone-lime); margin-bottom: .6rem; }
+  .method-grid h2 { font-size: .98rem; margin-bottom: .3rem; }
+  .method-grid p { color: var(--text-muted); font-size: .8rem; line-height: 1.55; }
+  .brand-library-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; }
+  .affiliate-note { margin-top: 2.5rem; padding: 1.25rem 1.4rem; background: rgba(56, 189, 248, .06); border: 1px solid rgba(56, 189, 248, .24); border-radius: var(--radius-md); }
+  .affiliate-note strong { color: var(--tone-aqua); }
+  .affiliate-note p { color: var(--text-secondary); font-size: .86rem; line-height: 1.65; margin-top: .35rem; }
+  @media (max-width: 960px) { .method-grid, .brand-library-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 620px) { .method-grid, .brand-library-grid { grid-template-columns: 1fr; } }
+</style>

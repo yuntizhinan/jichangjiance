@@ -1,0 +1,27 @@
+# Dependencies and package-manager caches
+node_modules/
+.pnpm-store/
+
+# Astro and production output
+.astro/
+dist/
+
+# Local browser and visual QA profiles
+.chrome-*/
+
+# Local logs and process files
+*.log
+.dev-server.pid
+
+# Local environment and Cloudflare state
+.env
+.env.*
+!.env.example
+.wrangler/
+
+# Editors and operating systems
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+

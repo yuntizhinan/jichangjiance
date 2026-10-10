@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">iPhone 客户端</title>
+  <desc id="desc">iOS 工具：按需连接 · 订阅 · 排障</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#e9f1ff"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#375f9e"/><stop offset="1" stop-color="#7ca5e8"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#375f9e" flood-opacity=".13"/></filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#375f9e" opacity=".08"/></pattern>
+  </defs>
+  <rect width="1280" height="720" rx="34" fill="url(#bg)"/>
+  <rect width="1280" height="720" rx="34" fill="url(#dots)"/>
+  <circle cx="1170" cy="42" r="230" fill="#7ca5e8" opacity=".11"/>
+  <circle cx="90" cy="690" r="190" fill="#375f9e" opacity=".06"/>
+  <g font-family="Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif">
+    <rect x="86" y="118" width="176" height="42" rx="21" fill="#375f9e" opacity=".11"/>
+    <text x="174" y="146" text-anchor="middle" fill="#375f9e" font-size="20" font-weight="700" letter-spacing="2">iOS 工具</text>
+    <text x="86" y="264" fill="#172a38" font-size="62" font-weight="800" letter-spacing="1">iPhone 客户端</text>
+    <text x="88" y="324" fill="#5c6d78" font-size="27" font-weight="500">按需连接 · 订阅 · 排障</text>
+    <rect x="88" y="389" width="112" height="8" rx="4" fill="url(#accent)"/>
+    <text x="88" y="497" fill="#375f9e" font-size="22" font-weight="700">JICHANGJIANCE.COM</text>
+    <text x="88" y="532" fill="#71828c" font-size="18">机场监测 · 专业指南与工具分享</text>
+  </g>
+  <g filter="url(#shadow)"><rect x="760" y="142" width="382" height="438" rx="38" fill="#ffffff" opacity=".94"/><rect x="794" y="178" width="314" height="20" rx="10" fill="#dce9ef"/><rect x="874" y="225" width="156" height="285" rx="29" fill="#375f9e"/><rect x="889" y="254" width="126" height="216" rx="12" fill="#f4fbff"/><rect x="916" y="277" width="72" height="13" rx="7" fill="#7ca5e8"/><path d="M918 347l25 25 48-58" fill="none" stroke="#375f9e" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><circle cx="952" cy="490" r="7" fill="#fff"/></g>
+  <rect x="1.5" y="1.5" width="1277" height="717" rx="32" fill="none" stroke="#375f9e" stroke-opacity=".11" stroke-width="3"/>
+</svg>

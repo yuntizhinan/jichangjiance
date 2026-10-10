@@ -1,0 +1,204 @@
+---
+import { ArrowUpRight, Calculator, CircleAlert, Gauge, Layers, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { brands } from '../data/brands';
+import { highIntentKeywords, keywordClusters } from '../data/keywordClusters';
+import { absoluteUrl } from '../lib/site';
+
+const visibleBrands = brands.filter((brand) => brand.status !== '资料待核验');
+const brandBySlug = new Map(brands.map((brand) => [brand.slug, brand]));
+const comparisonFaqs = [
+  {
+    question: '2026 机场推荐排行榜应该重点比较什么？',
+    answer: '至少同时比较月付价格、实际可用流量、常用节点倍率、入口线路、晚高峰表现、客户端兼容、售后响应和购买周期。单次测速或单一价格不能代表长期体验。'
+  },
+  {
+    question: '哪个机场晚高峰最稳定？',
+    answer: '不存在适用于所有地区和运营商的固定第一名。应在自己的宽带或移动网络上，于工作日和周末 20:00—23:00 连续测试丢包、网页首开、视频拖动和常用业务。'
+  },
+  {
+    question: '便宜机场和专线机场应该怎么选？',
+    answer: '轻量浏览、备用和预算优先可以先比较低价月付或按量方案；远程办公、视频会议和长时间在线任务更适合重点测试 IEPL/IPLC 或优化中转。首次购买都建议从短周期开始。'
+  },
+  {
+    question: '排行榜里的价格是最终付款价格吗？',
+    answer: '不是。页面展示的是资料参考区间，最终价格可能受套餐、流量、优惠活动、新老用户条件和续费规则影响，付款前应以结算页为准。'
+  }
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '2026 机场推荐排行榜与机场对比',
+  description: '按价格、线路、协议、晚高峰、AI、流媒体和客户端场景横向比较机场服务商。',
+    url: absoluteUrl('/airport-comparison/'),
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: visibleBrands.map((brand, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        name: `${brand.name}机场评测`,
+        url: absoluteUrl(`/brands/${brand.slug}/`)
+      }))
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: comparisonFaqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer }
+    }))
+  }
+];
+---
+
+<BaseLayout
+  title="2026机场推荐排行榜与机场对比：价格、线路、晚高峰"
+  description="2026机场推荐与横向对比，集中比较极连云、速界、边缘节点等机场服务商的月付价格、IEPL/IPLC、晚高峰、ChatGPT、Netflix、客户端与购买风险。"
+  keywords={highIntentKeywords}
+  jsonLd={jsonLd}
+>
+  <div class="shell comparison-page">
+    <Breadcrumbs items={[{ label: '机场推荐', href: '/airport-recommendations/' }, { label: '机场排行榜与对比' }]} />
+
+    <header class="comparison-hero">
+      <span>2026 AIRPORT COMPARISON · UPDATED 2026-10-06</span>
+      <h1>2026 机场推荐排行榜<br />与机场横向对比</h1>
+      <p>把“哪家最好”拆成可验证的问题：预算多少、主要设备是什么、晚高峰是否稳定、常用 AI 或流媒体能否使用，以及出现故障时有没有备用方案。</p>
+      <div class="hero-links">
+          <a href="#comparison">查看机场对比</a>
+        <a href="/deals/">查看优惠与折后成本</a>
+        <a href="/faq/">查看机场常见问题</a>
+      </div>
+    </header>
+
+      <aside class="ranking-note"><CircleAlert size={19} /><p><strong>排行榜说明：</strong>本站不设置脱离地区、运营商和时间的绝对名次。下表依据机场服务商公开的套餐、线路资料与适用场景整理候选范围，最终选择需要用自己的网络、设备和账号做月付测试。</p></aside>
+
+    <section class="method-grid" aria-label="机场对比方法">
+      <article><Gauge size={22} /><h2>晚高峰实用性</h2><p>连续观察 20:00—23:00 的丢包、首开、拖动和业务稳定性。</p></article>
+      <article><Calculator size={22} /><h2>真实单位成本</h2><p>把折后月费、流量、倍率、设备数和续费价格放在一起计算。</p></article>
+      <article><Layers size={22} /><h2>线路与客户端</h2><p>线路名称之外，还要确认订阅格式、协议和设备系统能否兼容。</p></article>
+      <article><ShieldCheck size={22} /><h2>持续运营风险</h2><p>关注公告、域名、售后、故障恢复和异常长期促销，而非只看宣传。</p></article>
+    </section>
+
+    <section id="comparison" class="comparison-section">
+      <div class="section-heading">
+        <span>BRAND MATRIX</span>
+        <h2>2026 机场服务商价格与场景对比</h2>
+        <p>价格均为资料参考区间，不等于当前结算价；协议和场景也应以具体套餐与节点为准。</p>
+      </div>
+        <div class="table-scroll" tabindex="0" aria-label="机场服务商横向对比表，可横向滚动">
+        <table>
+          <thead><tr><th>机场</th><th>评测侧重点</th><th>参考价格</th><th>协议/接入</th><th>优先场景</th><th>详细评测</th></tr></thead>
+          <tbody>
+            {visibleBrands.map((brand) => (
+              <tr>
+                <td><strong>{brand.name}</strong><small>{brand.englishName}</small></td>
+                <td><span class="position-tag">{brand.recommendation}</span></td>
+                <td>{brand.price}</td>
+                <td>{brand.protocols.slice(0, 2).join(' / ')}</td>
+                <td>{brand.useCases.slice(0, 2).join('、')}</td>
+                <td><a href={`/brands/${brand.slug}/`}>查看{brand.name}评测 <ArrowUpRight size={14} /></a></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="cluster-section">
+      <div class="section-heading">
+        <span>SEARCH INTENT</span>
+        <h2>按预算、线路和使用场景选择</h2>
+          <p>同一家机场不会在所有场景都占优。先确定自己的需求，再进入独立评测页和服务商结算页核验。</p>
+      </div>
+      <div class="cluster-grid">
+        {keywordClusters.map((cluster) => (
+          <article id={cluster.slug}>
+            <div class="cluster-top"><span>{cluster.intent}</span><a href={cluster.href}>专题入口 <ArrowUpRight size={14} /></a></div>
+            <h3>{cluster.title}</h3>
+            <p>{cluster.description}</p>
+            <div class="brand-links">
+              {cluster.brandSlugs.map((slug) => brandBySlug.get(slug)).filter(Boolean).map((brand) => <a href={`/brands/${brand!.slug}/`}>{brand!.name}</a>)}
+            </div>
+            <div class="keyword-list">{cluster.keywords.map((keyword) => <span>{keyword}</span>)}</div>
+          </article>
+        ))}
+      </div>
+    </section>
+
+    <section class="cost-section">
+      <div>
+        <span>REAL COST</span>
+        <h2>优惠后仍要计算真实月费和单位流量</h2>
+        <p>先记录活动后的实付金额，再除以使用月数；如果常用节点有倍率，还要把套餐流量除以倍率。最后把设备限制、续费价和闲置流量一起考虑。</p>
+      </div>
+      <ol>
+        <li><strong>折后月费</strong><span>实付金额 ÷ 使用月数</span></li>
+        <li><strong>有效流量</strong><span>套餐流量 ÷ 常用节点倍率</span></li>
+        <li><strong>单位成本</strong><span>折后月费 ÷ 有效流量</span></li>
+      </ol>
+    </section>
+
+    <section class="comparison-faq">
+      <div class="section-heading"><span>FAQ</span><h2>机场排行榜常见问题</h2></div>
+      {comparisonFaqs.map((item, index) => <details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .comparison-page { padding-top: 2rem; }
+  .comparison-hero { max-width: 62rem; padding: 3.4rem 0 2.5rem; }
+  .comparison-hero > span, .section-heading > span, .cost-section > div > span { color: var(--tone-lime); font-size: .72rem; font-weight: 800; letter-spacing: .12em; }
+  .comparison-hero h1 { margin: .8rem 0 1.2rem; font-size: clamp(2.55rem, 6vw, 4.8rem); line-height: 1.04; letter-spacing: -.05em; }
+  .comparison-hero p { max-width: 53rem; color: var(--text-secondary); font-size: 1.06rem; line-height: 1.8; }
+  .hero-links { display: flex; flex-wrap: wrap; gap: .7rem; margin-top: 1.35rem; }
+  .hero-links a { padding: .48rem .78rem; color: #087caf; background: #fff; border: 1px solid #dce6ec; border-radius: var(--radius-full); font-size: .8rem; font-weight: 700; }
+  .ranking-note { display: flex; align-items: flex-start; gap: .65rem; margin-bottom: 1.25rem; padding: 1rem 1.1rem; color: var(--text-secondary); background: #fff8eb; border: 1px solid #f0d9ab; border-radius: var(--radius-md); font-size: .84rem; }
+  .ranking-note svg { flex: 0 0 auto; margin-top: .15rem; color: #c77a16; }
+  .method-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-bottom: 4rem; }
+  .method-grid article { padding: 1.15rem; background: #fff; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .method-grid svg { color: var(--tone-lime); }
+  .method-grid h2 { margin: .7rem 0 .35rem; font-size: .98rem; }
+  .method-grid p { color: var(--text-muted); font-size: .79rem; line-height: 1.55; }
+  .comparison-section, .cluster-section, .comparison-faq { margin-bottom: 4rem; }
+  .section-heading { max-width: 48rem; margin-bottom: 1.3rem; }
+  .section-heading h2 { margin: .35rem 0 .45rem; font-size: clamp(1.65rem, 3vw, 2.25rem); }
+  .section-heading p { color: var(--text-secondary); font-size: .9rem; }
+  .table-scroll { overflow-x: auto; background: #fff; border: 1px solid var(--border-color); box-shadow: var(--shadow-sm); }
+  table { width: 100%; min-width: 900px; border-collapse: collapse; font-size: .82rem; }
+  th, td { padding: .9rem .85rem; border-bottom: 1px solid #edf0f2; text-align: left; vertical-align: middle; }
+  th { color: #556170; background: #f5f7f9; font-size: .75rem; }
+  td strong, td small { display: block; }
+  td small { color: var(--text-muted); font-size: .65rem; text-transform: uppercase; }
+  td a { display: inline-flex; align-items: center; gap: .25rem; color: #1689be; font-weight: 700; white-space: nowrap; }
+  .position-tag { display: inline-flex; padding: .2rem .5rem; color: #087caf; background: #eaf6fb; border-radius: var(--radius-full); white-space: nowrap; }
+  .cluster-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .cluster-grid article { min-width: 0; padding: 1.25rem; background: #fff; border: 1px solid var(--border-color); border-radius: var(--radius-md); }
+  .cluster-top { display: flex; justify-content: space-between; gap: 1rem; color: var(--tone-lime); font-size: .72rem; font-weight: 700; }
+  .cluster-top a { display: inline-flex; align-items: center; gap: .2rem; }
+  .cluster-grid h3 { margin: .55rem 0 .4rem; font-size: 1.08rem; }
+  .cluster-grid p { color: var(--text-secondary); font-size: .84rem; line-height: 1.65; }
+  .brand-links, .keyword-list { display: flex; flex-wrap: wrap; gap: .4rem; }
+  .brand-links { margin-top: .9rem; }
+  .brand-links a { color: #087caf; font-size: .78rem; font-weight: 700; }
+  .brand-links a::after { content: ' →'; }
+  .keyword-list { margin-top: .8rem; padding-top: .75rem; border-top: 1px solid #edf0f2; }
+  .keyword-list span { padding: .18rem .42rem; color: var(--text-muted); background: #f5f7f9; font-size: .68rem; }
+  .cost-section { display: grid; grid-template-columns: 1.25fr 1fr; gap: 2rem; margin-bottom: 4rem; padding: 2rem; color: #eaf4fa; background: linear-gradient(135deg, #10283a, #135a73); border-radius: var(--radius-lg); }
+  .cost-section h2 { margin: .45rem 0 .7rem; color: #fff; font-size: 1.75rem; }
+  .cost-section p { color: #c4d5df; font-size: .88rem; line-height: 1.7; }
+  .cost-section ol { display: grid; gap: .65rem; list-style: none; }
+  .cost-section li { display: flex; justify-content: space-between; gap: 1rem; padding: .75rem .85rem; background: rgba(255,255,255,.07); border: 1px solid rgba(255,255,255,.1); }
+  .cost-section li span { color: #bcd0dc; font-size: .8rem; }
+  .comparison-faq details { margin-bottom: .75rem; padding: 1rem 1.1rem; background: #fff; border: 1px solid var(--border-color); }
+  .comparison-faq summary { cursor: pointer; font-weight: 700; }
+  .comparison-faq p { margin-top: .7rem; color: var(--text-secondary); font-size: .88rem; line-height: 1.7; }
+  @media (max-width: 900px) { .method-grid { grid-template-columns: repeat(2, 1fr); } .cost-section { grid-template-columns: 1fr; } }
+  @media (max-width: 620px) { .comparison-hero { padding-top: 2.5rem; } .method-grid, .cluster-grid { grid-template-columns: 1fr; } .cost-section { padding: 1.25rem; } .cost-section li { flex-direction: column; gap: .15rem; } }
+</style>

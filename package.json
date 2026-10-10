@@ -1,0 +1,27 @@
+{
+  "name": "jichangjiance-blog",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "packageManager": "pnpm@10.11.1",
+  "engines": {
+    "node": ">=20.18.0 <25"
+  },
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build && node scripts/audit-dist.mjs",
+    "preview": "astro preview",
+    "check": "astro check",
+    "audit": "node scripts/audit-dist.mjs",
+    "verify": "pnpm run check && pnpm run build"
+  },
+  "dependencies": {
+    "@astrojs/sitemap": "^3.2.1",
+    "@lucide/astro": "^1.49.0",
+    "astro": "^5.0.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.10",
+    "typescript": "^5.6.3"
+  }
+}

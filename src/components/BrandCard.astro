@@ -1,0 +1,59 @@
+---
+import { ArrowUpRight, CircleCheckBig } from '@lucide/astro';
+import type { BrandProfile } from '../data/brands';
+
+interface Props {
+  brand: BrandProfile;
+  compact?: boolean;
+}
+
+const { brand, compact = false } = Astro.props;
+---
+
+<article class:list={['brand-card', { compact }]} style={`--brand-accent:${brand.accent}`}>
+  <a class="brand-card-cover" href={`/brands/${brand.slug}/`} aria-label={`阅读${brand.name}评测`}>
+  <img src={brand.cover} alt={`${brand.name}机场 2026 独立评测封面`} width="1200" height="630" loading="lazy" decoding="async" />
+  </a>
+  <div class="brand-card-body">
+    <div class="brand-card-topline">
+      <span class="brand-status">{brand.status}</span>
+      <span>{brand.recommendation}</span>
+    </div>
+    <h3><a href={`/brands/${brand.slug}/`}>{brand.name}<small>{brand.englishName}</small></a></h3>
+    <p>{brand.verdict}</p>
+    <div class="brand-card-facts">
+      <span><CircleCheckBig size={14} /> {brand.price}</span>
+      <span>{brand.protocols.slice(0, 2).join(' / ')}</span>
+    </div>
+    <div class="brand-card-actions">
+      <a class="brand-card-link" href={`/brands/${brand.slug}/`}>查看完整评测 <ArrowUpRight size={15} /></a>
+      {brand.referralUrl && brand.linkVerified && (
+        <a class="brand-card-entry" href={brand.referralUrl} target="_blank" rel="sponsored nofollow noopener">访问机场入口 <ArrowUpRight size={14} /></a>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .brand-card { overflow: hidden; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); transition: transform var(--transition-fast), border-color var(--transition-fast); }
+  .brand-card:hover { transform: translateY(-4px); border-color: color-mix(in srgb, var(--tone-lime) 48%, transparent); box-shadow: 0 14px 32px rgba(91, 66, 47, .1); }
+  .brand-card-cover { display: block; aspect-ratio: 1200 / 630; overflow: hidden; background: var(--bg-card); }
+  .brand-card-cover img { width: 100%; height: 100%; display: block; object-fit: cover; transition: transform .35s ease; }
+  .brand-card:hover .brand-card-cover img { transform: scale(1.025); }
+  .brand-card-body { padding: 1.25rem; }
+  .brand-card-topline { display: flex; align-items: center; justify-content: space-between; gap: .75rem; color: var(--text-muted); font-size: .76rem; margin-bottom: .75rem; }
+  .brand-status { color: var(--tone-lime); border: 1px solid var(--tone-lime-border); background: var(--tone-lime-bg); border-radius: var(--radius-full); padding: .2rem .55rem; font-weight: 700; }
+  h3 { font-size: 1.35rem; line-height: 1.2; margin-bottom: .65rem; }
+  h3 a { display: flex; align-items: baseline; gap: .55rem; }
+  h3 small { color: var(--text-muted); font-size: .68rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase; }
+  p { color: var(--text-secondary); font-size: .88rem; line-height: 1.65; min-height: 4.35rem; }
+  .brand-card-facts { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem; padding: .85rem 0; margin-top: .85rem; border-top: 1px solid var(--border-color); color: var(--text-muted); font-size: .78rem; }
+  .brand-card-facts span { display: inline-flex; align-items: center; gap: .3rem; }
+  .brand-card-facts svg { color: var(--tone-aqua); }
+  .brand-card-link { display: inline-flex; align-items: center; gap: .35rem; color: var(--tone-lime); font-size: .86rem; font-weight: 700; }
+  .brand-card-actions { display: flex; align-items: center; flex-wrap: wrap; gap: .65rem 1rem; }
+  .brand-card-entry { display: inline-flex; align-items: center; gap: .3rem; padding: .38rem .68rem; border-radius: var(--radius-full); color: #fff9f2; background: var(--tone-lime); font-size: .78rem; font-weight: 750; }
+  .brand-card-entry:hover { color: #fff; filter: brightness(.95); }
+  .compact .brand-card-cover { display: none; }
+  .compact p { min-height: auto; }
+</style>

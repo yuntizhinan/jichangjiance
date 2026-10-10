@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720" role="img" aria-labelledby="title desc">
+  <title id="title">全流程工具链</title>
+  <desc id="desc">AI 内容生产：研究 · 写作 · 视觉 · 发布</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#ffffff"/><stop offset="1" stop-color="#f4edfa"/></linearGradient>
+    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#76529e"/><stop offset="1" stop-color="#af83cf"/></linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="22" stdDeviation="24" flood-color="#76529e" flood-opacity=".13"/></filter>
+    <pattern id="dots" width="34" height="34" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="2" fill="#76529e" opacity=".08"/></pattern>
+  </defs>
+  <rect width="1280" height="720" rx="34" fill="url(#bg)"/>
+  <rect width="1280" height="720" rx="34" fill="url(#dots)"/>
+  <circle cx="1170" cy="42" r="230" fill="#af83cf" opacity=".11"/>
+  <circle cx="90" cy="690" r="190" fill="#76529e" opacity=".06"/>
+  <g font-family="Inter, 'Noto Sans SC', 'Microsoft YaHei', sans-serif">
+    <rect x="86" y="118" width="176" height="42" rx="21" fill="#76529e" opacity=".11"/>
+    <text x="174" y="146" text-anchor="middle" fill="#76529e" font-size="20" font-weight="700" letter-spacing="2">AI 内容生产</text>
+    <text x="86" y="264" fill="#172a38" font-size="62" font-weight="800" letter-spacing="1">全流程工具链</text>
+    <text x="88" y="324" fill="#5c6d78" font-size="27" font-weight="500">研究 · 写作 · 视觉 · 发布</text>
+    <rect x="88" y="389" width="112" height="8" rx="4" fill="url(#accent)"/>
+    <text x="88" y="497" fill="#76529e" font-size="22" font-weight="700">JICHANGJIANCE.COM</text>
+    <text x="88" y="532" fill="#71828c" font-size="18">机场监测 · 专业指南与工具分享</text>
+  </g>
+  <g filter="url(#shadow)"><rect x="760" y="142" width="382" height="438" rx="38" fill="#ffffff" opacity=".94"/><rect x="794" y="178" width="314" height="20" rx="10" fill="#dce9ef"/><rect x="823" y="250" width="247" height="58" rx="19" fill="#76529e"/><rect x="842" y="335" width="228" height="58" rx="19" fill="#af83cf" opacity=".85"/><rect x="861" y="420" width="209" height="58" rx="19" fill="#76529e" opacity=".52"/><circle cx="855" cy="279" r="10" fill="#fff"/><circle cx="874" cy="364" r="10" fill="#fff"/><circle cx="893" cy="449" r="10" fill="#fff"/></g>
+  <rect x="1.5" y="1.5" width="1277" height="717" rx="32" fill="none" stroke="#76529e" stroke-opacity=".11" stroke-width="3"/>
+</svg>

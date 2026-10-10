@@ -1,0 +1,128 @@
+---
+import { Search, Menu, ChevronDown } from '@lucide/astro';
+import { site } from '../lib/site';
+import { toolGuideLinks } from '../data/toolGuides';
+import { aiNavItems } from '../data/aiContent';
+
+const currentPath = Astro.url.pathname;
+const isHome = currentPath === '/';
+const primaryNav = [
+  { label: '机场推荐', href: '/airport-recommendations/' }
+];
+const secondaryNav = [
+  { label: '机场优惠码', href: '/deals/' },
+  { label: '跑路预警', href: '/alerts/' }
+];
+const moreNav = [
+  { label: '机场评测库', href: '/brands/', description: '八家机场独立评测' },
+  { label: '机场排行榜', href: '/airport-comparison/', description: '价格、线路与场景对比' },
+  { label: '机场导航', href: '/airport-directory/', description: '按预算和场景查找' },
+  { label: '新手入门', href: '/categories/beginner/', description: '订阅与客户端基础' },
+  { label: '全部文章', href: '/articles/', description: '完整内容归档' },
+  { label: '常见问题', href: '/faq/', description: '快速查找答案' },
+  { label: '关于本站', href: '/about/', description: '编辑原则与联系' }
+];
+const isActive = (href: string) => href === '/' ? currentPath === '/' : currentPath.startsWith(href);
+const isToolActive = currentPath.startsWith('/tools/') || toolGuideLinks.some((item) => item.href !== '/tools/' && currentPath.startsWith(item.href));
+const isAiActive = currentPath.startsWith('/ai-news/') || aiNavItems.some((item) => item.href !== '/ai-news/' && currentPath.startsWith(item.href));
+---
+
+<header class:list={['site-header', { 'site-header-home': isHome }]} data-site-header>
+  <div class="shell header-inner">
+    <a class="brand" href="/" aria-label={`${site.name}首页`}>
+      <span class="brand-mark" aria-hidden="true">J</span>
+      <span>{site.name}</span>
+    </a>
+
+    <nav class="desktop-nav" aria-label="主导航">
+      {primaryNav.map((item) => (
+        <a href={item.href} class:list={{ active: isActive(item.href) }} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+      <div class="nav-dropdown ai-nav-dropdown">
+        <button type="button" class:list={['nav-dropdown-trigger', { active: isAiActive }]} aria-haspopup="true" aria-current={isAiActive ? 'page' : undefined}>AI资讯分享 <ChevronDown size={15} /></button>
+        <div class="nav-dropdown-panel ai-dropdown-panel">
+          {aiNavItems.map((item) => (
+            <a href={item.href}>
+              <strong>{item.label}</strong>
+              <span>{item.description}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      <div class="nav-dropdown tool-nav-dropdown">
+        <button type="button" class:list={['nav-dropdown-trigger', { active: isToolActive }]} aria-haspopup="true" aria-current={isToolActive ? 'page' : undefined}>工具分享 <ChevronDown size={15} /></button>
+        <div class="nav-dropdown-panel tool-dropdown-panel">
+          {toolGuideLinks.map((item) => (
+            <a href={item.href}>
+              <strong>{item.label}</strong>
+              <span>{item.description}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+      {secondaryNav.map((item) => (
+        <a href={item.href} class:list={{ active: isActive(item.href) }} aria-current={isActive(item.href) ? 'page' : undefined}>{item.label}</a>
+      ))}
+      <div class="nav-dropdown">
+        <button type="button" class="nav-dropdown-trigger" aria-haspopup="true">更多 <ChevronDown size={15} /></button>
+        <div class="nav-dropdown-panel">
+          {moreNav.map((item) => (
+            <a href={item.href}>
+              <strong>{item.label}</strong>
+              <span>{item.description}</span>
+            </a>
+          ))}
+        </div>
+      </div>
+    </nav>
+
+    <div class="header-actions">
+      <a class="header-search" href="/search/" aria-label="搜索文章"><Search size={18} /></a>
+      <button class="mobile-menu-button" type="button" aria-label="打开菜单" aria-expanded="false" data-menu-toggle><Menu size={22} /></button>
+    </div>
+  </div>
+
+  <nav class="mobile-nav" data-mobile-nav aria-label="移动端导航">
+    {primaryNav.map((item) => <a href={item.href}>{item.label}</a>)}
+    <details open={isAiActive}>
+      <summary>AI资讯分享</summary>
+      <div class="mobile-subnav ai-mobile-subnav">{aiNavItems.map((item) => <a href={item.href}>{item.label}</a>)}</div>
+    </details>
+    <details open={isToolActive}>
+      <summary>工具分享</summary>
+      <div class="mobile-subnav tool-mobile-subnav">{toolGuideLinks.map((item) => <a href={item.href}>{item.label}</a>)}</div>
+    </details>
+    {secondaryNav.map((item) => <a href={item.href}>{item.label}</a>)}
+    <details>
+      <summary>更多栏目</summary>
+      <div class="mobile-subnav">{moreNav.map((item) => <a href={item.href}>{item.label}</a>)}</div>
+    </details>
+    <a href="/search/">站内搜索</a>
+  </nav>
+</header>
+
+<script>
+  const header = document.querySelector('[data-site-header]');
+  const toggle = document.querySelector('[data-menu-toggle]');
+  const nav = document.querySelector('[data-mobile-nav]');
+  const updateHeader = () => header?.classList.toggle('is-scrolled', window.scrollY > 24);
+  updateHeader();
+  requestAnimationFrame(updateHeader);
+  window.addEventListener('pageshow', updateHeader);
+  window.addEventListener('scroll', updateHeader, { passive: true });
+  toggle?.addEventListener('click', () => {
+    const open = nav?.classList.toggle('is-open') ?? false;
+    toggle.setAttribute('aria-expanded', String(open));
+  });
+</script>
+
+<style>
+  .ai-dropdown-panel { left: 0; right: auto; width: 480px; }
+  .ai-dropdown-panel a:first-child { grid-column: 1 / -1; background: #fbf3e9; border-left: 3px solid var(--tone-lime); }
+  .ai-dropdown-panel a:first-child strong { color: var(--tone-lime); }
+  .tool-dropdown-panel { left: 0; right: auto; width: 450px; }
+  .tool-dropdown-panel a:first-child { grid-column: 1 / -1; background: #fbf3e9; border-left: 3px solid var(--tone-lime); }
+  .tool-dropdown-panel a:first-child strong { color: var(--tone-lime); }
+  .tool-mobile-subnav { grid-template-columns: 1fr; }
+  .ai-mobile-subnav { grid-template-columns: 1fr; }
+</style>

@@ -1,0 +1,248 @@
+---
+import { getCollection } from 'astro:content';
+import { Search, Clock3, Flame, FolderOpen, Tags, ArrowRight } from '@lucide/astro';
+import { categories, formatDate, site } from '../lib/site';
+import { featuredBrands } from '../data/brands';
+
+const articles = await getCollection('articles', ({ data }) => !data.draft);
+const latest = [...articles].sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime()).slice(0, 6);
+const featured = articles.filter((article) => article.data.featured).slice(0, 5);
+const popularSearches = ['2026机场推荐', '性价比机场', '稳定机场', '机场优惠码', '机场跑路预警', 'IEPL专线'];
+const tagCloud = [
+  { tag: '机场推荐', weight: 5 },
+  { tag: '机场评测', weight: 5 },
+  { tag: '性价比机场', weight: 5 },
+  { tag: '稳定机场', weight: 4 },
+  { tag: '机场导航', weight: 4 },
+  { tag: '机场优惠码', weight: 4 },
+  { tag: '机场跑路预警', weight: 4 },
+  { tag: '新手选机场', weight: 4 },
+  { tag: '2026机场推荐', weight: 3 },
+  { tag: 'IEPL专线', weight: 3 },
+  { tag: 'IPLC专线', weight: 3 },
+  { tag: 'Clash订阅', weight: 3 },
+  { tag: 'ChatGPT机场', weight: 3 },
+  { tag: '流媒体解锁', weight: 3 },
+  { tag: '晚高峰测速', weight: 3 },
+  { tag: 'BGP中转', weight: 2 },
+  { tag: '节点倍率', weight: 2 },
+  { tag: '订阅导入', weight: 2 },
+  { tag: '客户端配置', weight: 2 },
+  { tag: '线路诊断', weight: 2 },
+  { tag: '极连云', weight: 3 },
+  { tag: '速界', weight: 3 },
+  { tag: '边缘节点', weight: 3 },
+  { tag: '光年梯', weight: 2 },
+  { tag: '快狸', weight: 2 },
+  { tag: '瞬云', weight: 2 },
+  { tag: '云图', weight: 2 },
+  { tag: '可信云', weight: 2 },
+  { tag: '机场安全', weight: 1 },
+  { tag: '隐私保护', weight: 1 }
+].map((item, index) => ({ ...item, tone: index % 6 }));
+const categoryCounts = categories.map((category) => ({
+  ...category,
+  count: articles.filter((article) => article.data.category === category.name).length
+}));
+---
+
+<aside class="blog-sidebar" aria-label="博客侧栏">
+  <section class="sidebar-widget sidebar-about">
+    <div class="sidebar-avatar" aria-hidden="true">J</div>
+    <h2>{site.name}</h2>
+    <p>机场代理、工具教程、优惠情报与风险观察，持续整理适合中文用户的实用内容。</p>
+    <a href="/about/">了解本站 <ArrowRight size={14} /></a>
+  </section>
+
+  <section class="sidebar-widget">
+    <h2 class="widget-title"><Search size={17} /> 搜索文章</h2>
+    <div class="sidebar-search-box" data-sidebar-search-box>
+      <form class="sidebar-search" action="/search/" method="get">
+        <label class="sr-only" for="sidebar-search-input">输入关键词</label>
+        <input id="sidebar-search-input" type="search" name="q" placeholder="输入机场名或关键词…" autocomplete="off" aria-controls="sidebar-search-suggestions" aria-expanded="false" data-sidebar-search-input />
+        <button type="submit">搜索</button>
+      </form>
+      <div class="popular-searches" aria-label="热门搜索">
+        <span>热门：</span>
+        {popularSearches.slice(0, 4).map((keyword) => <a href={`/search/?q=${encodeURIComponent(keyword)}`}>{keyword}</a>)}
+      </div>
+      <div class="search-suggestions" id="sidebar-search-suggestions" data-search-suggestions hidden>
+        <section data-suggestion-group>
+          <strong>热门关键词</strong>
+          <div class="suggestion-keywords">
+            {popularSearches.map((keyword) => (
+              <a href={`/search/?q=${encodeURIComponent(keyword)}`} data-search-suggestion data-search-term={keyword.toLocaleLowerCase('zh-CN')}>
+                <Search size={13} /><span>{keyword}</span>
+              </a>
+            ))}
+          </div>
+        </section>
+        <section data-suggestion-group>
+          <strong>机场测评文章</strong>
+          <div class="suggestion-brands">
+            {featuredBrands.map((brand) => (
+              <a href={`/brands/${brand.slug}/`} data-search-suggestion data-search-term={`${brand.name} ${brand.englishName} ${brand.keywords.join(' ')}`.toLocaleLowerCase('zh-CN')}>
+                <img src={brand.logo} alt="" width="40" height="40" loading="lazy" decoding="async" />
+                <span><b>{brand.name}怎么样？2026 机场评测</b><small>{brand.recommendation} · {brand.price}</small></span>
+                <ArrowRight size={13} />
+              </a>
+            ))}
+          </div>
+        </section>
+        <p class="suggestion-empty" data-suggestion-empty hidden>没有直接匹配项，按回车搜索完整文章库。</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sidebar-widget">
+    <div class="widget-tabs" role="tablist" aria-label="文章推荐">
+      <button class="is-active" type="button" data-tab-button="latest"><Clock3 size={15} /> 最新</button>
+      <button type="button" data-tab-button="featured"><Flame size={15} /> 推荐</button>
+    </div>
+    <div class="widget-post-list" data-tab-panel="latest">
+      {latest.map((article) => (
+        <a href={`/articles/${article.id}/`}>
+          <span>{article.data.title}</span>
+          <small>{formatDate(article.data.updatedAt)}</small>
+        </a>
+      ))}
+    </div>
+    <div class="widget-post-list" data-tab-panel="featured" hidden>
+      {featured.map((article) => (
+        <a href={`/articles/${article.id}/`}>
+          <span>{article.data.title}</span>
+          <small>{article.data.category} · {article.data.readingTime}</small>
+        </a>
+      ))}
+    </div>
+  </section>
+
+  <section class="sidebar-widget">
+      <h2 class="widget-title"><Flame size={17} /> 机场评测</h2>
+    <div class="widget-post-list">
+      {featuredBrands.map((brand, index) => (
+        <a href={`/brands/${brand.slug}/`}>
+            <span><b>{index + 1}.</b> {brand.name}怎么样？2026 机场评测</span>
+          <small>{brand.recommendation} · {brand.price}</small>
+        </a>
+      ))}
+    </div>
+      <a class="sidebar-all-brands" href="/brands/">查看全部机场评测 <ArrowRight size={14} /></a>
+  </section>
+
+  <section class="sidebar-widget">
+    <h2 class="widget-title"><FolderOpen size={17} /> 文章分类</h2>
+    <div class="sidebar-categories">
+      {categoryCounts.map((category) => (
+        <a href={`/categories/${category.slug}/`}><span>{category.name}</span><strong>{category.count}</strong></a>
+      ))}
+    </div>
+  </section>
+
+  <section class="sidebar-widget">
+    <h2 class="widget-title"><Tags size={17} /> 热门标签</h2>
+    <div class="sidebar-tag-cloud" aria-label="热门标签词云">
+      {tagCloud.map((item) => (
+        <a
+          href={`/search/?q=${encodeURIComponent(item.tag)}`}
+          class={`tag-weight-${item.weight} tag-tone-${item.tone}`}
+          title={`搜索：${item.tag}`}
+        >{item.tag}</a>
+      ))}
+    </div>
+  </section>
+</aside>
+
+<style>
+  .sidebar-all-brands { display: inline-flex; align-items: center; gap: .3rem; margin-top: .75rem; color: var(--tone-lime); font-size: .75rem; font-weight: 650; }
+  .sidebar-search-box { position: relative; z-index: 6; }
+  .popular-searches { display: flex; align-items: center; flex-wrap: wrap; gap: .3rem .45rem; margin-top: .65rem; color: #9b8d82; font-size: .62rem; }
+  .popular-searches a { color: #a45d3d; border-bottom: 1px dotted #d7a68e; }
+  .popular-searches a:hover { color: #1689be; border-color: #1689be; }
+  .search-suggestions { position: absolute; z-index: 20; top: calc(100% + .55rem); right: 0; width: min(25rem, calc(100vw - 2rem)); max-height: 30rem; overflow-y: auto; padding: .8rem; background: #fffdf9; border: 1px solid #ded4ca; box-shadow: 0 16px 38px rgba(74, 56, 43, .16); }
+  .search-suggestions[hidden], .suggestion-empty[hidden] { display: none; }
+  .search-suggestions section + section { margin-top: .85rem; padding-top: .8rem; border-top: 1px solid #eee6de; }
+  .search-suggestions section > strong { display: block; margin-bottom: .45rem; color: #4a4039; font-size: .68rem; }
+  .suggestion-keywords { display: flex; flex-wrap: wrap; gap: .35rem; }
+  .suggestion-keywords a { display: inline-flex; align-items: center; gap: .22rem; padding: .3rem .45rem; color: #766a61; background: #f8f2eb; border: 1px solid #ece0d4; font-size: .62rem; }
+  .suggestion-keywords a:hover { color: #fff; background: #bf6a43; border-color: #bf6a43; }
+  .suggestion-brands { display: grid; gap: .25rem; }
+  .suggestion-brands > a { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: .5rem; padding: .45rem; }
+  .suggestion-brands > a:hover { background: #f8f2eb; }
+  .suggestion-brands img { width: 34px; height: 34px; object-fit: contain; padding: .22rem; background: #fff; border: 1px solid #eee4dc; border-radius: 8px; }
+  .suggestion-brands span, .suggestion-brands b, .suggestion-brands small { display: block; min-width: 0; }
+  .suggestion-brands b { overflow: hidden; color: #4a4039; font-size: .68rem; text-overflow: ellipsis; white-space: nowrap; }
+  .suggestion-brands small { margin-top: .12rem; overflow: hidden; color: #9a8d84; font-size: .57rem; text-overflow: ellipsis; white-space: nowrap; }
+  .suggestion-brands svg { color: #b6a9a0; }
+  .suggestion-empty { margin: .65rem 0 0; padding: .55rem; color: #8d8178; background: #faf6f1; font-size: .62rem; line-height: 1.5; }
+  .sidebar-tag-cloud { display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: .28rem .55rem; padding: .35rem .1rem .2rem; line-height: 1.12; text-align: center; }
+  .sidebar-tag-cloud a { display: inline-block; font-weight: 520; transition: transform .18s ease, opacity .18s ease; }
+  .sidebar-tag-cloud a:hover { opacity: .72; transform: translateY(-1px); }
+  .tag-weight-1 { font-size: .72rem; }
+  .tag-weight-2 { font-size: .84rem; }
+  .tag-weight-3 { font-size: 1rem; }
+  .tag-weight-4 { font-size: 1.16rem; font-weight: 600 !important; }
+  .tag-weight-5 { font-size: 1.34rem; font-weight: 680 !important; }
+  .tag-tone-0 { color: #c45d40; }
+  .tag-tone-1 { color: #27846f; }
+  .tag-tone-2 { color: #397db3; }
+  .tag-tone-3 { color: #a46c28; }
+  .tag-tone-4 { color: #8060a5; }
+  .tag-tone-5 { color: #b64f72; }
+</style>
+
+<script>
+  document.querySelectorAll('.blog-sidebar').forEach((sidebar) => {
+    const buttons = sidebar.querySelectorAll<HTMLElement>('[data-tab-button]');
+    const panels = sidebar.querySelectorAll<HTMLElement>('[data-tab-panel]');
+    buttons.forEach((button) => button.addEventListener('click', () => {
+      const target = button.dataset.tabButton;
+      buttons.forEach((item) => item.classList.toggle('is-active', item === button));
+      panels.forEach((panel) => { panel.hidden = panel.dataset.tabPanel !== target; });
+    }));
+  });
+
+  document.querySelectorAll<HTMLElement>('[data-sidebar-search-box]').forEach((box) => {
+    const input = box.querySelector<HTMLInputElement>('[data-sidebar-search-input]');
+    const panel = box.querySelector<HTMLElement>('[data-search-suggestions]');
+    const suggestions = [...box.querySelectorAll<HTMLElement>('[data-search-suggestion]')];
+    const groups = [...box.querySelectorAll<HTMLElement>('[data-suggestion-group]')];
+    const empty = box.querySelector<HTMLElement>('[data-suggestion-empty]');
+    if (!input || !panel) return;
+
+    const openPanel = () => {
+      panel.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    };
+    const closePanel = () => {
+      panel.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+    };
+    const filterSuggestions = () => {
+      const query = input.value.trim().toLocaleLowerCase('zh-CN');
+      let visibleCount = 0;
+      suggestions.forEach((item) => {
+        const matches = !query || (item.dataset.searchTerm ?? '').includes(query);
+        item.hidden = !matches;
+        if (matches) visibleCount += 1;
+      });
+      groups.forEach((group) => {
+        group.hidden = !group.querySelector('[data-search-suggestion]:not([hidden])');
+      });
+      if (empty) empty.hidden = visibleCount !== 0;
+      openPanel();
+    };
+
+    input.addEventListener('focus', filterSuggestions);
+    input.addEventListener('input', filterSuggestions);
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        closePanel();
+        input.blur();
+      }
+    });
+    document.addEventListener('click', (event) => {
+      if (!box.contains(event.target as Node)) closePanel();
+    });
+  });
+</script>

@@ -1,0 +1,146 @@
+---
+import { getCollection } from 'astro:content';
+import { ArrowRight, Check, Clock3 } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ArticleCard from './ArticleCard.astro';
+import Sidebar from './Sidebar.astro';
+import { absoluteUrl } from '../lib/site';
+
+interface Point { title: string; description: string; }
+interface FaqItem { question: string; answer: string; }
+interface LinkItem { label: string; href: string; }
+interface Props {
+  eyebrow: string;
+  title: string;
+  description: string;
+  keywords: string[];
+  intro: string;
+  points: Point[];
+  categoryNames?: string[];
+  faqs: FaqItem[];
+  links?: LinkItem[];
+  featuredTitle?: string;
+  heroImage?: string;
+  heroPosition?: string;
+}
+
+const { eyebrow, title, description, keywords, intro, points, categoryNames = [], faqs, links = [], featuredTitle = '机场评测精选', heroImage, heroPosition = 'center' } = Astro.props;
+const allArticles = await getCollection('articles', ({ data }) => !data.draft);
+const articles = allArticles
+  .filter((article) => categoryNames.length === 0 || categoryNames.includes(article.data.category))
+  .sort((a, b) => b.data.updatedAt.getTime() - a.data.updatedAt.getTime())
+  .slice(0, 10);
+const jsonLd = [
+  {
+    '@context': 'https://schema.org', '@type': 'CollectionPage', name: title, description,
+    url: absoluteUrl(Astro.url.pathname), inLanguage: 'zh-CN',
+    mainEntity: articles.length > 0 ? {
+      '@type': 'ItemList', itemListElement: articles.map((article, index) => ({
+        '@type': 'ListItem', position: index + 1, name: article.data.title, url: absoluteUrl(`/articles/${article.id}/`)
+      }))
+    } : undefined
+  },
+  {
+    '@context': 'https://schema.org', '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } }))
+  }
+];
+const updatedAt = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(new Date());
+---
+
+<BaseLayout title={title} description={description} keywords={keywords} jsonLd={jsonLd}>
+  <div class="shell topic-header-wrap">
+    <Breadcrumbs items={[{ label: title }]} />
+    <header class:list={['page-hero', 'topic-header', { 'topic-header-image': Boolean(heroImage) }]} style={heroImage ? `--topic-hero-image:url('${heroImage}');--topic-hero-position:${heroPosition}` : undefined}>
+      <span class="topic-eyebrow">{eyebrow}</span>
+      <h1>{title}</h1>
+      <p>{description}</p>
+      <small><Clock3 size={13} /> 页面更新：{updatedAt}</small>
+      {links.length > 0 && <nav class="topic-links" aria-label={`${title}快捷导航`}>{links.map((item) => <a href={item.href}>{item.label}</a>)}</nav>}
+    </header>
+  </div>
+
+  <div class="blog-main shell">
+    <main class="topic-content">
+      <section class="topic-overview">
+        <h2>专题说明</h2>
+        <p class="topic-intro">{intro}</p>
+        <div class="topic-points">
+          {points.map((point) => <div><Check size={16} /><p><strong>{point.title}</strong>{point.description}</p></div>)}
+        </div>
+      </section>
+
+      {Astro.slots.has('before-featured') && <slot name="before-featured" />}
+
+      {Astro.slots.has('featured') && (
+        <section class="topic-featured">
+          <div class="stream-heading">
+            <div><span>AIRPORT PICKS</span><h2>{featuredTitle}</h2></div>
+          <a href="/brands/">全部机场评测 <ArrowRight size={15} /></a>
+          </div>
+          <div class="topic-featured-grid"><slot name="featured" /></div>
+        </section>
+      )}
+
+      <section class="topic-posts">
+        <div class="stream-heading">
+          <div><span>LATEST GUIDES</span><h2>相关指南与最新内容</h2></div>
+          <a href="/articles/">全部文章 <ArrowRight size={15} /></a>
+        </div>
+        {articles.length > 0 ? (
+          <div class="post-list">{articles.map((article) => <ArticleCard article={article} />)}</div>
+        ) : (
+          <div class="topic-empty"><h3>专题内容正在持续整理</h3><p>可以先从完整文章库和相关分类开始浏览。</p><a href="/articles/">浏览文章库 <ArrowRight size={14} /></a></div>
+        )}
+      </section>
+
+      <section class="topic-faq">
+        <h2>常见问题</h2>
+        {faqs.map((item, index) => <details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+      </section>
+    </main>
+    <Sidebar />
+  </div>
+</BaseLayout>
+
+<style>
+  .topic-header-wrap { padding-top: 1.5rem; }
+  .topic-header { margin-bottom: 0; }
+  .topic-header-image {
+    color: #fff;
+    background:
+      linear-gradient(90deg, rgba(62, 41, 29, .82) 0%, rgba(92, 61, 42, .58) 55%, rgba(106, 76, 52, .22) 100%),
+      var(--topic-hero-image) var(--topic-hero-position) / cover no-repeat;
+    box-shadow: var(--shadow-lg);
+  }
+  .topic-header-image .topic-eyebrow { color: #ffd3af; }
+  .topic-header-image > p { max-width: 760px; color: rgba(255,250,244,.88); }
+  .topic-header-image small { color: rgba(255,246,237,.74); }
+  .topic-header-image .topic-links a { color: #fff8f0; background: rgba(73,43,27,.3); border-color: rgba(255,244,232,.34); border-radius: 999px; backdrop-filter: blur(6px); }
+  .topic-header-image .topic-links a:hover { color: #5a3624; background: #fff1e3; border-color: #fff1e3; }
+  .topic-eyebrow { color: #1689be; font-size: .68rem; font-weight: 800; letter-spacing: .12em; }
+  .topic-header small { display: flex; align-items: center; gap: .3rem; margin-top: .8rem; color: var(--text-muted); font-size: .72rem; }
+  .topic-links { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+  .topic-links a { padding: .28rem .58rem; color: #5e6976; background: #f3f5f7; border: 1px solid #e5e8eb; font-size: .72rem; }
+  .topic-links a:hover { color: #fff; background: #1689be; border-color: #1689be; }
+  .topic-content { min-width: 0; }
+  .topic-overview, .topic-faq, .topic-empty { padding: 1.4rem 1.55rem; background: #fff; border: 1px solid #eceef1; box-shadow: var(--shadow-sm); }
+  .topic-overview { margin-bottom: 22px; }
+  .topic-overview h2, .topic-faq > h2 { margin-bottom: .75rem; font-size: 1.15rem; }
+  .topic-intro { color: var(--text-secondary); font-size: .9rem; line-height: 1.75; }
+  .topic-points { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem 1.2rem; margin-top: 1rem; padding-top: 1rem; border-top: 1px solid #edf0f2; }
+  .topic-points > div { display: flex; align-items: flex-start; gap: .45rem; }
+  .topic-points svg { flex: 0 0 auto; margin-top: .25rem; color: #1689be; }
+  .topic-points p { color: var(--text-secondary); font-size: .78rem; }
+  .topic-points strong { display: block; color: var(--text-primary); font-size: .82rem; }
+  .topic-posts { margin-bottom: 22px; }
+  .topic-featured { margin-bottom: 22px; }
+  .topic-featured-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; }
+  .topic-empty p { margin: .35rem 0 .7rem; color: var(--text-secondary); font-size: .86rem; }
+  .topic-empty a { display: inline-flex; align-items: center; gap: .25rem; color: #1689be; font-size: .8rem; }
+  .topic-faq details { padding: .8rem 0; border-top: 1px solid #edf0f2; }
+  .topic-faq summary { cursor: pointer; color: #3c4754; font-size: .9rem; font-weight: 650; }
+  .topic-faq details p { margin-top: .55rem; color: var(--text-secondary); font-size: .84rem; line-height: 1.7; }
+  @media (max-width: 680px) { .topic-points, .topic-featured-grid { grid-template-columns: 1fr; } }
+</style>

@@ -1,0 +1,203 @@
+---
+import { getCollection } from 'astro:content';
+import {
+  ArrowRight,
+  Apple,
+  Download,
+  Gauge,
+  Laptop,
+  MonitorSmartphone,
+  Network,
+  Route,
+  ShieldCheck,
+  Smartphone,
+  Wrench
+} from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ArticleCard from '../components/ArticleCard.astro';
+import { absoluteUrl } from '../lib/site';
+import { toolGuideLinks } from '../data/toolGuides';
+
+const articleIds = toolGuideLinks.slice(1).map((item) => item.href.split('/').filter(Boolean).at(-1));
+const allArticles = await getCollection('articles', ({ data }) => !data.draft && data.category === '工具教程');
+const articleById = Object.fromEntries(allArticles.map((article) => [article.id, article]));
+const toolArticles = articleIds.map((id) => id ? articleById[id] : undefined).filter(Boolean);
+
+const faqs = [
+  { question: '客户端、订阅和机场服务分别是什么？', answer: '机场服务提供节点与订阅，订阅是配置入口，客户端负责读取配置并建立连接。更换客户端通常不会改变线路本身，但会影响协议兼容、分流、DNS 与 TUN 行为。' },
+  { question: '新手应该先开启系统代理还是 TUN 模式？', answer: '先用系统代理验证订阅与节点是否正常；只有命令行、游戏或不遵循系统代理的应用需要接管时，再开启 TUN，并留意管理员权限、虚拟网卡和 DNS 设置。' },
+  { question: '为什么不建议从网盘或群文件下载客户端？', answer: '第三方打包版本可能滞后、被修改或无法验证完整性。优先使用项目发布页、正规应用商店或软件内能够相互验证的更新渠道。' },
+  { question: '测速延迟低就代表实际体验好吗？', answer: '不代表。客户端延迟通常只是一次探测，还需要观察丢包、抖动、晚高峰吞吐、目标网站响应和路由变化。' }
+];
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: '2026代理工具与客户端推荐',
+    description: '按 Windows、macOS、Linux、Android 和 iOS 整理代理客户端、订阅配置、路由追踪与账号安全教程。',
+    url: absoluteUrl('/tools/'),
+    dateModified: '2026-10-06',
+    mainEntity: {
+      '@type': 'ItemList',
+      itemListElement: toolGuideLinks.slice(1).map((item, index) => ({
+        '@type': 'ListItem', position: index + 1, name: item.label, url: absoluteUrl(item.href)
+      }))
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({ '@type': 'Question', name: item.question, acceptedAnswer: { '@type': 'Answer', text: item.answer } }))
+  }
+];
+
+const platformCards = [
+  { icon: Laptop, title: 'Windows / Linux / macOS', text: '比较 Clash Verge Rev、Hiddify 与 sing-box 的安装形式、TUN 支持、订阅兼容和日志能力。', href: '/articles/desktop-proxy-clients-2026/', tone: 'blue' },
+  { icon: Smartphone, title: 'Android 手机', text: '围绕 v2rayNG、Hiddify、VPN 权限、省电限制和后台保活给出选择方法。', href: '/articles/android-proxy-clients-2026/', tone: 'green' },
+  { icon: Apple, title: 'iOS / iPadOS', text: '说明 App Store 下载、按需连接、订阅导入、地区账号与数据安全注意事项。', href: '/articles/ios-proxy-clients-2026/', tone: 'purple' },
+  { icon: Route, title: 'IP 路由追踪', text: '使用在线监测点、tracert 与 traceroute 定位绕路、丢包和跨境入口问题。', href: '/articles/ip-traceroute-guide/', tone: 'orange' }
+];
+---
+
+<BaseLayout
+  title="2026代理工具与客户端推荐：Windows、Android、iOS与路由追踪"
+  description="2026代理工具汇总，覆盖Windows、macOS、Linux、Android与iOS客户端选择，提供Clash Mi、Clash Verge Rev、v2rayNG、Hiddify、Apple ID下载安全和IP路由追踪教程。"
+  keywords={['梯子工具', '代理客户端推荐', 'Clash Mi教程', 'Clash Verge Rev教程', 'v2rayNG教程', 'iOS代理工具', 'Android代理工具', 'IP路由追踪']}
+  jsonLd={jsonLd}
+>
+  <div class="shell tools-page">
+    <Breadcrumbs items={[{ label: '工具分享' }]} />
+
+    <header class="tools-hero">
+      <div>
+        <span><Wrench size={15} /> TOOLBOX · UPDATED 2026-10-06</span>
+        <h1>代理工具不只看“能不能连”<br />还要看兼容、分流和排障</h1>
+        <p>按设备、协议与任务选择客户端，下载前先核对项目发布渠道、应用开发者和安装包架构。教程重点放在可验证步骤、日志和故障定位。</p>
+        <nav aria-label="工具页快捷入口">
+          <a href="#platforms">按设备选择</a>
+          <a href="#matrix">客户端对比</a>
+          <a href="#workflow">配置流程</a>
+          <a href="#guides">完整教程</a>
+        </nav>
+      </div>
+      <aside>
+        <MonitorSmartphone size={34} />
+        <strong>先选平台，再核对协议</strong>
+        <p>同一个订阅在不同客户端里，可能因为内核版本、配置格式、DNS 和规则集支持不同而表现不同。</p>
+      </aside>
+    </header>
+
+    <section class="platform-section" id="platforms">
+      <div class="section-heading"><span>BY PLATFORM</span><h2>按设备快速进入对应教程</h2><p>每个入口都包含推荐工具、官方下载渠道、导入步骤和常见故障。</p></div>
+      <div class="platform-grid">
+        {platformCards.map((item) => {
+          const Icon = item.icon;
+          return <a class:list={['platform-card', `tone-${item.tone}`]} href={item.href}><Icon size={25} /><h3>{item.title}</h3><p>{item.text}</p><span>查看指南 <ArrowRight size={15} /></span></a>;
+        })}
+      </div>
+    </section>
+
+    <section class="tool-matrix" id="matrix">
+      <div class="section-heading"><span>CLIENT MATRIX</span><h2>常用客户端应该怎样选</h2><p>不追求列出所有软件，而是按安装来源、协议兼容与排障成本筛选更适合作为长期主力的工具。</p></div>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>工具</th><th>主要平台</th><th>更适合</th><th>重点能力</th><th>使用前确认</th></tr></thead>
+          <tbody>
+            <tr><th>Clash Verge Rev</th><td>Windows / macOS / Linux</td><td>需要图形界面与规则分流</td><td>Mihomo、系统代理、TUN、配置管理</td><td>从项目发布页选择正确架构</td></tr>
+            <tr><th>Hiddify</th><td>桌面端 / Android / iOS</td><td>希望跨平台界面一致</td><td>多种订阅格式、自动选择、TUN</td><td>确认订阅格式和系统权限</td></tr>
+            <tr><th>v2rayNG</th><td>Android</td><td>需要 Xray / v2fly 生态</td><td>多协议、路由、GeoIP / GeoSite</td><td>校验官方 APK 与签名来源</td></tr>
+            <tr><th>Clash Mi</th><td>iOS / macOS 等</td><td>偏好 Mihomo 图形界面</td><td>YAML 配置、代理组、规则与面板</td><td>核对唯一官网和官方仓库</td></tr>
+            <tr><th>sing-box</th><td>多平台</td><td>进阶配置和新协议需求</td><td>统一配置模型、路由、DNS、TUN</td><td>注意配置版本迁移和弃用项</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="workflow-section" id="workflow">
+      <div class="section-heading"><span>SAFE WORKFLOW</span><h2>从下载到排障的标准流程</h2></div>
+      <div class="workflow-grid">
+        <article><Download size={21} /><span>01</span><h3>确认发布渠道</h3><p>核对项目名称、下载域名、安装包架构和应用商店开发者，避免二次打包。</p></article>
+        <article><ShieldCheck size={21} /><span>02</span><h3>先用最小权限</h3><p>只开启当前需要的 VPN、系统代理或 TUN 权限，不随意安装来源不明的证书。</p></article>
+        <article><Network size={21} /><span>03</span><h3>导入后先验证直连</h3><p>更新订阅，选择节点，先测试网页与 DNS，再逐步启用复杂规则和 TUN。</p></article>
+        <article><Gauge size={21} /><span>04</span><h3>用日志定位问题</h3><p>区分订阅失败、DNS 失败、节点握手失败与路由绕行，不用单次测速代替诊断。</p></article>
+      </div>
+    </section>
+
+    <section class="diagnostic-strip">
+      <div><Route size={25} /><p><strong>线路突然变慢？</strong><span>先从本机和多地监测点做路由追踪，区分本地入口、跨境段和目标网络问题。</span></p></div>
+      <a href="/articles/ip-traceroute-guide/">学习 IP 路由追踪 <ArrowRight size={15} /></a>
+    </section>
+
+    <section class="guide-section" id="guides">
+      <div class="section-heading"><span>ORIGINAL GUIDES</span><h2>工具安装、配置与网络诊断文章</h2><p>内容围绕中文用户常见的订阅、系统权限、分流与排障场景重新组织，页面不堆砌下载链接，重点解释判断方法。</p></div>
+      <div class="guide-list">{toolArticles.map((article) => article && <ArticleCard article={article} />)}</div>
+    </section>
+
+    <section class="tool-faq">
+      <div class="section-heading"><span>FAQ</span><h2>工具选择常见问题</h2></div>
+      {faqs.map((item, index) => <details open={index === 0}><summary>{item.question}</summary><p>{item.answer}</p></details>)}
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .tools-page { padding-top: 1.5rem; padding-bottom: 2rem; }
+  .tools-hero { display: grid; grid-template-columns: minmax(0, 1.55fr) minmax(270px, .55fr); gap: 1.3rem; align-items: stretch; padding: 2.2rem; color: #fff; background: linear-gradient(100deg, rgba(57,42,32,.86) 0%, rgba(93,67,48,.68) 58%, rgba(110,85,63,.3) 100%), url('/images/site-bg/warm/network-tools-warm.webp') center 44% / cover no-repeat; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+  .tools-hero > div > span { display: inline-flex; align-items: center; gap: .35rem; color: #ffd4ad; font-size: .7rem; font-weight: 800; letter-spacing: .1em; }
+  .tools-hero h1 { margin-top: .7rem; font-size: clamp(1.8rem, 4vw, 2.8rem); line-height: 1.2; letter-spacing: -.035em; }
+  .tools-hero > div > p { max-width: 760px; margin-top: .75rem; color: rgba(255,255,255,.8); font-size: .9rem; line-height: 1.8; }
+  .tools-hero nav { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; }
+  .tools-hero nav a { padding: .35rem .65rem; color: #fff4e9; border: 1px solid rgba(255,245,234,.28); border-radius: 999px; font-size: .7rem; }
+  .tools-hero nav a:hover { color: #5a3a28; background: #fff3e7; }
+  .tools-hero aside { display: flex; flex-direction: column; justify-content: flex-end; padding: 1.2rem; background: rgba(60,40,27,.25); border: 1px solid rgba(255,245,234,.22); border-radius: var(--radius-md); }
+  .tools-hero aside svg { color: #ffd09f; }
+  .tools-hero aside strong { margin-top: .7rem; }
+  .tools-hero aside p { margin-top: .35rem; color: rgba(255,255,255,.72); font-size: .75rem; line-height: 1.65; }
+  .platform-section, .tool-matrix, .workflow-section, .guide-section, .tool-faq { scroll-margin-top: 86px; margin-top: 2.4rem; }
+  .section-heading { max-width: 780px; margin-bottom: 1rem; }
+  .section-heading > span { color: var(--tone-lime); font-size: .66rem; font-weight: 800; letter-spacing: .12em; }
+  .section-heading h2 { margin-top: .2rem; font-size: 1.45rem; }
+  .section-heading p { margin-top: .3rem; color: var(--text-secondary); font-size: .82rem; line-height: 1.7; }
+  .platform-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: .8rem; }
+  .platform-card { --card-tone: #b86b47; min-width: 0; padding: 1.1rem; background: #fffdf9; border: 1px solid var(--border-color); border-top: 3px solid var(--card-tone); border-radius: var(--radius-md); box-shadow: var(--shadow-sm); transition: .2s ease; }
+  .platform-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(20,32,45,.09); }
+  .platform-card svg, .platform-card > span { color: var(--card-tone); }
+  .platform-card h3 { margin-top: .75rem; font-size: .95rem; }
+  .platform-card p { min-height: 5.4rem; margin-top: .35rem; color: var(--text-secondary); font-size: .74rem; line-height: 1.65; }
+  .platform-card > span { display: inline-flex; align-items: center; gap: .25rem; margin-top: .7rem; font-size: .72rem; font-weight: 700; }
+  .tone-green { --card-tone: #5f8d78; }.tone-purple { --card-tone: #8d718e; }.tone-orange { --card-tone: #d58a58; }
+  .table-scroll { overflow-x: auto; background: #fff; border: 1px solid #e4e8eb; box-shadow: var(--shadow-sm); }
+  table { width: 100%; min-width: 820px; border-collapse: collapse; font-size: .76rem; }
+  th, td { padding: .8rem; border-bottom: 1px solid #e9ecef; text-align: left; vertical-align: top; }
+  thead th { color: #53606d; background: #f2f5f7; font-size: .69rem; }
+  tbody th { color: #2e3e4a; white-space: nowrap; }
+  td { color: #65717e; }
+  .workflow-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem; }
+  .workflow-grid article { position: relative; padding: 1rem; background: #fff; border: 1px solid #e7eaed; }
+  .workflow-grid svg { color: var(--tone-lime); }
+  .workflow-grid article > span { position: absolute; top: .8rem; right: .9rem; color: #c6d9e2; font-size: .75rem; font-weight: 800; }
+  .workflow-grid h3 { margin-top: .65rem; font-size: .88rem; }
+  .workflow-grid p { margin-top: .3rem; color: var(--text-secondary); font-size: .72rem; line-height: 1.6; }
+  .diagnostic-strip { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-top: 2.4rem; padding: 1.1rem 1.3rem; color: #ede1d7; background: #4b4038; border-radius: var(--radius-md); }
+  .diagnostic-strip > div { display: flex; align-items: center; gap: .7rem; }
+  .diagnostic-strip svg { flex: 0 0 auto; color: #57c5ee; }
+  .diagnostic-strip strong, .diagnostic-strip span { display: block; }
+  .diagnostic-strip strong { color: #fff; font-size: .82rem; }
+  .diagnostic-strip span { margin-top: .12rem; color: #afbcc5; font-size: .7rem; }
+  .diagnostic-strip > a { display: inline-flex; align-items: center; gap: .3rem; flex: 0 0 auto; padding: .45rem .7rem; border: 1px solid #566670; font-size: .7rem; }
+  .diagnostic-strip > a:hover { background: var(--tone-lime); border-color: var(--tone-lime); }
+  .guide-list { display: grid; gap: 1rem; }
+  .tool-faq details { padding: .85rem 0; border-top: 1px solid #dfe4e8; }
+  .tool-faq summary { color: #3d4955; cursor: pointer; font-size: .84rem; font-weight: 700; }
+  .tool-faq p { max-width: 820px; margin-top: .5rem; color: var(--text-secondary); font-size: .77rem; line-height: 1.7; }
+  @media (max-width: 980px) { .platform-grid, .workflow-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 720px) {
+    .tools-hero { grid-template-columns: 1fr; padding: 1.3rem 1rem; }
+    .tools-hero h1 { font-size: 1.75rem; }
+    .platform-grid, .workflow-grid { grid-template-columns: 1fr; }
+    .platform-card p { min-height: 0; }
+    .diagnostic-strip { align-items: flex-start; flex-direction: column; }
+  }
+</style>

@@ -1,0 +1,114 @@
+---
+import { absoluteUrl, site } from '../lib/site';
+
+interface Props {
+  title: string;
+  description: string;
+  canonical?: string;
+  type?: 'website' | 'article';
+  publishedAt?: Date;
+  updatedAt?: Date;
+  image?: string;
+  imageAlt?: string;
+  keywords?: string[];
+  robots?: string;
+  jsonLd?: Record<string, unknown> | Record<string, unknown>[];
+}
+
+const {
+  title,
+  description,
+  canonical = absoluteUrl(Astro.url.pathname),
+  type = 'website',
+  publishedAt,
+  updatedAt,
+  image,
+  imageAlt = title,
+  keywords = [],
+  robots = 'index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1',
+  jsonLd
+} = Astro.props;
+const pageTitle = title === site.name ? title : `${title} | ${site.name}`;
+const ogImage = absoluteUrl(image ?? site.defaultImage);
+const bingSiteVerification = import.meta.env.PUBLIC_BING_SITE_VERIFICATION?.trim();
+const articleData = type === 'article' ? {
+  '@type': 'Article',
+  headline: title,
+  description,
+  image: [ogImage],
+  inLanguage: site.language,
+  keywords: keywords.join(', '),
+  datePublished: publishedAt?.toISOString(),
+  dateModified: (updatedAt ?? publishedAt)?.toISOString(),
+  author: { '@type': 'Organization', name: site.author, url: absoluteUrl('/about/') },
+  publisher: {
+    '@type': 'Organization',
+    name: site.name,
+    url: site.url,
+    logo: { '@type': 'ImageObject', url: absoluteUrl(site.logo) }
+  },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': canonical }
+} : null;
+const baseSchema = articleData ?? {
+  '@type': 'WebPage',
+  name: pageTitle,
+  url: canonical,
+  description,
+  inLanguage: site.language,
+  isPartOf: { '@id': `${site.url}/#website` }
+};
+const schemas = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    '@id': `${site.url}/#website`,
+    name: site.name,
+    url: site.url,
+    description: site.description,
+    inLanguage: site.language,
+    publisher: { '@id': `${site.url}/#organization` },
+    potentialAction: {
+      '@type': 'SearchAction',
+      target: `${site.url}/search/?q={search_term_string}`,
+      'query-input': 'required name=search_term_string'
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    '@id': `${site.url}/#organization`,
+    name: site.name,
+    url: site.url,
+    email: site.email,
+    logo: absoluteUrl(site.logo)
+  },
+  { '@context': 'https://schema.org', ...baseSchema },
+  ...(jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [])
+];
+---
+<title>{pageTitle}</title>
+<meta name="description" content={description} />
+{keywords.length > 0 && <meta name="keywords" content={keywords.join(',')} />}
+<link rel="canonical" href={canonical} />
+<link rel="alternate" hreflang="zh-CN" href={canonical} />
+<link rel="alternate" hreflang="x-default" href={canonical} />
+<meta name="robots" content={robots} />
+<meta name="googlebot" content={robots} />
+<meta name="bingbot" content={robots} />
+{bingSiteVerification && <meta name="msvalidate.01" content={bingSiteVerification} />}
+<meta property="og:site_name" content={site.name} />
+<meta property="og:locale" content="zh_CN" />
+<meta property="og:type" content={type} />
+<meta property="og:title" content={pageTitle} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:alt" content={imageAlt} />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={pageTitle} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />
+<meta name="twitter:image:alt" content={imageAlt} />
+{type === 'article' && publishedAt && <meta property="article:published_time" content={publishedAt.toISOString()} />}
+{type === 'article' && updatedAt && <meta property="article:modified_time" content={updatedAt.toISOString()} />}
+<script type="application/ld+json" set:html={JSON.stringify(schemas)} />

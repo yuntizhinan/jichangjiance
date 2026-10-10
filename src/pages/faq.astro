@@ -1,0 +1,89 @@
+---
+import { ChevronDown, CircleQuestionMark, ListFilter } from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import Sidebar from '../components/Sidebar.astro';
+import { allFaqs, faqGroups } from '../data/faq';
+
+const faqSchema = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: allFaqs.map((faq) => ({
+    '@type': 'Question',
+    name: faq.question,
+    acceptedAnswer: { '@type': 'Answer', text: faq.answer }
+  }))
+};
+---
+
+<BaseLayout
+  title="2026 机场常见问题：选购、节点超时、AI、客户端与跑路预警"
+  description="收录机场推荐、IEPL/IPLC、流量倍率、节点 Timeout、订阅失败、ChatGPT/Netflix、Clash/Sing-box、隐私安全和跑路预警等 20 个高频问题。"
+  keywords={['机场常见问题', '机场节点Timeout', '机场订阅更新失败', 'IEPL专线机场', 'ChatGPT机场推荐', '机场跑路前兆', 'Clash Verge教程']}
+  jsonLd={faqSchema}
+>
+  <div class="shell faq-header-wrap">
+    <Breadcrumbs items={[{ label: '常见问题' }]} />
+    <header class="page-hero faq-hero">
+      <span class="faq-eyebrow">LONG-TAIL FAQ · UPDATED 2026-10-06</span>
+      <h1>机场常见问题与故障排查</h1>
+      <p>从选购线路、流量倍率，到节点超时、AI 工具、流媒体、客户端和跑路预警，按真实搜索意图整理可执行答案。</p>
+      <nav class="faq-jump" aria-label="FAQ 分类导航">
+        <ListFilter size={15} />
+        {faqGroups.map((group) => <a href={`#${group.slug}`}>{group.title}</a>)}
+      </nav>
+    </header>
+  </div>
+
+  <div class="blog-main shell">
+    <main class="faq-main">
+      {faqGroups.map((group, groupIndex) => (
+        <section class="faq-group" id={group.slug}>
+          <header><span>{String(groupIndex + 1).padStart(2, '0')}</span><div><h2>{group.title}</h2><p>{group.description}</p></div></header>
+          <div class="faq-accordion-list">
+            {group.items.map((faq, index) => (
+              <details class="faq-details-item" id={faq.id} open={groupIndex === 0 && index === 0}>
+                <summary class="faq-summary">
+                  <span class="faq-q-title"><CircleQuestionMark size={18} /> {faq.question}</span>
+                  <ChevronDown size={18} class="arrow-icon" />
+                </summary>
+                <div class="faq-body">
+                  <p>{faq.answer}</p>
+                  <div class="faq-keywords">{faq.keywords.map((keyword) => <a href={`/search/?q=${encodeURIComponent(keyword)}`}>{keyword}</a>)}</div>
+                </div>
+              </details>
+            ))}
+          </div>
+        </section>
+      ))}
+    </main>
+    <Sidebar />
+  </div>
+</BaseLayout>
+
+<style>
+  .faq-header-wrap { padding-top: 1.5rem; }
+  .faq-hero { margin-bottom: 0; }
+  .faq-eyebrow { color: var(--tone-lime); font-size: .68rem; font-weight: 800; letter-spacing: .12em; }
+  .faq-jump { display: flex; align-items: center; flex-wrap: wrap; gap: .45rem; margin-top: 1rem; color: #78838f; }
+  .faq-jump a { padding: .28rem .58rem; color: #5e6976; background: #f3f5f7; border: 1px solid #e5e8eb; font-size: .7rem; }
+  .faq-jump a:hover { color: #fff; background: var(--tone-lime); border-color: var(--tone-lime); }
+  .faq-main { min-width: 0; display: grid; gap: 22px; }
+  .faq-group { scroll-margin-top: 5rem; padding: 1.35rem 1.5rem; background: #fff; border: 1px solid #eceef1; box-shadow: var(--shadow-sm); }
+  .faq-group > header { display: flex; gap: .85rem; margin-bottom: .85rem; }
+  .faq-group > header > span { display: flex; align-items: center; justify-content: center; width: 2rem; height: 2rem; flex: 0 0 auto; color: #fff; background: var(--tone-lime); font-size: .72rem; font-weight: 800; }
+  .faq-group h2 { color: var(--text-primary); font-size: 1.12rem; }
+  .faq-group header p { color: var(--text-muted); font-size: .76rem; margin-top: .15rem; }
+  .faq-details-item { scroll-margin-top: 5rem; border-top: 1px solid #edf0f2; }
+  .faq-summary { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: .95rem .15rem; cursor: pointer; list-style: none; }
+  .faq-summary::-webkit-details-marker { display: none; }
+  .faq-q-title { display: flex; align-items: flex-start; gap: .5rem; color: #34404c; font-size: .9rem; font-weight: 650; }
+  .faq-q-title svg { flex: 0 0 auto; margin-top: .12rem; color: var(--tone-lime); }
+  .arrow-icon { flex: 0 0 auto; color: #98a2ad; transition: transform .2s ease; }
+  .faq-details-item[open] .arrow-icon { transform: rotate(180deg); }
+  .faq-body { padding: 0 .2rem 1rem 1.7rem; }
+  .faq-body p { color: var(--text-secondary); font-size: .84rem; line-height: 1.8; }
+  .faq-keywords { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: .7rem; }
+  .faq-keywords a { padding: .2rem .5rem; color: #66717d; background: #f5f6f7; border: 1px solid #e7e9ec; font-size: .66rem; }
+  .faq-keywords a:hover { color: var(--tone-lime); border-color: #d9b79f; }
+</style>

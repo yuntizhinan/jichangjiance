@@ -1,0 +1,445 @@
+---
+import {
+  Activity,
+  ArrowRight,
+  BookOpenCheck,
+  CalendarDays,
+  CircleAlert,
+  FileCheck,
+  RefreshCcw,
+  Search,
+  ShieldAlert,
+  ShieldCheck,
+  TriangleAlert
+} from '@lucide/astro';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import { absoluteUrl } from '../lib/site';
+import { alertRecords, alertStatusMeta, type AlertStatus } from '../data/alerts';
+
+const pageTitle = '2026机场跑路名单与跑路预警查询：失联、服务异常与状态更正';
+const description = '机场跑路预警与机场状态查询页，按确认失联、高风险、观察中、经营变化和服务恢复整理公开记录，并提供证据核验和充值止损步骤。';
+const updatedDate = '2026-10-06';
+const updatedDateLabel = '2026年10月6日';
+const keywords = [
+  '机场跑路名单2026',
+  '机场跑路预警',
+  '机场黑名单',
+  '机场状态查询',
+  '机场官网打不开',
+  '机场节点全部超时',
+  '机场失联',
+  '机场跑路怎么判断',
+  '机场转让',
+  '机场退款',
+  '机场备用域名',
+  '机场跑路前兆'
+];
+
+const faqs = [
+  {
+    question: '机场官网打不开或节点全部超时，就能确定已经跑路吗？',
+    answer: '不能。域名解析故障、线路维护、上游中断、订阅过期和客户端配置错误都可能造成类似现象。至少要交叉核对官网、多个节点、公告、客服和持续时间，不能只凭一次故障定性。'
+  },
+  {
+    question: '这份机场跑路名单代表本站已经实锤吗？',
+    answer: '不代表。本页是对第三方公开页面和社区记录的摘要整理，状态标签反映公开材料的强弱与变化，不代表本站掌握经营方资金状况，也不构成法律定性。'
+  },
+  {
+    question: '已经充值但机场疑似失联，应该怎样止损？',
+    answer: '先停止续费并保存订单、余额、付款、公告和沟通记录；排除本地网络与客户端问题后，再按照支付平台规则咨询争议处理。若复用了密码或订阅链接，应尽快修改密码并重置订阅 Token。'
+  },
+  {
+    question: '机场转让、换域名或更换运营团队等于跑路吗？',
+    answer: '不等于，但属于需要重新核验的经营变化。应确认新旧运营主体、原套餐权益、退款条款、账号迁移方式和新入口来源，不要在陌生迁移页面直接提交密码。'
+  },
+  {
+    question: '服务恢复后，预警记录会怎样处理？',
+    answer: '不会简单删除历史记录，而是补充恢复日期、可验证公告和当前状态，必要时改为“已恢复”或“状态更正”。这样既保留时间线，也避免旧标签长期误导读者。'
+  }
+];
+
+const statusOrder: AlertStatus[] = ['confirmed', 'high-risk', 'watch', 'changed', 'recovered'];
+const statusCounts = Object.fromEntries(statusOrder.map((status) => [status, alertRecords.filter((item) => item.status === status).length])) as Record<AlertStatus, number>;
+const years = [...new Set(alertRecords.map((item) => item.year))].sort((a, b) => b - a);
+const formatRecordDate = (date: string) => {
+  const [year, month, day] = date.split('-');
+  return `${year}年${Number(month)}月${Number(day)}日`;
+};
+
+const jsonLd = [
+  {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: pageTitle,
+    description,
+    url: absoluteUrl('/alerts/'),
+    inLanguage: 'zh-CN',
+    dateModified: updatedDate,
+    about: ['机场跑路预警', '机场状态查询', '代理服务风险管理'],
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: alertRecords.length,
+      itemListElement: alertRecords.map((record, index) => ({
+        '@type': 'ListItem',
+        position: index + 1,
+        item: {
+          '@type': 'Thing',
+          name: record.name,
+          description: record.summary,
+          url: absoluteUrl(`/alerts/#record-${record.slug}`),
+          dateModified: record.recordDate
+        }
+      }))
+    }
+  },
+  {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((item) => ({
+      '@type': 'Question',
+      name: item.question,
+      acceptedAnswer: { '@type': 'Answer', text: item.answer }
+    }))
+  }
+];
+---
+
+<BaseLayout title={pageTitle} description={description} keywords={keywords} jsonLd={jsonLd}>
+  <div class="alerts-page shell">
+    <Breadcrumbs items={[{ label: '跑路预警' }]} />
+
+    <header class="alerts-hero">
+      <div class="alerts-hero-copy">
+        <span class="alerts-eyebrow"><ShieldAlert size={15} /> AIRPORT STATUS WATCH</span>
+        <h1>2026机场跑路名单与跑路预警查询</h1>
+        <p>查询第三方公开记录中的失联、服务异常、经营变化与恢复案例。先看证据强度和更新时间，再决定是否续费、迁移或保存材料。</p>
+        <div class="alerts-meta">
+          <span><CalendarDays size={15} /> 更新于 <time datetime={updatedDate}>{updatedDateLabel}</time></span>
+          <span><FileCheck size={15} /> 共整理 {alertRecords.length} 条状态记录</span>
+        </div>
+      </div>
+      <aside class="evidence-notice" aria-label="重要说明">
+        <CircleAlert size={24} />
+        <div>
+          <strong>预警不等于实锤</strong>
+          <p>本页聚合第三方公开页面与社区记录，不代表本站独立确认经营方资金状况，也不构成法律定性。短时故障、转让和域名迁移需要分别判断。</p>
+        </div>
+      </aside>
+    </header>
+
+    <nav class="alerts-jump-nav" aria-label="页面目录">
+      <a href="#status-board">状态查询</a>
+      <a href="#risk-signals">判断信号</a>
+      <a href="#damage-control">止损步骤</a>
+      <a href="#faq">常见问题</a>
+    </nav>
+
+    <section class="summary-grid" aria-label="状态记录概览">
+      {statusOrder.map((status) => (
+        <article class:list={['summary-card', `status-${status}`]}>
+          <span>{alertStatusMeta[status].shortLabel}</span>
+          <strong>{statusCounts[status]}</strong>
+          <p>{alertStatusMeta[status].description}</p>
+        </article>
+      ))}
+    </section>
+
+    <section class="alerts-section" id="status-board">
+      <div class="section-heading">
+        <div>
+          <span>STATUS DATABASE</span>
+          <h2>机场状态记录查询</h2>
+          <p>可按机场名称、别名、状态和记录年份筛选。记录日期是第三方页面或公开材料的整理时间，并不等同于事件首次发生时间。</p>
+        </div>
+        <Activity size={30} />
+      </div>
+
+      <div class="filter-panel" aria-label="状态筛选器">
+        <label class="search-field">
+            <span>搜索机场名称或别名</span>
+          <span class="input-wrap"><Search size={17} /><input id="alert-search" type="search" placeholder="例如：奈云、FCCloud" autocomplete="off" /></span>
+        </label>
+        <label>
+          <span>状态</span>
+          <select id="alert-status">
+            <option value="all">全部状态</option>
+            {statusOrder.map((status) => <option value={status}>{alertStatusMeta[status].shortLabel}</option>)}
+          </select>
+        </label>
+        <label>
+          <span>记录年份</span>
+          <select id="alert-year">
+            <option value="all">全部年份</option>
+            {years.map((year) => <option value={String(year)}>{year} 年</option>)}
+          </select>
+        </label>
+        <button type="button" id="alert-reset"><RefreshCcw size={15} /> 重置筛选</button>
+      </div>
+
+      <p class="filter-result" aria-live="polite">当前显示 <strong id="alert-count">{alertRecords.length}</strong> 条记录</p>
+
+      <div class="alert-records" id="alert-records">
+        {alertRecords.map((record) => {
+          const aliases = record.aliases?.join('、') ?? '';
+          return (
+            <article
+              class:list={['alert-record', `status-${record.status}`]}
+              id={`record-${record.slug}`}
+              data-alert-record
+              data-name={`${record.name} ${aliases}`.toLowerCase()}
+              data-status={record.status}
+              data-year={String(record.year)}
+            >
+              <div class="record-head">
+                <div>
+                  <span class="status-badge">{alertStatusMeta[record.status].shortLabel}</span>
+                  <h3>{record.name}</h3>
+                  {record.aliases && <p class="record-aliases">别名：{record.aliases.join('、')}</p>}
+                </div>
+                <div class="record-date"><CalendarDays size={15} /><time datetime={record.recordDate}>{formatRecordDate(record.recordDate)}</time></div>
+              </div>
+              <p class="record-status-label">记录口径：{record.statusLabel}</p>
+              <p class="record-summary">{record.summary}</p>
+              <div class="record-details">
+                <div>
+                  <h4>公开记录中的风险信号</h4>
+                  <ul>{record.signals.map((signal) => <li>{signal}</li>)}</ul>
+                </div>
+                <div class="record-action">
+                  <h4>用户可执行动作</h4>
+                  <p>{record.userAction}</p>
+                </div>
+              </div>
+              <p class="record-note">公开信息交叉整理 · 状态会随新材料持续更新</p>
+            </article>
+          );
+        })}
+      </div>
+      <div class="empty-state" id="alert-empty" hidden>
+        <Search size={28} />
+        <h3>没有找到匹配记录</h3>
+          <p>可尝试缩短机场名称，或改为“全部状态”和“全部年份”。没有收录也不代表服务一定安全。</p>
+      </div>
+    </section>
+
+    <section class="alerts-section signal-guide" id="risk-signals">
+        <div class="section-heading compact">
+          <div><span>EVIDENCE GUIDE</span><h2>怎样判断信号强弱</h2></div>
+          <ShieldCheck size={28} />
+        </div>
+        <ol class="evidence-levels">
+          <li><span>1</span><div><strong>先排除单点故障</strong><p>换网络、换客户端、更新订阅，检查是否只是某个节点或地区异常。</p></div></li>
+          <li><span>2</span><div><strong>寻找运营方说明</strong><p>核对官网公告、工单、邮件和社群消息，观察内容与恢复进度是否一致。</p></div></li>
+          <li><span>3</span><div><strong>交叉验证多个来源</strong><p>区分同名机场或服务商，核对域名、时间、运营主体和用户反馈，避免转述变成“实锤”。</p></div></li>
+          <li><span>4</span><div><strong>关注组合信号</strong><p>官网、全部节点、支付和客服同时持续异常，通常比单一测速或一条聊天截图更值得警惕。</p></div></li>
+        </ol>
+        <aside class="signal-note"><TriangleAlert size={18} /><p><strong>不要只看“官网打不开”。</strong> 短时维护很常见；更重要的是持续时间、影响范围、售后响应与后续恢复记录。</p></aside>
+    </section>
+
+    <section class="alerts-section" id="damage-control">
+      <div class="section-heading">
+        <div>
+          <span>DAMAGE CONTROL</span>
+          <h2>疑似失联后的六步止损清单</h2>
+          <p>按顺序执行，既避免把本地故障误判为跑路，也能在风险持续时保存必要材料。</p>
+        </div>
+        <BookOpenCheck size={30} />
+      </div>
+      <ol class="action-steps">
+        <li><span>01</span><div><h3>停止续费与追加充值</h3><p>关闭自动续费，不因“即将恢复”或异常折扣继续投入大额资金。</p></div></li>
+        <li><span>02</span><div><h3>保存订单和沟通记录</h3><p>截取订单号、余额、付款凭证、套餐说明、公告、工单和客服对话，并保留时间。</p></div></li>
+        <li><span>03</span><div><h3>排除本地网络和客户端故障</h3><p>更换网络、设备和客户端，更新订阅，核对系统时间与订阅是否过期。</p></div></li>
+        <li><span>04</span><div><h3>保护账号与订阅信息</h3><p>修改复用密码；若订阅链接可能泄露，重置 Token，避免配置被第三方继续访问。</p></div></li>
+        <li><span>05</span><div><h3>咨询支付争议处理</h3><p>按支付平台、发卡机构或支付渠道规则提交真实材料，客观描述未交付或无法联系的情况。</p></div></li>
+        <li><span>06</span><div><h3>准备不同上游的备用线路</h3><p>不要把主用与备用服务放在同一运营方或同一上游，重要工作保留可切换方案。</p></div></li>
+      </ol>
+    </section>
+
+    <section class="alerts-section faq-section" id="faq">
+      <div class="section-heading compact">
+        <div><span>FAQ</span><h2>机场跑路预警常见问题</h2></div>
+      </div>
+      <div class="faq-list">
+        {faqs.map((item, index) => (
+          <details open={index === 0}>
+            <summary>{item.question}</summary>
+            <p>{item.answer}</p>
+          </details>
+        ))}
+      </div>
+    </section>
+
+    <aside class="related-links" aria-label="相关内容">
+          <div><strong>下一步可以查看</strong><p>将风险记录与机场评测资料、优惠活动和基础排障方法交叉核对。</p></div>
+      <nav>
+        <a href="/airport-directory/">机场导航 <ArrowRight size={14} /></a>
+        <a href="/airport-recommendations/">机场推荐 <ArrowRight size={14} /></a>
+        <a href="/deals/">机场优惠码 <ArrowRight size={14} /></a>
+        <a href="/faq/">常见问题库 <ArrowRight size={14} /></a>
+      </nav>
+    </aside>
+  </div>
+</BaseLayout>
+
+<script>
+  const searchInput = document.querySelector<HTMLInputElement>('#alert-search');
+  const statusSelect = document.querySelector<HTMLSelectElement>('#alert-status');
+  const yearSelect = document.querySelector<HTMLSelectElement>('#alert-year');
+  const resetButton = document.querySelector<HTMLButtonElement>('#alert-reset');
+  const records = [...document.querySelectorAll<HTMLElement>('[data-alert-record]')];
+  const count = document.querySelector<HTMLElement>('#alert-count');
+  const empty = document.querySelector<HTMLElement>('#alert-empty');
+
+  const normalize = (value: string) => value.trim().toLocaleLowerCase('zh-CN');
+  const applyFilters = () => {
+    const query = normalize(searchInput?.value ?? '');
+    const status = statusSelect?.value ?? 'all';
+    const year = yearSelect?.value ?? 'all';
+    let visible = 0;
+
+    records.forEach((record) => {
+      const matchesQuery = !query || normalize(record.dataset.name ?? '').includes(query);
+      const matchesStatus = status === 'all' || record.dataset.status === status;
+      const matchesYear = year === 'all' || record.dataset.year === year;
+      const show = matchesQuery && matchesStatus && matchesYear;
+      record.hidden = !show;
+      if (show) visible += 1;
+    });
+
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
+  };
+
+  searchInput?.addEventListener('input', applyFilters);
+  statusSelect?.addEventListener('change', applyFilters);
+  yearSelect?.addEventListener('change', applyFilters);
+  resetButton?.addEventListener('click', () => {
+    if (searchInput) searchInput.value = '';
+    if (statusSelect) statusSelect.value = 'all';
+    if (yearSelect) yearSelect.value = 'all';
+    applyFilters();
+    searchInput?.focus();
+  });
+</script>
+
+<style>
+  .alerts-page { padding-top: 1.5rem; padding-bottom: 2rem; }
+  .alerts-hero { display: grid; grid-template-columns: minmax(0, 1.7fr) minmax(300px, .85fr); gap: 1.2rem; padding: 2rem; color: #fff; background: linear-gradient(100deg, rgba(67,43,29,.86) 0%, rgba(104,66,41,.7) 58%, rgba(126,88,57,.35) 100%), url('/images/site-bg/warm/alerts-runway-warm.webp') center 56% / cover no-repeat; border-radius: var(--radius-lg); box-shadow: var(--shadow-lg); }
+  .alerts-hero-copy { align-self: center; }
+  .alerts-eyebrow { display: inline-flex; align-items: center; gap: .4rem; margin-bottom: .7rem; color: #ffd2aa; font-size: .7rem; font-weight: 800; letter-spacing: .11em; }
+  .alerts-hero h1 { max-width: 760px; font-size: clamp(1.75rem, 4vw, 2.65rem); line-height: 1.2; letter-spacing: -.035em; }
+  .alerts-hero-copy > p { max-width: 760px; margin-top: .8rem; color: rgba(255,255,255,.84); font-size: .96rem; line-height: 1.8; }
+  .alerts-meta { display: flex; flex-wrap: wrap; gap: .75rem 1.2rem; margin-top: 1rem; color: rgba(255,255,255,.72); font-size: .76rem; }
+  .alerts-meta span { display: inline-flex; align-items: center; gap: .35rem; }
+  .evidence-notice { display: flex; align-items: flex-start; gap: .75rem; padding: 1.15rem; background: rgba(64,38,24,.26); border: 1px solid rgba(255,244,230,.24); border-radius: var(--radius-md); backdrop-filter: blur(7px); }
+  .evidence-notice > svg { flex: 0 0 auto; color: #ffcf91; }
+  .evidence-notice strong { font-size: .95rem; }
+  .evidence-notice p { margin-top: .35rem; color: rgba(255,255,255,.75); font-size: .78rem; line-height: 1.7; }
+  .alerts-jump-nav { position: sticky; top: 64px; z-index: 50; display: flex; gap: 0; overflow-x: auto; margin-bottom: 1.2rem; background: #fffdf9; border: 1px solid var(--border-color); border-top: 0; border-radius: 0 0 var(--radius-md) var(--radius-md); box-shadow: var(--shadow-sm); scrollbar-width: thin; }
+  .alerts-jump-nav a { flex: 0 0 auto; padding: .75rem 1rem; color: #5d6976; border-right: 1px solid #edf0f2; font-size: .78rem; font-weight: 600; }
+  .alerts-jump-nav a:hover { color: var(--tone-lime); background: #fbf3e9; }
+  .summary-grid { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: .8rem; margin-bottom: 1.2rem; }
+  .summary-card { position: relative; min-width: 0; padding: 1rem; overflow: hidden; background: #fff; border: 1px solid #e7e9ed; border-top: 3px solid var(--status-color); box-shadow: var(--shadow-sm); }
+  .summary-card span { color: var(--status-color); font-size: .72rem; font-weight: 750; }
+  .summary-card strong { display: block; margin: .15rem 0; color: #2f3844; font-size: 1.8rem; line-height: 1.1; }
+  .summary-card p { color: var(--text-muted); font-size: .68rem; line-height: 1.55; }
+  .status-confirmed { --status-color: #c94c4c; --status-soft: #fff3f2; --status-border: #f0c5c3; }
+  .status-high-risk { --status-color: #e7763b; --status-soft: #fff7f1; --status-border: #f1d0bd; }
+  .status-watch { --status-color: #bd891d; --status-soft: #fff9e9; --status-border: #ead8a6; }
+  .status-changed { --status-color: #7759b8; --status-soft: #f7f3ff; --status-border: #d9ccef; }
+  .status-recovered { --status-color: #158a72; --status-soft: #effaf7; --status-border: #bde3da; }
+  .alerts-section { scroll-margin-top: 120px; margin-bottom: 1.2rem; padding: 1.45rem; background: #fff; border: 1px solid #e8ebee; box-shadow: var(--shadow-sm); }
+  .section-heading { display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; margin-bottom: 1.1rem; padding-bottom: .9rem; border-bottom: 1px solid #e9edf0; }
+  .section-heading > svg { flex: 0 0 auto; color: #1689be; }
+  .section-heading span { color: #1689be; font-size: .66rem; font-weight: 800; letter-spacing: .12em; }
+  .section-heading h2 { margin-top: .12rem; font-size: 1.35rem; line-height: 1.3; }
+  .section-heading p, .section-intro { max-width: 760px; margin-top: .35rem; color: var(--text-secondary); font-size: .82rem; line-height: 1.7; }
+  .section-heading.compact { align-items: center; }
+  .filter-panel { display: grid; grid-template-columns: minmax(220px, 1.5fr) minmax(150px, .65fr) minmax(140px, .55fr) auto; gap: .7rem; align-items: end; padding: 1rem; background: #f5f7f9; border: 1px solid #e6eaee; }
+  .filter-panel label { display: flex; min-width: 0; flex-direction: column; gap: .35rem; color: #697583; font-size: .7rem; font-weight: 650; }
+  .filter-panel input, .filter-panel select { width: 100%; height: 42px; padding: 0 .7rem; color: #37414d; background: #fff; border: 1px solid #d8dee4; border-radius: 0; outline: none; }
+  .filter-panel input { padding-left: 2.15rem; }
+  .filter-panel input:focus, .filter-panel select:focus { border-color: #1689be; box-shadow: 0 0 0 2px rgba(22,137,190,.1); }
+  .input-wrap { position: relative; display: block; }
+  .input-wrap svg { position: absolute; z-index: 1; left: .72rem; top: 50%; color: #8b95a0; transform: translateY(-50%); }
+  .filter-panel button { display: inline-flex; align-items: center; justify-content: center; gap: .35rem; height: 42px; padding: 0 .9rem; color: #fff; background: #465563; border: 0; cursor: pointer; font-size: .76rem; font-weight: 650; white-space: nowrap; }
+  .filter-panel button:hover { background: #1689be; }
+  .filter-result { margin: .8rem 0; color: var(--text-muted); font-size: .74rem; }
+  .filter-result strong { color: #1689be; }
+  .alert-records { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .9rem; }
+  .alert-record { min-width: 0; padding: 1.05rem; background: #fff; border: 1px solid #e3e7eb; border-left: 4px solid var(--status-color); }
+  .alert-record[hidden] { display: none; }
+  .record-head { display: flex; align-items: flex-start; justify-content: space-between; gap: .75rem; }
+  .record-head h3 { display: inline; margin-left: .35rem; color: #313a45; font-size: 1.08rem; }
+  .status-badge { display: inline-flex; padding: .18rem .42rem; color: var(--status-color); background: var(--status-soft); border: 1px solid var(--status-border); font-size: .65rem; font-weight: 750; vertical-align: 2px; }
+  .record-aliases { margin-top: .25rem; color: var(--text-muted); font-size: .68rem; }
+  .record-date { display: inline-flex; align-items: center; flex: 0 0 auto; gap: .3rem; color: var(--text-muted); font-size: .67rem; }
+  .record-status-label { margin-top: .75rem; color: var(--status-color); font-size: .7rem; font-weight: 700; }
+  .record-summary { margin-top: .38rem; color: #596573; font-size: .8rem; line-height: 1.7; }
+  .record-details { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-top: .8rem; }
+  .record-details > div { padding: .75rem; background: #f7f9fa; border: 1px solid #edf0f2; }
+  .record-details h4 { margin-bottom: .35rem; color: #424d59; font-size: .72rem; }
+  .record-details ul { padding-left: 1rem; color: #707b87; font-size: .69rem; line-height: 1.6; }
+  .record-details p { color: #707b87; font-size: .69rem; line-height: 1.65; }
+  .record-action { background: var(--status-soft) !important; border-color: var(--status-border) !important; }
+  .record-note { margin-top: .8rem; padding-top: .65rem; color: #8b94a0; border-top: 1px dashed #e1e5e9; font-size: .66rem; }
+  .empty-state { padding: 2rem; color: var(--text-muted); background: #f7f9fa; border: 1px dashed #d9dfe5; text-align: center; }
+  .empty-state[hidden] { display: none; }
+  .empty-state svg { color: #1689be; }
+  .empty-state h3 { margin-top: .4rem; color: #46515e; font-size: 1rem; }
+  .empty-state p { max-width: 520px; margin: .25rem auto 0; font-size: .76rem; }
+  .evidence-levels { display: grid; gap: .65rem; list-style: none; }
+  .evidence-levels li { display: grid; grid-template-columns: 32px 1fr; gap: .65rem; align-items: start; }
+  .evidence-levels li > span { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; color: #1689be; background: #eef7fb; border: 1px solid #cde4ee; font-size: .75rem; font-weight: 800; }
+  .evidence-levels strong { color: #414c58; font-size: .78rem; }
+  .evidence-levels p { margin-top: .12rem; color: var(--text-secondary); font-size: .7rem; line-height: 1.55; }
+  .signal-note { display: flex; gap: .55rem; margin-top: 1rem; padding: .8rem; color: #6d5a3f; background: #fff9ec; border: 1px solid #eeddb8; }
+  .signal-note svg { flex: 0 0 auto; color: #bd891d; }
+  .signal-note p { font-size: .7rem; line-height: 1.6; }
+  .action-steps { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; list-style: none; counter-reset: action; }
+  .action-steps li { display: grid; grid-template-columns: 42px 1fr; gap: .65rem; min-width: 0; padding: .9rem; background: #f7f9fa; border: 1px solid #e9edf0; }
+  .action-steps li > span { color: #b9d9e8; font-size: 1.25rem; font-weight: 800; line-height: 1.2; }
+  .action-steps h3 { color: #424d59; font-size: .8rem; }
+  .action-steps p { margin-top: .25rem; color: var(--text-secondary); font-size: .69rem; line-height: 1.6; }
+  .faq-list details { border-top: 1px solid #e8ecef; }
+  .faq-list summary { padding: .85rem 0; color: #3f4a56; cursor: pointer; font-size: .83rem; font-weight: 700; }
+  .faq-list details p { padding: 0 0 .9rem; color: var(--text-secondary); font-size: .76rem; line-height: 1.75; }
+  .related-links { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem 1.3rem; color: #efe3d8; background: #4b3e35; border-radius: var(--radius-md); }
+  .related-links strong { color: #fff; font-size: .85rem; }
+  .related-links p { margin-top: .15rem; color: #aebbc5; font-size: .7rem; }
+  .related-links nav { display: flex; flex-wrap: wrap; gap: .45rem; }
+  .related-links a { display: inline-flex; align-items: center; gap: .25rem; padding: .42rem .65rem; color: #d8e5eb; border: 1px solid #52616c; font-size: .7rem; }
+  .related-links a:hover { color: #fff; background: #1689be; border-color: #1689be; }
+  @media (max-width: 980px) {
+    .alerts-hero { grid-template-columns: 1fr; }
+    .summary-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .filter-panel { grid-template-columns: 1fr 1fr; }
+    .search-field { grid-column: 1 / -1; }
+    .alert-records { grid-template-columns: 1fr; }
+    .action-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  }
+  @media (max-width: 700px) {
+    .alerts-page { padding-top: .8rem; }
+    .alerts-hero { padding: 1.25rem 1rem; }
+    .alerts-hero h1 { font-size: 1.72rem; }
+    .alerts-jump-nav { top: 64px; margin-inline: 0; }
+    .summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .summary-card:last-child { grid-column: 1 / -1; }
+    .alerts-section { padding: 1rem; scroll-margin-top: 112px; }
+    .section-heading h2 { font-size: 1.16rem; }
+    .filter-panel { grid-template-columns: 1fr; padding: .75rem; }
+    .search-field { grid-column: auto; }
+    .filter-panel button { width: 100%; }
+    .record-head { display: block; }
+    .record-date { margin-top: .45rem; }
+    .record-details { grid-template-columns: 1fr; }
+    .action-steps { grid-template-columns: 1fr; }
+    .related-links { align-items: flex-start; flex-direction: column; }
+  }
+  @media (max-width: 420px) {
+    .summary-grid { grid-template-columns: 1fr; }
+    .summary-card:last-child { grid-column: auto; }
+    .alerts-meta { display: grid; }
+  }
+</style>

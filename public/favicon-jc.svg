@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="机场监测">
+  <rect width="64" height="64" rx="15" fill="#1689be"/>
+  <path d="M38 12h10v29c0 11-7 18-19 18-10 0-17-5-19-14l10-3c1 5 4 8 9 8 6 0 9-3 9-10V12z" fill="#fff"/>
+  <circle cx="47" cy="13" r="4" fill="#f3c986"/>
+</svg>

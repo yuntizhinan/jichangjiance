@@ -1,0 +1,151 @@
+---
+import { ArrowRight, BrainCircuit, Funnel, Grid3x3, Search, ShieldCheck } from '@lucide/astro';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import { absoluteUrl } from '../../lib/site';
+import { aiAppCategories, aiAppProfiles } from '../../data/aiAppProfiles';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: 'AI应用库与工具选择',
+  description: '按通用对话、编程、图像、视频、知识管理和Agent自动化整理AI应用，并提供独立工具介绍页面。',
+  url: absoluteUrl('/ai-news/apps/'),
+  dateModified: '2026-10-06',
+  mainEntity: {
+    '@type': 'ItemList',
+    itemListElement: aiAppProfiles.map((item, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: item.name,
+      url: absoluteUrl(`/ai-news/apps/${item.slug}/`),
+      image: absoluteUrl(item.logo),
+      description: item.description
+    }))
+  }
+};
+---
+
+<BaseLayout title="AI应用库：带Logo的AI工具导航、介绍与使用指南" description="2026 AI应用库，提供ChatGPT、Claude、Gemini、DeepSeek、AI编程、AI绘画、AI视频和Agent工具的Logo导航、独立介绍、适用场景与使用注意事项。" keywords={['AI应用库', 'AI工具导航', 'AI工具Logo', 'AI工具推荐', 'AI应用商店', 'AI写作工具', 'AI编程工具', 'AI绘画工具', 'AI视频工具', 'AI Agent工具']} jsonLd={jsonLd}>
+  <div class="shell apps-page">
+    <Breadcrumbs items={[{ label: 'AI资讯分享', href: '/ai-news/' }, { label: 'AI应用库' }]} />
+
+    <header class="apps-hero">
+      <div>
+        <span><Grid3x3 size={15} /> AI APP LIBRARY</span>
+        <h1>从 Logo 找到工具，<br />从详情页判断是否适合</h1>
+        <p>每个应用都提供独立介绍、适用任务、功能重点、开始步骤和风险提示。点击卡片即可进入详情页。</p>
+      </div>
+      <aside><BrainCircuit size={28} /><strong>{aiAppProfiles.length} 个应用详情</strong><p>{aiAppCategories.length} 个任务分类，更新于 2026年10月6日。</p></aside>
+    </header>
+
+    <section class="app-filters" aria-label="AI应用筛选">
+      <label><Search size={17} /><span class="sr-only">搜索AI应用</span><input id="app-search" type="search" placeholder="搜索工具、用途或标签" /></label>
+      <label><Funnel size={16} /><span class="sr-only">按分类筛选</span><select id="app-category"><option value="all">全部分类</option>{aiAppCategories.map((category) => <option value={category}>{category}</option>)}</select></label>
+      <button id="app-reset" type="button">重置</button>
+    </section>
+    <p class="count">当前显示 <strong id="app-count">{aiAppProfiles.length}</strong> 个应用</p>
+
+    <section class="apps-grid" aria-label="AI工具列表">
+      {aiAppProfiles.map((app) => (
+        <article data-app-item data-category={app.category} data-search={`${app.name} ${app.description} ${app.bestFor} ${app.tags.join(' ')}`.toLowerCase()} style={`--app-accent:${app.accent}`}>
+          <a href={`/ai-news/apps/${app.slug}/`} aria-label={`查看${app.name}介绍与使用指南`}>
+            <div class="app-card-top">
+              <div class="app-logo"><img src={app.logo} alt={`${app.name} Logo`} width="128" height="128" loading="lazy" decoding="async" /></div>
+              <div class="app-title"><span>{app.category}</span><h2>{app.name}</h2></div>
+              <ArrowRight class="app-arrow" size={18} />
+            </div>
+            <p>{app.description}</p>
+            <div class="app-tags">{app.tags.map((tag) => <small>{tag}</small>)}</div>
+            <dl>
+              <div><dt>更适合</dt><dd>{app.bestFor}</dd></div>
+              <div><dt>使用前注意</dt><dd>{app.caution}</dd></div>
+            </dl>
+            <span class="detail-link">查看工具详情 <ArrowRight size={15} /></span>
+          </a>
+        </article>
+      ))}
+    </section>
+    <div class="empty" id="app-empty" hidden>没有找到匹配工具，请尝试缩短关键词或查看全部分类。</div>
+
+    <section class="selection-guide">
+      <div><ShieldCheck size={25} /><h2>AI工具选型的五项检查</h2><p>功能演示只能说明“可能做到”，长期使用还要检查数据、成本、团队和退出机制。</p></div>
+      <ol><li><strong>任务：</strong>输入和结果是否能够被清楚定义？</li><li><strong>数据：</strong>是否会接触隐私、客户或内部资料？</li><li><strong>质量：</strong>如何抽样、评测和人工复核？</li><li><strong>成本：</strong>除订阅费外，是否还有人工修正和迁移成本？</li><li><strong>退出：</strong>内容、提示词和知识库能否导出或替换？</li></ol>
+    </section>
+  </div>
+</BaseLayout>
+
+<script>
+  const input = document.querySelector<HTMLInputElement>('#app-search');
+  const select = document.querySelector<HTMLSelectElement>('#app-category');
+  const reset = document.querySelector<HTMLButtonElement>('#app-reset');
+  const items = [...document.querySelectorAll<HTMLElement>('[data-app-item]')];
+  const count = document.querySelector<HTMLElement>('#app-count');
+  const empty = document.querySelector<HTMLElement>('#app-empty');
+  const params = new URLSearchParams(location.search);
+  if (select && params.get('category') && [...select.options].some((option) => option.value === params.get('category'))) select.value = params.get('category') ?? 'all';
+  const filter = () => {
+    const query = (input?.value ?? '').trim().toLocaleLowerCase('zh-CN');
+    const category = select?.value ?? 'all';
+    let visible = 0;
+    items.forEach((item) => {
+      const show = (!query || (item.dataset.search ?? '').includes(query)) && (category === 'all' || item.dataset.category === category);
+      item.hidden = !show;
+      if (show) visible += 1;
+    });
+    if (count) count.textContent = String(visible);
+    if (empty) empty.hidden = visible !== 0;
+  };
+  input?.addEventListener('input', filter);
+  select?.addEventListener('change', filter);
+  reset?.addEventListener('click', () => { if (input) input.value = ''; if (select) select.value = 'all'; filter(); });
+  filter();
+</script>
+
+<style>
+  .apps-page { padding-top: 1.5rem; padding-bottom: 2rem; }
+  .apps-hero { display: grid; grid-template-columns: 1fr 270px; gap: 1rem; padding: 1.7rem; color: #fff; background: linear-gradient(100deg, rgba(67,43,30,.86) 0%, rgba(119,77,49,.7) 58%, rgba(142,105,74,.32) 100%), url('/images/site-bg/warm/ai-coding-warm.webp') center 55% / cover no-repeat; border-radius: var(--radius-lg); }
+  .apps-hero span { display: inline-flex; align-items: center; gap: .35rem; color: #ffd6b2; font-size: .68rem; font-weight: 800; letter-spacing: .1em; }
+  .apps-hero h1 { margin-top: .55rem; font-size: clamp(1.75rem, 4vw, 2.5rem); line-height: 1.12; }
+  .apps-hero > div > p { max-width: 42rem; margin-top: .55rem; color: rgba(255,255,255,.78); font-size: .82rem; line-height: 1.7; }
+  .apps-hero aside { padding: 1rem; background: rgba(64,39,24,.25); border: 1px solid rgba(255,245,235,.22); border-radius: var(--radius-md); }
+  .apps-hero aside strong { display: block; margin-top: .5rem; }
+  .apps-hero aside p { margin-top: .2rem; color: rgba(255,255,255,.7); font-size: .68rem; }
+  .app-filters { display: grid; grid-template-columns: 1fr 230px auto; gap: .6rem; margin-top: 1rem; padding: .8rem; background: #fff; border: 1px solid #e5e8ec; }
+  .app-filters label { position: relative; display: flex; align-items: center; }
+  .app-filters svg { position: absolute; left: .7rem; color: #8e97a2; }
+  .app-filters input, .app-filters select { width: 100%; height: 40px; padding: 0 .7rem 0 2rem; color: #46515d; background: #f7f9fa; border: 1px solid #dde2e6; }
+  .app-filters button { padding: 0 .9rem; color: #fff; background: #465563; border: 0; cursor: pointer; }
+  .count { margin: .7rem 0; color: var(--text-muted); font-size: .7rem; }
+  .count strong { color: #1689be; }
+  .apps-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .8rem; }
+  .apps-grid article { background: #fff; border: 1px solid #e2e7eb; border-top: 3px solid var(--app-accent); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  .apps-grid article:hover { transform: translateY(-3px); border-color: color-mix(in srgb, var(--app-accent) 42%, #dfe5e9); box-shadow: 0 12px 30px rgba(31, 45, 61, .09); }
+  .apps-grid article[hidden], .empty[hidden] { display: none; }
+  .apps-grid article > a { display: flex; min-height: 100%; flex-direction: column; padding: 1rem; color: inherit; }
+  .app-card-top { display: grid; grid-template-columns: 52px 1fr auto; align-items: center; gap: .75rem; }
+  .app-logo { display: grid; width: 52px; height: 52px; place-items: center; overflow: hidden; background: #f7f9fa; border: 1px solid #edf0f2; border-radius: 14px; }
+  .app-logo img { width: 34px; height: 34px; object-fit: contain; }
+  .app-title span { display: block; color: var(--app-accent); font-size: .62rem; font-weight: 750; }
+  .app-title h2 { margin-top: .16rem; font-size: 1.02rem; }
+  .app-arrow { color: #a5afb8; transition: color .2s ease, transform .2s ease; }
+  .apps-grid article:hover .app-arrow { color: var(--app-accent); transform: translateX(3px); }
+  .apps-grid article > a > p { min-height: 3.15rem; margin-top: .75rem; color: var(--text-secondary); font-size: .72rem; line-height: 1.6; }
+  .app-tags { display: flex; flex-wrap: wrap; gap: .25rem; margin-top: .55rem; }
+  .app-tags small { padding: .12rem .36rem; color: #74808c; background: #f0f3f5; font-size: .56rem; }
+  .apps-grid dl { margin-top: .7rem; padding-top: .55rem; border-top: 1px dashed #dfe3e7; }
+  .apps-grid dl > div { display: grid; grid-template-columns: 66px 1fr; gap: .4rem; margin-top: .32rem; font-size: .66rem; line-height: 1.5; }
+  .apps-grid dt { color: var(--app-accent); font-weight: 700; }
+  .apps-grid dd { color: #6d7884; }
+  .detail-link { display: inline-flex; align-items: center; gap: .3rem; margin-top: auto; padding-top: .8rem; color: var(--app-accent); font-size: .68rem; font-weight: 750; }
+  .empty { padding: 1.5rem; color: var(--text-muted); background: #fff; border: 1px dashed #ccd3da; text-align: center; }
+  .selection-guide { display: grid; grid-template-columns: .8fr 1.2fr; gap: 1.2rem; margin-top: 2rem; padding: 1.2rem; color: #eee1d6; background: #4a3e36; border-radius: var(--radius-md); }
+  .selection-guide svg { color: #5bc6e9; }
+  .selection-guide h2 { margin-top: .45rem; color: #fff; font-size: 1.05rem; }
+  .selection-guide p { margin-top: .3rem; color: #acbac3; font-size: .7rem; }
+  .selection-guide ol { padding-left: 1.2rem; columns: 2; column-gap: 1.5rem; }
+  .selection-guide li { break-inside: avoid; margin-bottom: .45rem; color: #becad1; font-size: .7rem; }
+  .selection-guide strong { color: #fff; }
+  @media (max-width: 900px) { .apps-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+  @media (max-width: 700px) { .apps-hero, .selection-guide { grid-template-columns: 1fr; }.app-filters { grid-template-columns: 1fr; }.app-filters button { height: 40px; }.apps-grid { grid-template-columns: 1fr; }.apps-grid article > a > p { min-height: 0; }.selection-guide ol { columns: 1; } }
+</style>
