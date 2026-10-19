@@ -23,6 +23,7 @@ BRANDS = [
     ("yuntu", "云图", "YUNTU AIRPORT", "科研检索 · 多路优化", "yuntu-logo.png", "2b9bd8"),
     ("kexinyun", "可信云", "KEXIN CLOUD", "低门槛试用 · 月付观察", "kexinyun-logo.webp", "2475b8"),
     ("huanyuyun", "环宇云", "HUANYUN CLOUD", "全球节点 · 资料待核验", "huanyuyun-logo.webp", "39bfe8"),
+    ("kunpeng", "鲲鹏加速", "KUNPENG JIASU", "性价比专线 · 全球原生节点", "kunpeng-logo.webp", "1a6bc8"),
 ]
 
 
