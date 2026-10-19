@@ -29,8 +29,8 @@ const sortedArticles = articles.sort((a, b) => b.data.updatedAt.getTime() - a.da
     </div>
   </section>
 
-  <section class="home-airport-strip shell" aria-label="八家机场快速入口">
-    <div class="home-airport-strip-copy"><span>本期机场推荐</span><strong>先看八家机场，再按场景挑选</strong></div>
+  <section class="home-airport-strip shell" aria-label="精选机场快速入口">
+    <div class="home-airport-strip-copy"><span>本期机场推荐</span><strong>浏览精选机场，再按场景挑选</strong></div>
     <div class="home-airport-pills">
       {featuredBrands.map((brand) => <a href={`/brands/${brand.slug}/`}><span>{brand.name}</span><small>{brand.recommendation}</small></a>)}
     </div>

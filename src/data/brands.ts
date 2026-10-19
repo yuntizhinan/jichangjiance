@@ -605,6 +605,341 @@ export const brands: BrandProfile[] = [
       { question: '鲲鹏加速能稳定使用 ChatGPT 和 Netflix 吗？', answer: '服务商资料将 ChatGPT AI 工具及主流海外流媒体列为支持场景，并标注原生节点。实际可用性仍取决于具体节点出口 IP 和平台风控，建议先月付测试常用地区节点。' },
       { question: '鲲鹏加速支持多少台设备？', answer: '逍遥畅游套餐允许 5 台设备同时在线，吞吐山海套餐允许 8 台设备并发，适合多设备家庭或多端用户。' }
     ]
+  },
+  {
+    slug: 'liulianyun',
+    name: '榴莲云',
+    englishName: 'Liulian Cloud',
+    logo: '/images/brands/logos/liulianyun-logo.webp',
+    cover: '/images/brands/covers/liulianyun-cover-warm.webp',
+    accent: '#7aaa1c',
+    recommendation: '低价专线型',
+    status: '场景推荐',
+    tagline: 'IPLC/IEPL 专线 · 多地区流媒体',
+    description: '榴莲云怎么样？整理榴莲云 11.88 元起月付套餐、120GB 至 1TB 流量、IPLC/IEPL 专线、流媒体与 AI 工具适用场景、优惠码 ll88 和购买前注意事项。',
+    verdict: '适合预算有限、希望用较低月费覆盖日常浏览、影音和 AI 工具的用户；套餐跨度完整，首次使用仍建议从月付档开始。',
+    lineArchitecture: '公开资料标注 IPLC/IEPL 专线、40+ 全球节点和 5 台设备同时在线；具体入口、倍率和节点可用性以后台实时信息为准。',
+    protocols: ['Shadowsocks'],
+    price: '¥11.88/月起（120GB）',
+    plans: [
+      { name: '入门版', price: '¥11.88/月', traffic: '120GB/月', note: '5 台设备，适合日常浏览、轻量影音与 AI 对话' },
+      { name: '标准版', price: '¥17.88/月', traffic: '260GB/月', note: '适合多端日常使用和中等频率视频' },
+      { name: '进阶版', price: '¥27.88/月', traffic: '480GB/月', note: '适合家庭多设备与较高频影音' },
+      { name: '高流量版', price: '¥39.88/月', traffic: '720GB/月', note: '适合高清视频和较高流量需求' },
+      { name: '旗舰版', price: '¥55.88/月', traffic: '1TB/月', note: '面向高流量用户，购买前核对并发和公平使用规则' }
+    ],
+    audience: ['低预算月付用户', '流媒体追剧用户', 'ChatGPT 等 AI 工具用户', '五台以内多设备用户'],
+    useCases: ['日常浏览', 'Netflix / Disney+', 'ChatGPT / AI 工具', '多端订阅导入'],
+    strengths: ['11.88 元起步，月付门槛较低', '流量从 120GB 到 1TB，档位覆盖较完整', '公开资料标注 IPLC/IEPL 专线和 40+ 节点', '提供用户确认的优惠码 ll88'],
+    considerations: ['流媒体和 AI 可用性随出口 IP 与平台风控变化', '第三方资料中的线路与节点数量需要在后台再次核对', '不要因为优惠码直接选择长周期，先验证晚高峰体验', '套餐价格、倍率、并发和续费规则以结算页为准'],
+    keywords: ['榴莲云怎么样', '榴莲云机场评测', '榴莲云优惠码', '榴莲云官网入口', '榴莲云套餐价格', '11元机场', '120G机场', 'IPLC机场推荐', '便宜机场推荐'],
+    referralUrl: 'http://853vip01.liulianyunaff.com/#/?code=RM8ZQC6i',
+    couponCode: 'll88',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '榴莲云套餐怎么选？',
+        paragraphs: [
+          '榴莲云的月付档从 11.88 元 120GB 起步，向上提供 260GB、480GB、720GB 和 1TB。轻量用户可以先看入门版；经常观看高清视频或多设备同时使用时，再比较 260GB 与 480GB 档位。',
+          '价格低并不等于适合直接年付。首次使用应优先检查本地运营商晚高峰连接、常用地区节点、订阅导入和工单响应，再决定是否延长周期。'
+        ]
+      },
+      {
+        title: '专线、流媒体和 AI 场景怎么看？',
+        paragraphs: [
+          '公开资料将 IPLC/IEPL、Netflix、Disney+ 和 AI 工具列为主要卖点，但线路名称不能代替实际体验。真正影响使用感受的还有本地入口、节点负载、倍率以及故障切换速度。',
+          '如果主要使用 ChatGPT 或流媒体，建议分别测试登录、连续对话、视频起播和拖动，而不是只看一次测速结果。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '榴莲云优惠码是什么？', answer: '本站当前记录的优惠码为 ll88。使用前请确认代码是否生效、适用套餐和最终结算金额。' },
+      { question: '榴莲云最低套餐多少钱？', answer: '当前参考价格为 11.88 元/月，包含 120GB 月流量；价格和权益可能调整，应以结算页为准。' },
+      { question: '榴莲云适合看流媒体吗？', answer: '公开资料列出 Netflix、Disney+ 等场景，但解锁会随节点出口 IP 变化，建议先月付测试常用地区。' }
+    ]
+  },
+  {
+    slug: 'dalaoyun',
+    name: '大佬云',
+    englishName: 'Dalao Cloud',
+    logo: '/images/brands/logos/dalaoyun-logo.webp',
+    cover: '/images/brands/covers/dalaoyun-cover-warm.webp',
+    accent: '#c9972b',
+    recommendation: '入门中转型',
+    status: '性价比观察',
+    tagline: '动态中转 · Clash 订阅兼容',
+    description: '大佬云怎么样？整理大佬云 15 元起月付套餐、100GB 至 500GB 流量、动态中转、Clash 与 Shadowsocks 使用方式、优惠码 dly888 和适用人群。',
+    verdict: '适合需要基础中转线路、Clash 订阅和中等月流量的个人用户；公开资料更新节奏有限，建议先小额月付核验当前运营状态。',
+    lineArchitecture: '参考资料标注动态中转、30+ 节点和 Shadowsocks 协议；线路与节点会调整，应以购买后台和实际订阅为准。',
+    protocols: ['Shadowsocks'],
+    price: '¥15/月起（100GB）',
+    plans: [
+      { name: '基础套餐', price: '¥15/月', traffic: '100GB/月', note: '适合轻量浏览、聊天与基础视频' },
+      { name: '标准套餐', price: '¥20/月', traffic: '200GB/月', note: '适合个人日常使用与多端切换' },
+      { name: '进阶套餐', price: '¥30/月', traffic: '300GB/月', note: '适合中等频率视频和远程协作' },
+      { name: '高流量套餐', price: '¥50/月', traffic: '500GB/月', note: '适合更高流量需求，购买前核对设备限制' }
+    ],
+    audience: ['Clash 用户', '个人日常浏览用户', '中等流量影音用户', '希望月付观察的用户'],
+    useCases: ['Clash 订阅', '日常网页与社交', '中等频率视频', '远程协作'],
+    strengths: ['15 元起的月付价格容易试用', '提供 100GB 至 500GB 四档流量', '公开资料标注支持 Clash 和 Shadowsocks', '提供用户确认的优惠码 dly888'],
+    considerations: ['参考资料显示同时在线设备数量可能较少，购买前应核对', '节点、线路与流媒体可用性可能变化', '公开评测更新时间不等于服务商当前状态', '首次使用优先月付，不建议仅因折扣选择多年周期'],
+    keywords: ['大佬云怎么样', '大佬云机场评测', '大佬云优惠码', '大佬云官网入口', '大佬云套餐价格', '15元机场', 'Clash机场推荐', 'Shadowsocks机场', '中转机场推荐'],
+    referralUrl: 'https://liu01.dalaoyunaff.com/#/?code=P8KlGHa6',
+    couponCode: 'dly888',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '大佬云的套餐和定位',
+        paragraphs: [
+          '大佬云目前可参考的月付方案从 15 元 100GB 起，20 元提供 200GB，30 元提供 300GB，50 元提供 500GB。价格阶梯直观，适合按自己的实际月流量选择。',
+          '其公开定位更偏向个人中转与 Clash 使用，并不是以超大设备并发为核心。家庭共享或设备较多时，应在付款前确认同时在线限制。'
+        ]
+      },
+      {
+        title: '为什么建议先月付核验？',
+        paragraphs: [
+          '机场线路与入口可能随时间变化，第三方文章中的节点数量、在线率和测试结果只能作为历史参考。更可靠的做法是用月付方案观察自己的本地运营商和常用时段。',
+          '连续测试应覆盖工作日晚高峰、周末和常用客户端，重点记录延迟、丢包、视频拖动以及故障后的恢复速度。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '大佬云优惠码是什么？', answer: '本站当前记录的大佬云优惠码为 dly888，付款前请确认结算页已经应用优惠。' },
+      { question: '大佬云支持 Clash 吗？', answer: '参考资料标注支持 Clash 订阅和 Shadowsocks 协议，实际可导入格式应以当前后台为准。' },
+      { question: '大佬云适合多设备家庭吗？', answer: '公开资料中的设备并发信息较有限，多设备或家庭共享用户应在购买前向服务商确认同时在线规则。' }
+    ]
+  },
+  {
+    slug: 'shandianshu',
+    name: '闪电鼠',
+    englishName: 'Shandianshu',
+    logo: '/images/brands/logos/shandianshu-logo.webp',
+    cover: '/images/brands/covers/shandianshu-cover-warm.webp',
+    accent: '#f2b400',
+    recommendation: '全球节点型',
+    status: '场景推荐',
+    tagline: '全球多地区节点 · 五设备并发',
+    description: '闪电鼠怎么样？整理闪电鼠 14.99 元起月付套餐、100GB 至 600GB 流量、全球节点、五台设备、Shadowsocks、流媒体与优惠码 sd88。',
+    verdict: '适合看重多平台兼容、全球地区覆盖和清晰流量档位的个人及小家庭用户；可从 100GB 月付档先验证常用节点。',
+    lineArchitecture: '公开资料标注全球多地区节点、Shadowsocks 协议和 5 台设备支持；不同地区出口、倍率和中转方式以实时订阅为准。',
+    protocols: ['Shadowsocks'],
+    price: '¥14.99/月起（100GB）',
+    plans: [
+      { name: '入门版', price: '¥14.99/月', traffic: '100GB/月', note: '五台设备，适合轻量个人使用' },
+      { name: '标准版', price: '¥22.98/月', traffic: '200GB/月', note: '适合多端日常和中等视频需求' },
+      { name: '进阶版', price: '¥30.97/月', traffic: '300GB/月', note: '适合较高频影音与远程协作' },
+      { name: '高流量版', price: '¥59.93/月', traffic: '600GB/月', note: '适合多设备高流量场景' },
+      { name: '年度大流量', price: '¥299.64/年', traffic: '7200GB/年', note: '长周期大流量方案，购买前先月付验证服务' }
+    ],
+    audience: ['五台以内多设备用户', '跨平台客户端用户', '流媒体用户', '需要全球节点的用户'],
+    useCases: ['Windows / macOS / Android / iOS', 'Netflix / YouTube', 'ChatGPT / AI 工具', '日常办公'],
+    strengths: ['100GB 至 600GB 月付流量档位清晰', '公开资料标注支持五台设备', '覆盖多个常用地区并兼容主流平台代理客户端', '提供用户确认的优惠码 sd88'],
+    considerations: ['年度大流量方案预付金额较高，应先验证月付服务', '全球节点不代表所有地区同时保持相同质量', '流媒体解锁受出口 IP 和平台策略影响', '套餐、设备数和倍率以结算页及后台为准'],
+    keywords: ['闪电鼠怎么样', '闪电鼠机场评测', '闪电鼠优惠码', '闪电鼠官网入口', '闪电鼠套餐价格', '14元机场', '全球节点机场', '五设备机场', '流媒体机场推荐'],
+    referralUrl: 'https://eothvip01.shandianshuaff.com/#/?code=YwnQXVv8',
+    couponCode: 'sd88',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '闪电鼠套餐怎么选？',
+        paragraphs: [
+          '闪电鼠月付档位从 100GB 到 600GB，个人轻量用户可从 14.99 元方案开始；多设备、高清视频和频繁下载会更适合 200GB 或 300GB 档。',
+          '年度方案虽然折算月费更低并提供较高总流量，但长周期会放大服务变化风险。第一次使用不应跳过月付测试。'
+        ]
+      },
+      {
+        title: '全球节点是否等于稳定？',
+        paragraphs: [
+          '节点地区多能提升场景选择，但稳定性还取决于入口、上游、负载和故障调度。选择时应优先测试自己真正会用到的香港、日本、新加坡或美国节点。',
+          '如果主要用于 AI 和流媒体，应分别验证登录、区域内容、长对话和视频拖动，避免只用测速数值判断。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '闪电鼠优惠码是什么？', answer: '本站当前记录的闪电鼠优惠码为 sd88，是否适用及优惠内容以结算页显示为准。' },
+      { question: '闪电鼠支持几台设备？', answer: '参考资料标注支持 5 台设备，但同时在线与共享规则可能调整，购买前应再次确认。' },
+      { question: '闪电鼠年付值得买吗？', answer: '首次用户更适合先月付测试；连续使用并确认晚高峰、客服和节点维护符合需要后，再比较年付方案。' }
+    ]
+  },
+  {
+    slug: 'huanqiuti',
+    name: '环球梯',
+    englishName: 'Global Ladder',
+    logo: '/images/brands/logos/huanqiuti-logo.webp',
+    cover: '/images/brands/covers/huanqiuti-cover-warm.webp',
+    accent: '#2e93db',
+    recommendation: '低门槛多节点型',
+    status: '性价比观察',
+    tagline: '9.9 元起 · 40+ 全球节点',
+    description: '环球梯怎么样？整理环球梯 9.9 元起月付套餐、100GB 至 1TB 流量、一次性流量包、40+ 全球节点、流媒体支持与优惠码 HQ66。',
+    verdict: '适合希望用较低门槛测试全球节点、流媒体和日常代理的用户；9.9 元入门档与一次性流量包适合作为轻量或备用选择。',
+    lineArchitecture: '公开资料标注 40+ 全球节点、Shadowsocks 协议和 5 台设备支持；具体节点等级、倍率及专线属性应在购买后台核对。',
+    protocols: ['Shadowsocks'],
+    price: '¥9.90/月起（100GB）',
+    plans: [
+      { name: '轻量版', price: '¥9.90/月', traffic: '100GB/月', note: '低门槛月付，适合轻量或备用使用' },
+      { name: '标准版', price: '¥14.90/月', traffic: '200GB/月', note: '适合个人多端和中等视频需求' },
+      { name: '进阶版', price: '¥24.90/月', traffic: '400GB/月', note: '适合家庭多设备与高频影音' },
+      { name: '旗舰版', price: '¥89.90/月', traffic: '1TB/月', note: '大流量月付，购买前确认公平使用限制' },
+      { name: '一次性流量包', price: '¥55/次', traffic: '250GB 总量', note: '不按月重置，适合低频备用，核对有效期' }
+    ],
+    audience: ['低预算入门用户', '备用机场用户', '流媒体用户', '需要一次性流量包的低频用户'],
+    useCases: ['日常网页', 'Netflix / Disney+', 'ChatGPT / AI 工具', '备用线路'],
+    strengths: ['9.9 元起步，试用成本较低', '月付与一次性流量包并存', '公开资料标注 40+ 全球节点与五台设备', '提供用户确认的优惠码 HQ66'],
+    considerations: ['超低价套餐应重点观察晚高峰负载和售后响应', '一次性流量包需要确认有效期和是否清零', '流媒体与 AI 可用性可能随出口 IP 变化', '价格、设备数、倍率和续费条件以结算页为准'],
+    keywords: ['环球梯怎么样', '环球梯机场评测', '环球梯优惠码', '环球梯官网入口', '环球梯套餐价格', '9.9元机场', '一次性流量机场', '便宜机场推荐', '全球节点机场'],
+    referralUrl: 'https://123pps01.huanqiutiaff.com/#/?code=FXwud2Gg',
+    couponCode: 'HQ66',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '环球梯的低价套餐适合谁？',
+        paragraphs: [
+          '9.9 元 100GB 适合轻量浏览、聊天和备用线路；经常观看视频时，200GB 或 400GB 更有余量。1TB 档适合高流量需求，但应先确认限速和公平使用规则。',
+          '一次性 250GB 流量包适合使用频率不固定的人，不过要重点核对有效期、流量是否会清零以及节点是否与月付套餐一致。'
+        ]
+      },
+      {
+        title: '如何验证 40+ 全球节点？',
+        paragraphs: [
+          '节点数量是覆盖广度指标，不是性能保证。购买后应优先检查常用地区是否真实可连、倍率是否透明，以及晚高峰是否频繁切换。',
+          '备用机场还需要与主力服务使用不同入口或上游，否则同一网络故障可能同时影响两边。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '环球梯优惠码是什么？', answer: '本站当前记录的优惠码为 HQ66，请保持字母大小写一致，并在付款前确认优惠已经生效。' },
+      { question: '环球梯 9.9 元套餐有多少流量？', answer: '当前参考方案为 9.9 元/月、100GB 月流量，具体权益以当前结算页为准。' },
+      { question: '环球梯一次性流量包适合备用吗？', answer: '适合低频备用，但购买前必须确认有效期、流量清零规则和节点范围。' }
+    ]
+  },
+  {
+    slug: 'shenxing',
+    name: '神行加速',
+    englishName: 'Shenxing Acceleration',
+    logo: '/images/brands/logos/shenxing-logo.webp',
+    cover: '/images/brands/covers/shenxing-cover-warm.webp',
+    accent: '#ff6b21',
+    recommendation: '大流量多设备型',
+    status: '性价比观察',
+    tagline: '9 元 150GB · 多设备不限端',
+    description: '神行加速怎么样？整理神行加速 9 元起月付套餐、150GB 至 1200GB 流量、多设备使用、全球节点、Shadowsocks 与优惠码 sx0077。',
+    verdict: '适合希望用较低月费获得较多流量、并在手机和电脑多端使用的个人用户；大流量方案仍需先验证晚高峰和公平使用规则。',
+    lineArchitecture: '公开资料标注全球多地区节点、Shadowsocks 协议和多设备支持；不同套餐的并发、倍率与具体线路以后台说明为准。',
+    protocols: ['Shadowsocks'],
+    price: '¥9/月起（150GB）',
+    plans: [
+      { name: '轻量版', price: '¥9/月', traffic: '150GB/月', note: '低价大流量入门，适合个人日常使用' },
+      { name: '标准版', price: '¥16/月', traffic: '300GB/月', note: '适合多端日常与中高频视频' },
+      { name: '进阶版', price: '¥23/月', traffic: '500GB/月', note: '适合家庭或较高流量需求' },
+      { name: '高流量版', price: '¥36/月', traffic: '800GB/月', note: '适合多设备和高清视频' },
+      { name: '旗舰版', price: '¥59/月', traffic: '1200GB/月', note: '超大流量方案，购买前确认限速和共享规则' }
+    ],
+    audience: ['追求大流量性价比的用户', '手机与电脑多端用户', '高清视频用户', '远程办公用户'],
+    useCases: ['多设备日常使用', 'YouTube / Netflix', 'ChatGPT / AI 工具', '远程办公'],
+    strengths: ['9 元提供 150GB，入门流量价格比突出', '月付档覆盖 150GB 至 1200GB', '公开资料标注多设备支持和多个常用地区', '提供用户确认的优惠码 sx0077'],
+    considerations: ['不限设备表述仍可能受到个人使用与并发规则限制', '大流量不代表不限速或允许 P2P', '节点与解锁能力会随维护和出口 IP 调整', '先月付验证，再考虑更长周期'],
+    keywords: ['神行加速怎么样', '神行加速机场评测', '神行加速优惠码', '神行加速官网入口', '神行加速套餐价格', '9元150G机场', '大流量机场推荐', '多设备机场', '便宜机场推荐'],
+    referralUrl: 'https://fugui0077.shenxingaff.com/#/?code=9Al3jhhl',
+    couponCode: 'sx0077',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '神行加速为什么主打大流量？',
+        paragraphs: [
+          '从公开套餐看，神行加速在 9 元档就提供 150GB，向上覆盖 300GB、500GB、800GB 和 1200GB，适合月流量明显高于轻量浏览的人群。',
+          '选大流量套餐时不能只看 GB 数，还要核对倍率、限速、重置时间、同时在线以及 P2P 等使用限制。'
+        ]
+      },
+      {
+        title: '多设备用户应该测试什么？',
+        paragraphs: [
+          '手机、电脑和平板同时连接时，应测试订阅刷新、并发登录和不同网络切换。所谓多设备支持通常仍要求个人合理使用，不能默认可以公开共享。',
+          '晚高峰连续视频、AI 长对话和大文件下载比单次测速更能反映线路是否适合自己的实际场景。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '神行加速优惠码是什么？', answer: '本站当前记录的神行加速优惠码为 sx0077，付款前请确认优惠内容和最终金额。' },
+      { question: '神行加速 9 元套餐有多少流量？', answer: '当前参考方案为 9 元/月、150GB 月流量，套餐可能调整，应以购买页为准。' },
+      { question: '神行加速真的不限设备吗？', answer: '参考资料标注多设备支持，但通常仍受个人使用、并发和公平使用规则约束，购买前应再次确认。' }
+    ]
+  },
+  {
+    slug: 'yunjiexian',
+    name: '云界线',
+    englishName: 'Yunjiexian',
+    logo: '/images/brands/logos/yunjiexian-logo.webp',
+    cover: '/images/brands/covers/yunjiexian-cover-warm.webp',
+    accent: '#20aeea',
+    recommendation: '低价多协议型',
+    status: '性价比观察',
+    tagline: '8 元 200GB · SS/SSR/Trojan',
+    description: '云界线怎么样？整理云界线 8 元起月付套餐、200GB 至 2400GB 流量、SS/SSR/Trojan 多协议、中转节点、AI 与流媒体场景及优惠码 yjx888。',
+    verdict: '适合希望用较低月费获得大流量、需要多协议与多平台导入的用户；低价高流量更应重点核验倍率、限速和晚高峰负载。',
+    lineArchitecture: '公开资料标注国内中转、50+ 节点及 Shadowsocks、ShadowsocksR、Trojan 协议；节点数量和线路类型以当前订阅为准。',
+    protocols: ['Shadowsocks', 'ShadowsocksR', 'Trojan'],
+    price: '¥8/月起（200GB）',
+    plans: [
+      { name: '入门版', price: '¥8/月', traffic: '200GB/月', note: '低价大流量入门，适合个人日常使用' },
+      { name: '标准版', price: '¥15/月', traffic: '400GB/月', note: '适合多端与中高频影音' },
+      { name: '进阶版', price: '¥25/月', traffic: '600GB/月', note: '适合家庭与较高流量需求' },
+      { name: '高流量版', price: '¥37/月', traffic: '1200GB/月', note: '适合高清视频和多设备' },
+      { name: '旗舰版', price: '¥60/月', traffic: '2400GB/月', note: '超大流量档，购买前核对倍率与限速' }
+    ],
+    audience: ['低预算大流量用户', '需要多协议的客户端用户', 'AI 工具用户', '流媒体与多设备用户'],
+    useCases: ['Clash / Shadowrocket', 'ChatGPT / AI 工具', 'Netflix / YouTube', '多端日常使用'],
+    strengths: ['8 元提供 200GB，入门门槛低', '公开资料标注 SS、SSR 和 Trojan 多协议', '套餐覆盖 200GB 至 2400GB', '提供用户确认的优惠码 yjx888'],
+    considerations: ['低价高流量需重点核对节点倍率和限速', '协议多不等于所有客户端订阅格式都完善', '流媒体与 AI 解锁受出口 IP 变化影响', '第三方价格和节点资料以当前结算页及后台为准'],
+    keywords: ['云界线怎么样', '云界线机场评测', '云界线优惠码', '云界线官网入口', '云界线套餐价格', '8元机场', '200G机场', 'SSR机场', 'Trojan机场', '大流量机场推荐'],
+    referralUrl: 'https://youxia01.yunjiexianaff.com/#/?code=FwZZ4ato',
+    couponCode: 'yjx888',
+    linkVerified: true,
+    sourceNote: commonSource,
+    publishedAt: '2026-10-19',
+    updatedAt: '2026-10-19',
+    featured: true,
+    sections: [
+      {
+        title: '云界线的低价大流量怎么看？',
+        paragraphs: [
+          '云界线从 8 元 200GB 起步，向上提供 400GB、600GB、1200GB 和 2400GB。账面流量价格很低，适合预算敏感且使用量较大的人群进行月付测试。',
+          '判断真实成本时，需要用套餐流量除以常用节点倍率，并检查限速、设备并发和流量重置时间。不能只用标称 GB 数横向比较。'
+        ]
+      },
+      {
+        title: '多协议对用户有什么价值？',
+        paragraphs: [
+          'SS、SSR 和 Trojan 能覆盖不同客户端与系统，但真正的易用性还取决于后台是否提供 Clash、Shadowrocket 或通用订阅，以及订阅转换是否稳定。',
+          '对于 AI 和流媒体场景，建议测试常用地区出口的登录稳定性、长对话、视频起播和拖动，不把协议名称当作解锁保证。'
+        ]
+      }
+    ],
+    faq: [
+      { question: '云界线优惠码是什么？', answer: '本站当前记录的云界线优惠码为 yjx888，使用时请核对大小写和最终结算金额。' },
+      { question: '云界线最低多少钱？', answer: '当前参考入门方案为 8 元/月、200GB 月流量，具体价格、倍率和设备规则以购买页为准。' },
+      { question: '云界线支持哪些协议？', answer: '参考资料列出 Shadowsocks、ShadowsocksR 和 Trojan；具体客户端订阅格式应以当前后台为准。' }
+    ]
   }
 ];
 
