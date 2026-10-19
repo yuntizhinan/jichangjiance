@@ -25,7 +25,7 @@ BRANDS = [
     ("huanyuyun", "环宇云", "HUANYUN CLOUD", "全球节点 · 资料待核验", "huanyuyun-logo.webp", "39bfe8"),
     ("kunpeng", "鲲鹏加速", "KUNPENG JIASU", "性价比专线 · 全球原生节点", "kunpeng-logo.webp", "1a6bc8"),
     ("liulianyun", "榴莲云", "LIULIAN CLOUD", "低价专线 · 多地区流媒体", "liulianyun-logo.webp", "7aaa1c"),
-    ("dalaoyun", "大佬云", "DALAO CLOUD", "中转线路 · 入门月付", "dalaoyun-logo.webp", "c9972b"),
+    ("dalaoyun", "大佬云", "DALAO CLOUD", "全线 IPLC · 多周期套餐", "dalaoyun-logo.webp", "c9972b"),
     ("shandianshu", "闪电鼠", "SHANDIANSHU", "多端兼容 · 全球节点", "shandianshu-logo.webp", "f2b400"),
     ("huanqiuti", "环球梯", "GLOBAL LADDER", "低门槛月付 · 多地区节点", "huanqiuti-logo.webp", "2e93db"),
     ("shenxing", "神行加速", "SHENXING ACCELERATION", "大流量月付 · 多设备使用", "shenxing-logo.webp", "ff6b21"),
